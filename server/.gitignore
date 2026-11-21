@@ -1,0 +1,5 @@
+/node_modules
+/dist
+/build
+.env
+US25001PDF_DSA5_Regelwerk_Vierte_Auflage_LZ_meta.pdf

@@ -1,0 +1,20 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+dist/
+coverage/
+*.log
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Rulebook (copyrighted, large)
+*.pdf
+
+.DS_Store
