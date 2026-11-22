@@ -13,6 +13,8 @@ export interface IUserDocument extends Document {
    username: string
    email: string
    password: string
+   // What other party members see of a hero that joins a party (user setting; the owner can change it per hero)
+   settings?: { defaultPartyVisibility?: 'private' | 'summary' | 'full' }
    matchPassword(candidatePassword: string): Promise<boolean>
 }
 
@@ -49,6 +51,12 @@ const userSchema = new Schema<IUserDocument>(
       timestamps: true,
    },
 )
+
+userSchema.add({
+   settings: {
+      defaultPartyVisibility: { type: String, enum: ['private', 'summary', 'full'], default: 'summary' },
+   },
+})
 
 userSchema.pre(
    'save',

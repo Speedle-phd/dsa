@@ -1,0 +1,48 @@
+# Development override: client (Vite), server (Express, tsx watch), MongoDB.
+#   docker compose -f compose.yml -f compose.dev.yml up -d --build
+# Source folders are bind-mounted, so local edits reload inside the containers.
+# node_modules live in named volumes: the container needs Linux binaries,
+# your local node_modules has Windows ones.
+
+services:
+  client:
+    image: dsa-client:dev
+    build: !override
+      context: ./client
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0
+    ports: !override
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - client_node_modules:/app/node_modules
+    environment:
+      # Windows bind mounts don't forward file events into Linux: poll instead.
+      CHOKIDAR_USEPOLLING: "true"
+      # The browser calls the API directly on the published server port.
+      VITE_API_URL: http://localhost:3000
+
+  server:
+    image: dsa-server:dev
+    build: !override
+      context: ./server
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - server_node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+      TRUST_PROXY: 0
+      CHOKIDAR_USEPOLLING: "true"
+      # Takes precedence over server/.env (dotenv does not override).
+      CLIENT_ORIGIN: ${CLIENT_ORIGIN:-http://localhost:5173}
+
+  mongo:
+    # Only on this machine, for Compass or mongosh: mongodb://<user>:<pw>@localhost:27017/?authSource=admin
+    ports:
+      - "127.0.0.1:${MONGO_PORT:-27017}:27017"

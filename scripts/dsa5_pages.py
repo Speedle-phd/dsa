@@ -30,7 +30,7 @@ def main() -> None:
     parser.add_argument("--offset", type=int, default=PAGE_OFFSET)
     args = parser.parse_args()
 
-    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8") # type: ignore
     reader = PdfReader(PDF_PATH)
 
     for spec in args.pages:

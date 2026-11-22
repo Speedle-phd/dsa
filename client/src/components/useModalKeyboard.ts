@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const focusableSelector = [
    'button:not(:disabled)',
@@ -12,6 +12,9 @@ const focusableSelector = [
 export function useModalKeyboard(onClose: () => void) {
    const dialogRef = useRef<HTMLElement>(null)
    const closeRef = useRef(onClose)
+   // Captured on the first render: React's autoFocus moves focus into the dialog before effects run
+   const [opener] = useState(() => document.activeElement)
+   const autoFocusedRef = useRef<HTMLElement | null>(null)
 
    useEffect(() => {
       closeRef.current = onClose
@@ -20,11 +23,15 @@ export function useModalKeyboard(onClose: () => void) {
    useEffect(() => {
       const dialog = dialogRef.current
       if (!dialog) return
-      const opener = document.activeElement
 
       const elements = () =>
          Array.from(dialog.querySelectorAll<HTMLElement>(focusableSelector))
-      const initiallyFocused =
+      // Keep the field React's autoFocus focused (it renders no attribute). Remembered, because StrictMode's
+      // second effect run follows a cleanup that already returned focus to the opener.
+      if (!autoFocusedRef.current && document.activeElement instanceof HTMLElement && dialog.contains(document.activeElement)) {
+         autoFocusedRef.current = document.activeElement
+      }
+      const initiallyFocused = (autoFocusedRef.current?.isConnected ? autoFocusedRef.current : null) ??
          dialog.querySelector<HTMLElement>('[autofocus]') ?? elements()[0]
       initiallyFocused?.focus()
 
@@ -57,7 +64,7 @@ export function useModalKeyboard(onClose: () => void) {
          document.removeEventListener('keydown', handleKeyDown)
          if (opener instanceof HTMLElement && opener.isConnected) opener.focus()
       }
-   }, [])
+   }, [opener])
 
    return dialogRef
 }

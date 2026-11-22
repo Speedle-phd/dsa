@@ -134,3 +134,35 @@ describe('equipment purchases and currency (S. 364)', () => {
       expect(result).toEqual({ ok: false, reason: 'invalid-purchase' })
    })
 })
+
+describe('equipment packages (S. 364–365)', () => {
+   const purse: EquipmentPurse = { dukaten: 0, silbertaler: 500, heller: 0, kreuzer: 0 }
+   const contents = [
+      { item: 'Proviant für einen Tag', category: 'Traveling_and_Tools', unitWeight: 1.5, amount: 3 },
+      { item: 'Kletterseil', category: 'Ropes_and_Climbing', unitWeight: 0.5, amount: 10 },
+      { item: 'Messer', category: 'Traveling_and_Tools', unitWeight: 0.25, amount: 1, description: 'Weapon' },
+   ]
+   it('charges the package price once and adds every piece on its own, times the amount', () => {
+      const result = purchaseEquipment(purse, [], {
+         item: 'Reisepaket', category: 'Equipment_Packages', unitWeight: 20, amount: 2, carriedOn: 'Equipped', unitPriceSilbertaler: 120, contents,
+      })
+      // 500 S − 2 × 120 S = 260 S, returned in standard coins (S. 364)
+      expect(result).toMatchObject({ ok: true, totalCostKreuzer: 24000, purse: { dukaten: 26, silbertaler: 0, heller: 0, kreuzer: 0 } })
+      if (!result.ok) return
+      expect(result.equipment.map(({ item, amount, weight }) => ({ item, amount, weight }))).toEqual([
+         { item: 'Proviant für einen Tag', amount: 6, weight: 1.5 },
+         { item: 'Kletterseil', amount: 20, weight: 0.5 },
+         { item: 'Messer', amount: 2, weight: 0.25 },
+      ])
+      expect(result.equipment.some((entry) => entry.item === 'Reisepaket')).toBe(false)
+      // 2 × (4.5 + 5 + 0.25)
+      expect(result.totalWeight).toBeCloseTo(19.5)
+   })
+   it('merges pieces into identical stacks at the same place', () => {
+      const owned: EquipmentPurchaseEntry[] = [{ item: 'Kletterseil', category: 'Ropes_and_Climbing', weight: 0.5, amount: 4, carriedOn: 'Equipped', description: '' }]
+      const result = purchaseEquipment(purse, owned, {
+         item: 'Reisepaket', category: 'Equipment_Packages', unitWeight: 20, amount: 1, carriedOn: 'Equipped', unitPriceSilbertaler: 120, contents,
+      })
+      expect(result.ok && result.equipment.filter((entry) => entry.item === 'Kletterseil')).toEqual([expect.objectContaining({ amount: 14 })])
+   })
+})

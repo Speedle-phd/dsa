@@ -67,8 +67,8 @@ export type CreationLedger = {
    usage: { attributeSum: number; advantageAp: number; disadvantageAp: number; spells: number; liturgies: number }
    packageTalents: Record<string, number>
    profession: { key: string; variant: string | null; ap: number; languageBudget: number; budgetUsed: number; budgetIncludesScripts: boolean; curseBudget: number; curseUsed: number } | null
-   // null = not activated (app house rule, see experience.md); package talents are activated
-   talents: Record<string, { base: number | null; value: number | null; cost: number; maximum: number }>
+   // Every talent is active from FW 0 (S. 25); base = package value, else 0
+   talents: Record<string, { base: number; value: number; cost: number; maximum: number }>
    techniques: Record<string, { base: number; value: number; cost: number; maximum: number }>
    spells: Record<string, { base: number | null; value: number; cost: number; maximum: number }>
    liturgies: Record<string, { base: number | null; value: number; cost: number; maximum: number }>
@@ -183,11 +183,10 @@ export function creationLedger(draft: CreationDraftData): CreationLedger {
    const talents: CreationLedger['talents'] = {}
    for (const talent of talentCatalog) {
       // User decision: profession values and culture bonuses add up (archetype Allacaya: Fährtensuchen 7 + 1 = 8)
-      const inPackage = talent.key in packageTalents || talent.key in (profession?.talents ?? {})
-      const base = inPackage ? (packageTalents[talent.key] ?? 0) + (profession?.talents[talent.key] ?? 0) : null
+      const base = (packageTalents[talent.key] ?? 0) + (profession?.talents[talent.key] ?? 0)
       const value = draft.talents[talent.key] ?? base
-      // House rule (experience.md): activating an unset talent costs its activation (A–D: 1–4 AP), like on the hero page
-      const cost = value === null ? 0 : base === null ? advancementCost(null, value, talent.stfClass, true) : stepCost(base, value, talent.stfClass)
+      // source: DSA5 Regelwerk, S. 25 ("Alle Talente sind aktiv"): no activation cost, only the raises from FW 0 or the package value
+      const cost = stepCost(base, value, talent.stfClass)
       talents[talent.key] = { base, value, cost, maximum: caps.skill }
    }
    const techniques: CreationLedger['techniques'] = {}
@@ -340,7 +339,7 @@ export function creationLedger(draft: CreationDraftData): CreationLedger {
    for (const talent of talentCatalog) {
       const entry = talents[talent.key]
       entry.maximum = Math.min(caps.skill, talentMaximum(values, talent.key) ?? caps.skill)
-      if (entry.value !== null && entry.value > entry.maximum) violations.push({ section: 'skills', key: `talent:${talent.key}`, message: '{skill} {value} is above its maximum {max} (S. 39).', values: { skill: talent.key, value: entry.value, max: entry.maximum } })
+      if (entry.value > entry.maximum) violations.push({ section: 'skills', key: `talent:${talent.key}`, message: '{skill} {value} is above its maximum {max} (S. 39).', values: { skill: talent.key, value: entry.value, max: entry.maximum } })
       costs.skills += entry.cost
    }
    for (const technique of combatTechniques) {

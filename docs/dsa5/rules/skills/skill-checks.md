@@ -56,7 +56,7 @@ Notation: `Talent (Anwendungsgebiet)`, e.g. Körperbeherrschung (Springen) (S. 2
 ## Edge cases
 
 - FW 0 is a valid FW, so the check is allowed (S. 23, 25).
-- Inactive skills (not activated) cannot be rolled (S. 25).
+- All talents are active from FW 0 ("Alle Talente sind aktiv"). Inactive skills (spells, rituals, liturgies, ceremonies not activated yet) cannot be rolled (S. 25).
 - Rolling well below an Eigenschaft gives no bonus FP (S. 22).
 - Optional rule "Alternative Eigenschaften": an assessment-only check uses KL/IN/IN (S. 23).
 - Schips: Neuer Wurf (not on a Patzer) or Qualität verbessern (+1 QS on success), max 1 per check (S. 29–30).
@@ -88,6 +88,7 @@ Notation: `Talent (Anwendungsgebiet)`, e.g. Körperbeherrschung (Springen) (S. 2
 - App choice: the routine column uses the stored FW and no modifiers; the dialog uses the effective FW and the full modifier.
 - App choice: "no tools" blocks the check; the GM can pick "poor tools" instead when they allow improvising.
 - The application list for Fertigkeitsspezialisierung is a suggestion list (datalist); the book lists are not closed (S. 216).
+- English UI: applications show the German rulebook term with an app gloss, e.g. "Feilschen (haggling)" (`talentApplicationGlosses.ts`, user decision Nov 2026: glosses, not official English names). Place and deity names stay as printed. Stored values stay German. The check dialog explains the choice: matching Fertigkeitsspezialisierung +2 FW (S. 216), new applications need their advantage/SF (S. 186). A caller can fix the application (store haggling = Feilschen); on opening, the selected specialization always matches the application shown, so an earlier choice does not carry over unseen.
 
 ## Implemented Vergleichs-, Sammel- und Gruppenprobe
 

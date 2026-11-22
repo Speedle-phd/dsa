@@ -32,6 +32,8 @@ import { getPurchaseDescription } from '@/utils/storeDisplay'
 import { catalogEntry, equipmentDisplayName } from '@/utils/storePricing'
 import { isConsumableItem } from './activeEffectsApi'
 import { ConsumeDialog } from './ConsumeDialog'
+import { UseItemDialog } from './UseItemDialog'
+import { isUsedUpItem } from '@/utils/storeConsumables'
 import {
    adjustPurseForHero,
    getStatsForHero,
@@ -97,6 +99,7 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
       useState<SortDirection>('ascending')
    const [dropTarget, setDropTarget] = useState<EquipmentEntry | null>(null)
    const [consumeTarget, setConsumeTarget] = useState<EquipmentEntry | null>(null)
+   const [useTarget, setUseTarget] = useState<EquipmentEntry | null>(null)
    const [dropAmount, setDropAmount] = useState(1)
    const [isPickUpOpen, setIsPickUpOpen] = useState(false)
    const [purseMode, setPurseMode] = useState<'receive' | 'lose' | null>(null)
@@ -213,13 +216,26 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
       })
    }
 
-   const consumeItem = (entry: EquipmentEntry) => {
+   const consumeItem = (entry: EquipmentEntry, amount: number) => {
+      // The list may have been refetched while the dialog was open: find the same stack again
+      const target = equipment.includes(entry) ? entry : equipment.find((current) => current.item === entry.item &&
+         current.carriedOn === entry.carriedOn && current.quality === entry.quality && current.condition === entry.condition)
+      if (!target || target.amount < amount) {
+         toast.error(t('This item is no longer in the inventory in that amount.', language))
+         setUseTarget(null)
+         return
+      }
       const nextEquipment = equipment.flatMap((current) => {
-         if (current !== entry) return [current]
-         if (current.amount <= 1) return []
-         return [{ ...current, amount: current.amount - 1 }]
+         if (current !== target) return [current]
+         const remaining = current.amount - amount
+         return remaining > 0 ? [{ ...current, amount: remaining }] : []
       })
-      updateEquipment(nextEquipment, t('Item used.', language))
+      saveEquipmentMutation.mutate(nextEquipment, {
+         onSuccess: () => {
+            toast.success(t('Item used.', language))
+            setUseTarget(null)
+         },
+      })
    }
 
    const dropItem = () => {
@@ -453,16 +469,18 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
                         <td>
                            <div className='equipment-row-actions'>
                               {statsQuery.data && <WeaponRepairButton stats={statsQuery.data} entry={entry} index={equipment.indexOf(entry)} />}
-                              <button
+                              {/* Only consumables can be used up: effect items open their dialog, the others ask how many */}
+                              {(isConsumableItem(entry.item) || isUsedUpItem(entry.item)) && <button
                                  className='icon-button'
                                  type='button'
-                                 title={t('Use one item', language)}
-                                 aria-label={t('Use one item', language)}
-                                 onClick={() => isConsumableItem(entry.item) ? setConsumeTarget(entry) : consumeItem(entry)}
+                                 aria-haspopup='dialog'
+                                 title={t('Use up', language)}
+                                 aria-label={`${t('Use up', language)}: ${equipmentDisplayName(entry.item, language)}`}
+                                 onClick={() => isConsumableItem(entry.item) ? setConsumeTarget(entry) : setUseTarget(entry)}
                                  disabled={saveEquipmentMutation.isPending}
                               >
                                  <Utensils size={15} />
-                              </button>
+                              </button>}
                               <button
                                  className='icon-button'
                                  type='button'
@@ -493,6 +511,10 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
          {consumeTarget && statsQuery.data && (
             <ConsumeDialog stats={statsQuery.data} entry={consumeTarget} index={equipment.indexOf(consumeTarget)}
                onClose={() => setConsumeTarget(null)} />
+         )}
+         {useTarget && (
+            <UseItemDialog entry={useTarget} pending={saveEquipmentMutation.isPending}
+               onConfirm={(amount) => consumeItem(useTarget, amount)} onClose={() => setUseTarget(null)} />
          )}
          {dropTarget && (
             <div className='modal-backdrop'>

@@ -94,6 +94,13 @@ export const purchaseEquipmentSchema = z.object({
    unitPriceSilbertaler: z.number().min(0),
    description: z.string().optional(),
    quality: z.number().int().min(1).max(6).optional(),
+   contents: z.array(z.object({
+      item: nonEmptyString,
+      category: nonEmptyString,
+      unitWeight: z.number().min(0),
+      amount: z.number().int().min(1).max(100),
+      description: z.string().max(1000).optional(),
+   })).max(40).optional(),
 })
 
 const coinAmount = z.number().int().min(0).default(0)
@@ -206,7 +213,7 @@ export const vitalResourcesTypeSchema = z.object({
 
 const talentEntrySchema = z.object({
    key: nonEmptyString,
-   value: z.number().int().min(0).nullable(),
+   value: z.number().int().min(0),
    notes: z.string().max(200).default(''),
 })
 

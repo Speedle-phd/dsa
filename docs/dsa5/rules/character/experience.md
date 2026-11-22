@@ -62,7 +62,7 @@ What uses which column (S. 50): Eigenschaft E; Fertigkeit, Zauber/Ritual, Liturg
 ## Open questions
 
 - AP rewards and learning methods after creation (Detailregeln "Erfahrung", "Lernmethoden", S. 337–352) are not covered yet.
-- House rule: the app charges the activation cost when a talent goes from unset (`null`) to FW 0. By the book, talents are always active and free (S. 25, 50).
+- Talents are always active from FW 0 without activation cost (S. 25), on the hero page and in creation. The former house rule (activation A–D 1–4 AP for unset talents) was dropped in Nov 2026 (user decision); a startup migration (`utils/talentMigration.ts`) set unset talents to FW 0. AP already paid for such activations stay spent.
 
 ## Code
 

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
    Brain,
    ArrowUp,
+   BookOpenText,
    Bug,
    HeartPulse,
    Moon,
@@ -12,7 +13,9 @@ import {
 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { incrementFatePoints, levelUpAttribute, restoreFatePoints } from './statsApi'
-import type { Hero } from './heroApi'
+import { updateHero, type Hero, type HeroInput } from './heroApi'
+import { HeroEditor } from './HeroEditor'
+import type { HeroFormSection } from './heroSchema'
 import { StatsEditor } from './StatsEditor'
 import {
    getStatsForHero,
@@ -122,6 +125,24 @@ export function HeroOverview({ hero }: HeroOverviewProps) {
       queryFn: () => getStatsForHero(hero._id),
    })
    const family = hero.familyTree
+   const queryClient = useQueryClient()
+   const [editing, setEditing] = useState<readonly HeroFormSection[] | null>(null)
+   const save = useMutation({
+      mutationFn: (values: HeroInput) => updateHero(hero._id, values),
+      onSuccess: (updated) => {
+         queryClient.setQueryData(['heroes', hero._id], updated)
+         void queryClient.invalidateQueries({ queryKey: ['heroes'], exact: true })
+         toast.success(t('Hero updated', language))
+         setEditing(null)
+      },
+      onError: (error) => toast.error(getErrorMessage(error)),
+   })
+   const editButton = (section: HeroFormSection, label: string) => (
+      <button className='quiet-button section-action' type='button' aria-haspopup='dialog'
+         aria-label={t(label, language)} onClick={() => setEditing([section])}>
+         <Pencil size={16} />{t('Edit', language)}
+      </button>
+   )
 
    return (
       <div className='hero-overview'>
@@ -145,6 +166,7 @@ export function HeroOverview({ hero }: HeroOverviewProps) {
                   <p className='eyebrow'>{t('Character record', language)}</p>
                   <h2>{t('Hero at a glance', language)}</h2>
                </div>
+               {editButton('identity', 'Edit character record')}
             </header>
             <dl className='fact-grid'>
                <div>
@@ -183,7 +205,10 @@ export function HeroOverview({ hero }: HeroOverviewProps) {
          </section>
          <section className='overview-section overview-split'>
             <div>
-               <h3>{t('Appearance', language)}</h3>
+               <div className='overview-subheading'>
+                  <h3>{t('Appearance', language)}</h3>
+                  {editButton('appearance', 'Edit appearance')}
+               </div>
                <p className='prose-copy'>
                   {hero.appearance ||
                      t('No appearance or characteristics recorded yet.', language)}
@@ -212,7 +237,10 @@ export function HeroOverview({ hero }: HeroOverviewProps) {
                </dl>
             </div>
             <div>
-               <h3>{t('Family', language)}</h3>
+               <div className='overview-subheading'>
+                  <h3>{t('Family', language)}</h3>
+                  {editButton('family', 'Edit family')}
+               </div>
                <dl className='family-facts'>
                   <div>
                      <dt>{t('Parents', language)}</dt>
@@ -236,6 +264,28 @@ export function HeroOverview({ hero }: HeroOverviewProps) {
                )}
             </div>
          </section>
+         <section className='overview-section overview-chronicle'>
+            <header className='section-heading'>
+               <BookOpenText size={19} />
+               <div>
+                  <p className='eyebrow'>{t('Character record', language)}</p>
+                  <h2>{t('Chronicle', language)}</h2>
+               </div>
+               {editButton('chronicle', 'Edit chronicle')}
+            </header>
+            <div>
+               <h3>{t('Background', language)}</h3>
+               <p className='prose-copy'>{hero.background || t('Not recorded', language)}</p>
+            </div>
+            <div>
+               <h3>{t('Biography', language)}</h3>
+               <p className='prose-copy'>{hero.biography || t('Not recorded', language)}</p>
+            </div>
+         </section>
+         {editing && (
+            <HeroEditor hero={hero} sections={editing} isSaving={save.isPending}
+               onClose={() => setEditing(null)} onSave={(values) => save.mutate(values)} />
+         )}
          {statsQuery.isPending && (
             <div className='overview-loading'>{t('Loading base attributes...', language)}</div>
          )}

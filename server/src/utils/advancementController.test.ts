@@ -5,6 +5,7 @@ import * as persistence from './statsPersistence'
 import { levelUpAttribute, levelUpTalent, purchaseAdditionalVitalResources, updateStats } from '../controllers/statsController'
 import { levelUpCombatTechnique, removeCombatAbility } from '../controllers/combatController'
 import { addCharacterEntry, removeCharacterEntry } from '../controllers/characterEntryController'
+import { mockStatsLookup } from './testing/mockStatsLookup'
 
 function request(body: Record<string, unknown>) {
    return {
@@ -24,7 +25,7 @@ function setup() {
       talents: [{ key: 'gassenwissen', value: 7, notes: 'Keep this note' }],
       createdAt: new Date(), updatedAt: new Date(),
    })
-   vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+   mockStatsLookup(stat)
    const save = vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
    const res = { json: vi.fn(), status: vi.fn().mockReturnThis() } as Response
    return { stat, save, res }

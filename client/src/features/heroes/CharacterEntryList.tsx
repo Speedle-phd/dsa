@@ -17,6 +17,7 @@ import { getAttributeAbbreviation, talentCatalog } from './talentCatalog'
 import { APToggle } from './AdvancementControls'
 import { useAdvancementMode } from './advancement'
 import { talentDetails } from './talentDetails'
+import { applicationLabel } from './talentApplicationGlosses'
 import { DetailInput, SuggestionChips } from './SuggestedDetail'
 import { entryAvailability } from './entryOwnership'
 
@@ -212,7 +213,7 @@ function AddEntryDialog({ stats, category, reference, initial, onClose }: {
                <input value={application} maxLength={200} required disabled={mutation.isPending} list='talent-applications'
                   onChange={(event) => setApplication(event.target.value)} />
                <datalist id='talent-applications'>
-                  {(talentDetails[detail]?.applications ?? []).map((name) => <option key={name} value={name} />)}
+                  {(talentDetails[detail]?.applications ?? []).map((name) => <option key={name} value={name} label={applicationLabel(name, language)} />)}
                </datalist>
             </label>}
             {!custom && entry?.parameter === 'immunity' && <label className='field-group'>

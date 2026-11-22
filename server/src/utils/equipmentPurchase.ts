@@ -27,6 +27,8 @@ export type EquipmentPurchaseInput = {
    unitPriceSilbertaler: number
    description?: string
    quality?: number
+   // Equipment package (S. 364–365): paid once at the package price, each piece is added on its own (× amount)
+   contents?: Array<{ item: string; category: string; unitWeight: number; amount: number; description?: string }>
 }
 
 type EquipmentPurchaseFailure =
@@ -132,35 +134,42 @@ export function purchaseEquipment(
       }
    }
 
-   const nextEquipment = equipment.map((entry) => ({ ...entry }))
-   const existingIndex = nextEquipment.findIndex(
-      (entry) =>
-         entry.item === purchase.item &&
-         entry.category === purchase.category &&
-         entry.carriedOn === purchase.carriedOn &&
-         entry.quality === purchase.quality,
-   )
+   const pieces = purchase.contents?.length
+      ? purchase.contents.map((piece) => ({ ...piece, amount: piece.amount * purchase.amount, quality: undefined }))
+      : [{ item: purchase.item, category: purchase.category, unitWeight: purchase.unitWeight, amount: purchase.amount,
+         description: purchase.description, quality: purchase.quality }]
+   if (pieces.some((piece) => !Number.isSafeInteger(piece.amount) || piece.amount < 1 || !Number.isFinite(piece.unitWeight) || piece.unitWeight < 0)) {
+      return { ok: false, reason: 'invalid-purchase' }
+   }
 
-   if (existingIndex >= 0) {
-      const nextAmount =
-         nextEquipment[existingIndex].amount + purchase.amount
-      if (!Number.isSafeInteger(nextAmount)) {
-         return { ok: false, reason: 'invalid-purchase' }
+   const nextEquipment = equipment.map((entry) => ({ ...entry }))
+   for (const piece of pieces) {
+      // Merges into an identical stack at the same place (same quality)
+      const existingIndex = nextEquipment.findIndex(
+         (entry) =>
+            entry.item === piece.item &&
+            entry.category === piece.category &&
+            entry.carriedOn === purchase.carriedOn &&
+            entry.quality === piece.quality,
+      )
+
+      if (existingIndex >= 0) {
+         const nextAmount = nextEquipment[existingIndex].amount + piece.amount
+         if (!Number.isSafeInteger(nextAmount)) {
+            return { ok: false, reason: 'invalid-purchase' }
+         }
+         nextEquipment[existingIndex] = { ...nextEquipment[existingIndex], amount: nextAmount }
+      } else {
+         nextEquipment.push({
+            item: piece.item,
+            category: piece.category,
+            weight: piece.unitWeight,
+            amount: piece.amount,
+            carriedOn: purchase.carriedOn,
+            description: piece.description?.trim() ?? '',
+            ...(piece.quality ? { quality: piece.quality } : {}),
+         })
       }
-      nextEquipment[existingIndex] = {
-         ...nextEquipment[existingIndex],
-         amount: nextAmount,
-      }
-   } else {
-      nextEquipment.push({
-         item: purchase.item,
-         category: purchase.category,
-         weight: purchase.unitWeight,
-         amount: purchase.amount,
-         carriedOn: purchase.carriedOn,
-         description: purchase.description?.trim() ?? '',
-         ...(purchase.quality ? { quality: purchase.quality } : {}),
-      })
    }
 
    const totalWeight = carriedEquipmentWeight(nextEquipment)

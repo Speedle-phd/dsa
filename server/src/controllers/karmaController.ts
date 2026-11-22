@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { findStatsForUser, saveStats } from '@/utils/statsPersistence'
+import { findStatsForActor, findStatsForUser, saveStats } from '@/utils/statsPersistence'
 import { buildStatResponse } from '@/views/statsView'
 import { BadRequestError, UnauthorizedError } from '@/utils/appError'
 import { advancementCost, assertAffordable } from '@/utils/advancement'
@@ -98,11 +98,14 @@ export async function removeBlessing(req: Request, res: Response) {
 
 // KaP spent on liturgies and blessings, or recovered by the GM's ruling (S. 306, 311)
 export async function adjustKarma(req: Request, res: Response) {
-   const stat = await owner(req)
+   if (!req.user) throw new UnauthorizedError('User not authenticated')
+   const { stat, actor } = await findStatsForActor(req.params.id, req.user._id)
    const { direction, amount } = karmaAdjustmentSchema.parse(req.body)
    const current = stat.karmaEnergy.current ?? stat.karmaEnergy.max
-   const spend = direction === 'spend' ? karmaSpend(stat, amount, current) : null
-   const target = current + (spend ? -spend.total : amount)
+   // The party GM applies a plain KaP loss; liturgy surcharges belong to the hero's own spending
+   const spend = direction === 'spend' && actor === 'owner' ? karmaSpend(stat, amount, current) : null
+   const loss = direction === 'spend' && actor === 'gm' ? amount : 0
+   const target = current + (spend ? -spend.total : loss ? -loss : amount)
    // source: DSA5 Regelwerk, S. 306 (a liturgy costing more KaP than the priest has fails)
    if (target < 0 || target > stat.karmaEnergy.max) throw new BadRequestError('KaP must stay between zero and the maximum.')
    stat.karmaEnergy.current = target

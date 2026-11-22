@@ -17,7 +17,7 @@ export function MarketRatePanel({ stats }: { stats: Stats }) {
    const language = useLanguageStore((state) => state.language)
    const { marketRate, setMarketRate } = useHeroStore()
    const [rolling, setRolling] = useState(false)
-   const value = stats.talents.find((talent) => talent.key === 'handel')?.value ?? null
+   const value = stats.talents.find((talent) => talent.key === 'handel')?.value ?? 0
 
    return <div className='state-panel market-rate-panel'>
       <div className='resource-label'>
@@ -28,8 +28,7 @@ export function MarketRatePanel({ stats }: { stats: Stats }) {
       </div>
       <small>{t('Haggle once per market visit: Handel (Feilschen) against the merchant, net QS × 10 %, at most 50 % (S. 208).', language)}</small>
       <div className='market-rate-controls'>
-         <button className='primary-button' type='button' disabled={value === null}
-            title={value === null ? t('This talent is not activated.', language) : undefined} onClick={() => setRolling(true)}>
+         <button className='primary-button' type='button' onClick={() => setRolling(true)}>
             <Handshake size={16} />{t('Haggle', language)}
          </button>
          <QuantityStepper value={marketRate} min={-50} max={50} label={t('Market rate in percent', language)} onChange={setMarketRate} />
@@ -37,7 +36,7 @@ export function MarketRatePanel({ stats }: { stats: Stats }) {
             <RotateCcw size={15} />{t('Reset', language)}
          </button>
       </div>
-      {rolling && value !== null && <TalentProbeDialog stats={stats} talent={handel} value={value} opposedRole='none'
+      {rolling && <TalentProbeDialog stats={stats} talent={handel} value={value} opposedRole='none' fixedApplication='Feilschen'
          renderResult={({ contest }) => {
             if (!contest) return <p className='fight-note'>{t('Enter the merchant’s Handel (Feilschen) result to compare.', language)}</p>
             const rate = haggleRate(contest)

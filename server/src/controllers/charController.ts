@@ -1,3 +1,5 @@
+import { removeHeroFromParties } from '@/utils/partyCleanup'
+import { publishHeroChange } from '@/utils/statsPersistence'
 import type { Request, Response } from 'express'
 import { Char } from '@/models/char.model'
 import { Stats } from '@/models/stats.model'
@@ -77,6 +79,9 @@ export async function updateCharacter(req: Request, res: Response) {
 
    Object.assign(char, req.body)
    await char.save()
+   // Name, appearance etc. appear in party rosters and sheets
+   const stat = await Stats.findOne({ userId: req.user._id, charId: char._id }).select('_id userId charId')
+   if (stat) await publishHeroChange(stat)
 
    res.status(200).json(buildCharResponse(char))
 }
@@ -104,6 +109,7 @@ export async function deleteCharacter(req: Request, res: Response) {
          Artifact.deleteMany({ userId: req.user._id, statsId: stat._id }),
          ActiveEffect.deleteMany({ userId: req.user._id, statsId: stat._id }),
       ] : []),
+      removeHeroFromParties(char._id),
    ])
 
    res.status(200).json({

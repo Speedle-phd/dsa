@@ -6,6 +6,7 @@ import * as persistence from './statsPersistence'
 import { adjustMana, changeSpell, changeTrick, removeSpell, removeTrick, updateMagicSettings, updateSpellNotes } from '../controllers/magicController'
 import { toPublicStats } from '../views/statsView'
 import { spellChangeSchema, magicSettingsSchema, manaAdjustmentSchema } from '../validations/magicValidation'
+import { mockStatsLookup } from './testing/mockStatsLookup'
 
 function request(body: Record<string, unknown>) {
    return { params: { id: '507f1f77bcf86cd799439010' }, user: { _id: '507f1f77bcf86cd799439011' }, body } as Request
@@ -19,7 +20,7 @@ function setup() {
       mana: { current: 12, max: 35 },
       createdAt: new Date(), updatedAt: new Date(),
    })
-   const find = vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+   const find = mockStatsLookup(stat)
    const save = vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
    const res = { json: vi.fn() } as Response
    return { stat, find, save, res }

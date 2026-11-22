@@ -116,7 +116,7 @@ export function ArtifactsSection({ stats }: { stats: Stats }) {
             <span>{t('QS of ANALYS or another Hellsicht spell', language)}</span>
             <ProbeStepper value={analysisSpell} min={0} max={6} label={t('QS of ANALYS or another Hellsicht spell', language)}
                lowerLabel={t('Less', language)} raiseLabel={t('More', language)} onChange={setAnalysisSpell} />
-            <button className='quiet-button' type='button' disabled={cap < 1 || (stats.talents.find((entry) => entry.key === 'magiekunde')?.value ?? null) === null}
+            <button className='quiet-button' type='button' disabled={cap < 1}
                onClick={() => setAnalysing(true)}><Search size={15} />{t('Analyse (max. QS {cap})', language).replace('{cap}', String(cap))}</button>
          </div>
          <ol className='artifact-analysis'>{analysisTable.map((line, index) => <li key={line}>QS {index + 1}: {t(line, language)}</li>)}</ol>

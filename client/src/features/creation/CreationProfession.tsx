@@ -1,4 +1,5 @@
 import { talentDetails } from '@/features/heroes/talentDetails'
+import { applicationLabel } from '@/features/heroes/talentApplicationGlosses'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { resolvedProfession, usualFor, type ProfessionDefinition, type StepProps } from './creationApi'
@@ -83,7 +84,7 @@ export function ProfessionStep({ data, ledger, reference, update }: StepProps) {
                {talentDetails[resolved.specialization]?.applications.length
                   ? <select value={current.application} onChange={(event) => set({ application: event.target.value })}>
                      <option value=''>{t('Choose an application', language)}</option>
-                     {talentDetails[resolved.specialization].applications.map((application) => <option key={application} value={application}>{application}</option>)}
+                     {talentDetails[resolved.specialization].applications.map((application) => <option key={application} value={application}>{applicationLabel(application, language)}</option>)}
                   </select>
                   : <input value={current.application} maxLength={80} onChange={(event) => set({ application: event.target.value })} />}
             </label>}

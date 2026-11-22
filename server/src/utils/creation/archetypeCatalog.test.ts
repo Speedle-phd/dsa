@@ -3,12 +3,12 @@ import { archetypeCatalog, archetypeDraft, archetypeFor } from './archetypeCatal
 import { creationLedger, emptyDraft, type CreationDraftData } from './creationLedger'
 import { finishedHero } from './creationFinish'
 
-// Remaining AP of each printed archetype under the app's rules. Only Allacaya balances like the book (0 AP left);
-// the others differ by printed values that do not add up (e.g. Wulfgrimm Menschenkenntnis 0 below its package 2, S. 80, 141),
-// plus the activation house rule for talents outside the packages (experience.md). The player resolves the rest.
+// Remaining AP of each printed archetype. Attributes, techniques and all 59 talents match the stat blocks (checked Nov 2026),
+// and talents are active from FW 0 without activation cost (S. 25). Allacaya, Irinja and Gonzalo balance to 0; the others
+// do not add up in print (e.g. Wulfgrimm Menschenkenntnis 0 below its package 2, S. 80, 141). The player resolves the rest.
 const balances: Record<string, number> = {
-   Allacaya: 0, Korgrimm: -77, Thallian: 20, Irinja: -1, Belima: -8, Orestas: 10,
-   Elwene: -27, Selim: -8, Nevinia: -11, Wulfgrimm: 6, Ylwa: -29, Gonzalo: -2,
+   Allacaya: 0, Korgrimm: -71, Thallian: 27, Irinja: 0, Belima: -2, Orestas: 18,
+   Elwene: -26, Selim: -9, Nevinia: -10, Wulfgrimm: 10, Ylwa: -27, Gonzalo: 0,
 }
 // Open points every archetype may have: the specialization's application is not printed, the AP balance, and GM approvals
 const expectedOpen = new Set(['application', 'balance'])

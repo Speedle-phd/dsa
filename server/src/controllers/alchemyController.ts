@@ -16,7 +16,6 @@ export async function brewElixir(req: Request, res: Response) {
    const stat = await findStatsForUser(req.params.id, req.user._id)
    const { elixir, level, asp, success, quality, placement } = brewElixirSchema.parse(req.body)
    if (!stat.generalSpecialAbilities.includes(`Berufsgeheimnis (${elixir})`)) throw new BadRequestError(`The recipe ${elixir} is a Berufsgeheimnis (S. 215, 270).`)
-   if ((stat.talents.find((entry) => entry.key === 'alchimie')?.value ?? null) === null) throw new BadRequestError('Activate the talent Alchimie first.')
    const owned = stat.equipment.filter((item) => item.amount > 0).map((item) => item.item)
    const plan = brewPlan({ elixir, level, asp, laboratory: bestLaboratory(owned) })
    if (!(basePlacements as readonly string[]).includes(placement) && !(isContainer(placement) && owned.includes(placement))) {

@@ -11,7 +11,7 @@ source: DSA5 Regelwerk (4th revised German edition), S. 39, 154–159, 165, 177,
 
 ## Acquisition and advancement
 
-- Requires the advantage Geweihter (S. 165) and the tradition of a church. Activation to FW 0 costs A/B/C/D = 1/2/3/4 AP (app house rule, shared with talents and spells); raising uses the S. 50 table.
+- Requires the advantage Geweihter (S. 165) and the tradition of a church. Activation to FW 0 costs A/B/C/D = 1/2/3/4 AP (S. 25, 50; like spells — talents need no activation); raising uses the S. 50 table.
 - Maximum: highest Probe attribute + 2 (S. 39), capped at 14 without Aspektkenntnis of one of the liturgy's aspects (S. 321). The editor ends at 25.
 - Segnungen cost 1 AP each. "Die Zwölf Segnungen" is a 12 AP package of all twelve (S. 324) and is part of every priest profession.
 - The header AP switch works as in Arcana: AP disabled records without AP; removal refunds only tracked payments.

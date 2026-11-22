@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import type { MagicReferenceResponse } from '@/types/apiContracts'
-import { findStatsForUser, saveStats } from '@/utils/statsPersistence'
+import { findStatsForActor, findStatsForUser, saveStats } from '@/utils/statsPersistence'
 import { buildStatResponse } from '@/views/statsView'
 import { BadRequestError, UnauthorizedError } from '@/utils/appError'
 import { activatableStaffSpells, magicSpells, magicTricks, magicTraditions } from '@/utils/magicCatalog'
@@ -158,17 +158,19 @@ export async function updateMagicSettings(req: Request, res: Response) {
 
 export async function adjustMana(req: Request, res: Response) {
    if (!req.user) throw new UnauthorizedError('User not authenticated')
-   const stat = await findStatsForUser(req.params.id, req.user._id)
+   const { stat, actor } = await findStatsForActor(req.params.id, req.user._id)
    const { direction, amount, spiritRoll } = manaAdjustmentSchema.parse(req.body)
-   const spend = direction === 'spend' ? astralSpend(stat, amount, stat.mana.current) : null
+   // The party GM applies a plain AsP loss: casting surcharges and Lästige Mindergeister belong to the hero's own spending
+   const spend = direction === 'spend' && actor === 'owner' ? astralSpend(stat, amount, stat.mana.current) : null
+   const loss = direction === 'spend' && actor === 'gm' ? amount : 0
    if (spend && hasMinorSpirits(stat) && spiritRoll === undefined) throw new BadRequestError('Roll a W20 for Lästige Mindergeister (S. 173).')
-   const target = stat.mana.current + (spend ? -spend.total : amount)
+   const target = stat.mana.current + (spend ? -spend.total : loss ? -loss : amount)
    if (target < 0 || target > stat.mana.max) throw new BadRequestError('AsP must stay between zero and the maximum.')
    stat.mana.current = target
    await saveStats(stat)
    const minorSpirits = spend !== null && spiritRoll !== undefined && minorSpiritsAppear(stat, spiritRoll, spend.total)
-   if (minorSpirits && !(await ActiveEffect.exists({ statsId: stat._id, userId: req.user._id, key: minorSpiritsEffect.key }))) {
-      await createEffect(stat._id, req.user._id, minorSpiritsEffect)
+   if (minorSpirits && !(await ActiveEffect.exists({ statsId: stat._id, userId: stat.userId, key: minorSpiritsEffect.key }))) {
+      await createEffect(stat._id, String(stat.userId), minorSpiritsEffect)
    }
    res.json({ ...buildStatResponse(stat), spend: { total: spend?.total ?? 0, extra: spend?.extra ?? 0, minorSpirits } })
 }

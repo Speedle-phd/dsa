@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
-import { BadRequestError, UnauthorizedError } from '@/utils/appError'
-import { findStatsForUser, saveStats } from '@/utils/statsPersistence'
+import { BadRequestError, ForbiddenError, UnauthorizedError } from '@/utils/appError'
+import { findStatsForActor, findStatsForUser, saveStats } from '@/utils/statsPersistence'
 import { buildStatResponse } from '@/views/statsView'
 import {
    adjustHealth, combatAbilities, combatTechniques,
@@ -104,8 +104,12 @@ export async function addCombatAbility(req: Request, res: Response) {
 
 export async function updateCombatSettings(req: Request, res: Response) {
    if (!req.user) throw new UnauthorizedError('User not authenticated')
-   const stat = await findStatsForUser(req.params.id, req.user._id)
+   const { stat, actor } = await findStatsForActor(req.params.id, req.user._id)
    const payload = combatSettingsSchema.parse(req.body)
+   // The party GM may set statuses and Zustände only (user decision, Nov 2026)
+   if (actor === 'gm' && Object.keys(payload).some((key) => key !== 'statuses' && key !== 'conditions')) {
+      throw new ForbiddenError('The game master can change statuses and conditions only.')
+   }
    if (payload.wornArmor !== undefined) {
       if (payload.wornArmor !== null && (armorIndex(payload.wornArmor) < 0 ||
          !stat.equipment.some((entry) => entry.item === payload.wornArmor && entry.amount > 0))) {
@@ -138,7 +142,7 @@ export async function updateCombatSettings(req: Request, res: Response) {
       stat.combatConditions = endBloodRage(stat.statuses ?? [], next, stat.combatConditions ?? {})
       // source: DSA5 Regelwerk, S. 216 (Eiserner Wille ends when the hero becomes Bewusstlos, then Betäubung I)
       if (next.includes('Bewusstlos') && !(stat.statuses ?? []).includes('Bewusstlos')) {
-         const focus = await ActiveEffect.findOneAndDelete({ statsId: stat._id, userId: req.user._id, key: 'ironWill' })
+         const focus = await ActiveEffect.findOneAndDelete({ statsId: stat._id, userId: stat.userId, key: 'ironWill' })
          if (focus) stat.combatConditions = conditionsAfterEffect(stat.combatConditions ?? {}, focus.toObject().values ?? {})
       }
       stat.statuses = next
@@ -155,7 +159,7 @@ export async function updateCombatSettings(req: Request, res: Response) {
 
 export async function adjustHealthController(req: Request, res: Response) {
    if (!req.user) throw new UnauthorizedError('User not authenticated')
-   const stat = await findStatsForUser(req.params.id, req.user._id)
+   const { stat } = await findStatsForActor(req.params.id, req.user._id)
    const { direction, amount } = healthAdjustmentSchema.parse(req.body)
    const result = adjustHealth(stat.health.current, stat.health.max, direction, amount)
    if (!result.ok) throw new BadRequestError('Enter a positive whole number of LeP and check the health values.')

@@ -14,6 +14,7 @@ import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import type { AventurianStoreItem } from '@/utils/aventurian_store'
 import { getItemDetails, getPurchaseDescription } from '@/utils/storeDisplay'
+import { bundlePieces } from '@/utils/storeBundles'
 import { defaultVariant, purchaseName, unitPrice, withRate, type StoreVariant } from '@/utils/storePricing'
 import { conversionTable, getErrorMessage } from '@/utils/utils'
 
@@ -51,6 +52,8 @@ export function StorePurchaseDialog({ item, stats, heroId, onClose }: {
    const cost = toKreuzer(price) * quantity
    const name = purchaseName(item, variant)
    const effectivePlacement = placement ?? defaultPlacement(stats.equipment, name, quantity)
+   // Equipment packages go into the inventory piece by piece (S. 364–365)
+   const pieces = bundlePieces(item)
 
    const companionMutation = useMutation({
       mutationFn: () => updateCompanions(stats._id, { action: 'add-companion', species: item.name, name: t(item.name, language), familiar: false }),
@@ -67,6 +70,7 @@ export function StorePurchaseDialog({ item, stats, heroId, onClose }: {
             item: name, category: item.category, unitWeight: item.weight, amount: quantity, carriedOn: effectivePlacement,
             unitPriceSilbertaler: price, ...(description ? { description } : {}),
             ...(variant?.quality ? { quality: variant.quality } : {}),
+            ...(pieces.length ? { contents: pieces } : {}),
          })
       },
       onSuccess: () => {
@@ -133,6 +137,7 @@ export function StorePurchaseDialog({ item, stats, heroId, onClose }: {
 
                {item.kind === 'bundle' && item.contents && <section className='bundle-preview' aria-label={t('Bundle contents', language)}>
                   <h4>{t('Included in this bundle', language)}</h4>
+                  {pieces.length > 0 && <p>{t('Each item is added to the inventory on its own, so you can use, move or drop it separately.', language)}</p>}
                   <ul>{item.contents.map(({ name: content, amount }) => <li key={content}>{amount > 1 && <span>{amount} × </span>}{t(content, language)}</li>)}</ul>
                </section>}
 

@@ -24,7 +24,7 @@ import {
 } from '@/utils/talentCatalog'
 import { getExpForLevel, getLevelForExp } from '@/utils/levelExpMapping'
 import { attributeNames, statsRules } from '@/validations/statsRules'
-import { findStatsForUser, saveStats } from '@/utils/statsPersistence'
+import { findStatsForActor, findStatsForUser, saveStats } from '@/utils/statsPersistence'
 import {
    purchaseEquipment as calculateEquipmentPurchase,
    carriedEquipmentWeight,
@@ -534,7 +534,7 @@ export async function updateTalents(req: Request, res: Response) {
    const payload = req.body
 
    const { talents } = payload as {
-      talents: Array<{ key: string; value: number | null; notes: string }>
+      talents: Array<{ key: string; value: number; notes: string }>
    }
 
    const invalidKeys = talents
@@ -574,12 +574,12 @@ export async function levelUpTalent(req: Request, res: Response) {
 
    if (!talent) {
       // Stats saved before this talent was added to the catalog.
-      talents.push({ key: talentKey, value: null, notes: '' })
+      talents.push({ key: talentKey, value: 0, notes: '' })
       talent = talents[talents.length - 1]
    }
 
    const stfClass = talentStfClassByKey[talentKey]
-   const target = value ?? (talent.value === null ? 0 : talent.value + 1)
+   const target = value ?? talent.value + 1
    const maximum = talentMaximum(stat, talentKey) ?? 0
    if (spendAP && target > maximum) {
       throw new BadRequestError(`Talent has reached its maximum ${maximum} (highest probe attribute + 2, Herausragende Fertigkeit; S. 39, 166).`)
@@ -628,7 +628,8 @@ export async function updateExperience(req: Request, res: Response) {
 
    const { id } = req.params
 
-   const stat = await findStatsForUser(id, req.user._id)
+   // Owner, or the party GM awarding AP (user decision, Nov 2026)
+   const { stat } = await findStatsForActor(id, req.user._id)
 
    const payload = req.body
 

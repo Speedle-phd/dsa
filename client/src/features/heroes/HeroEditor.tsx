@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { X } from 'lucide-react'
-import { type Resolver, useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { type FieldErrors, type Resolver, useForm } from 'react-hook-form'
 import { useModalKeyboard } from '../../components/useModalKeyboard'
 import type { Hero, HeroInput } from './heroApi'
-import { heroFormSchema, type HeroFormValues } from './heroSchema'
+import { heroFormSchema, heroFormSections, type HeroFormSection, type HeroFormValues } from './heroSchema'
 import { t } from '@/locales/translation'
 import { useLanguageStore } from '@/locales/languageStore'
 
@@ -12,6 +13,15 @@ type HeroEditorProps = {
    isSaving: boolean
    onClose: () => void
    onSave: (hero: HeroInput) => void
+   // Only these parts of the form; the other fields are saved unchanged
+   sections?: readonly HeroFormSection[]
+}
+
+const sectionFields: Record<HeroFormSection, ReadonlyArray<keyof HeroFormValues>> = {
+   identity: ['name', 'title', 'status', 'sex', 'age', 'species', 'placeOfOrigin', 'culture', 'profession', 'socialStatus'],
+   family: ['parents', 'siblings', 'partner', 'children', 'familyNotes'],
+   appearance: ['height', 'weight', 'build', 'eyeColor', 'hairColor', 'appearance'],
+   chronicle: ['background', 'biography'],
 }
 
 const emptyHero: HeroFormValues = {
@@ -42,8 +52,11 @@ const emptyHero: HeroFormValues = {
 
 function toFormValues(hero: Hero | null): HeroFormValues {
    if (!hero) return emptyHero
+   // Heroes from guided creation or older saves may lack optional texts (e.g. title): fall back to empty strings
+   const stored = Object.fromEntries(Object.entries(hero).filter(([, value]) => value !== undefined && value !== null))
    return {
-      ...hero,
+      ...emptyHero,
+      ...stored,
       height: hero.height?.toString() ?? '',
       weight: hero.weight?.toString() ?? '',
       parents: hero.familyTree?.parents?.join(', ') ?? '',
@@ -70,9 +83,12 @@ export function HeroEditor({
    isSaving,
    onClose,
    onSave,
+   sections = heroFormSections,
 }: HeroEditorProps) {
    const dialogRef = useModalKeyboard(onClose)
    const language = useLanguageStore((state) => state.language)
+   const [shown, setShown] = useState<readonly HeroFormSection[]>(sections)
+   const first = shown[0]
    const {
       register,
       handleSubmit,
@@ -97,6 +113,13 @@ export function HeroEditor({
             notes: familyNotes,
          },
       })
+   }
+
+   // A stored value outside the open sections can fail validation (e.g. an older hero without a place of origin):
+   // show the whole form so the message is visible.
+   function invalid(found: FieldErrors<HeroFormValues>) {
+      const visible = shown.flatMap((section) => sectionFields[section])
+      if (Object.keys(found).some((key) => !visible.includes(key as keyof HeroFormValues))) setShown(heroFormSections)
    }
 
    return (
@@ -127,15 +150,15 @@ export function HeroEditor({
             </header>
             <form
                className='hero-form'
-               onSubmit={handleSubmit(submit)}
+               onSubmit={handleSubmit(submit, invalid)}
                noValidate
             >
-               <fieldset className='form-section'>
+               {shown.includes('identity') && <fieldset className='form-section'>
                   <legend>{t('Identity', language)}</legend>
                   <div className='form-grid'>
                      <label className='field-group field-wide'>
                         <span>{t('Name', language)}</span>
-                        <input autoFocus {...register('name')} />
+                        <input autoFocus={first === 'identity'} {...register('name')} />
                         {errors.name && (
                            <small className='field-error'>
                               {errors.name.message}
@@ -224,13 +247,14 @@ export function HeroEditor({
                         )}
                      </label>
                   </div>
-               </fieldset>
-               <fieldset className='form-section'>
+               </fieldset>}
+               {shown.includes('family') && <fieldset className='form-section'>
                   <legend>{t('Family', language)}</legend>
                   <div className='form-grid'>
                      <label className='field-group field-wide'>
                         <span>{t('Parents', language)}</span>
                         <input
+                           autoFocus={first === 'family'}
                            placeholder={t('Names, separated by commas', language)}
                            {...register('parents')}
                         />
@@ -263,13 +287,14 @@ export function HeroEditor({
                         )}
                      </label>
                   </div>
-               </fieldset>
-               <fieldset className='form-section'>
+               </fieldset>}
+               {shown.includes('appearance') && <fieldset className='form-section'>
                   <legend>{t('Appearance', language)}</legend>
                   <div className='form-grid'>
                      <label className='field-group'>
                         <span>{t('Height (cm)', language)}</span>
                         <input
+                           autoFocus={first === 'appearance'}
                            type='number'
                            min='0'
                            step='0.1'
@@ -317,20 +342,30 @@ export function HeroEditor({
                         )}
                      </label>
                   </div>
-               </fieldset>
-               <fieldset className='form-section'>
+               </fieldset>}
+               {shown.includes('chronicle') && <fieldset className='form-section'>
                   <legend>{t('Chronicle', language)}</legend>
                   <div className='form-grid'>
                      <label className='field-group field-wide'>
                         <span>{t('Background', language)}</span>
-                        <textarea rows={3} {...register('background')} />
+                        <textarea autoFocus={first === 'chronicle'} rows={3} {...register('background')} />
+                        {errors.background && (
+                           <small className='field-error'>
+                              {errors.background.message}
+                           </small>
+                        )}
                      </label>
                      <label className='field-group field-wide'>
                         <span>{t('Biography', language)}</span>
-                        <textarea rows={4} {...register('biography')} />
+                        <textarea rows={8} {...register('biography')} />
+                        {errors.biography && (
+                           <small className='field-error'>
+                              {errors.biography.message}
+                           </small>
+                        )}
                      </label>
                   </div>
-               </fieldset>
+               </fieldset>}
                <footer className='editor-actions'>
                   <button
                      className='quiet-button'

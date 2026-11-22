@@ -51,8 +51,8 @@ export type CreationLedger = {
    usage: { attributeSum: number; advantageAp: number; disadvantageAp: number; spells: number; liturgies: number }
    packageTalents: Record<string, number>
    profession: { key: string; variant: string | null; ap: number; languageBudget: number; budgetUsed: number; budgetIncludesScripts: boolean; curseBudget: number; curseUsed: number } | null
-   // null = not activated (house rule: activation costs A–D 1–4 AP); package talents are activated
-   talents: Record<string, { base: number | null; value: number | null; cost: number; maximum: number }>
+   // Every talent is active from FW 0 (S. 25); base = package value, else 0
+   talents: Record<string, SkillRow>
    techniques: Record<string, SkillRow>
    spells: Record<string, { base: number | null; value: number; cost: number; maximum: number }>
    liturgies: Record<string, { base: number | null; value: number; cost: number; maximum: number }>

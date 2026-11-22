@@ -1419,10 +1419,6 @@
       "de": "Unbekannt",
       "en": "Unknown"
    },
-   "Use one item": {
-      "de": "Einen Gegenstand verwenden",
-      "en": "Use one item"
-   },
    "Vital forces": {
       "de": "Lebenskräfte",
       "en": "Vital forces"
@@ -2923,33 +2919,9 @@
       "de": "Taschenuhr (Vinsalter Ei)",
       "en": "Pocket watch (Vinsalt egg)"
    },
-   "Amulette, Götterfigürchen und persönliche Gegenstände": {
-      "de": "Amulette, Götterfigürchen und persönliche Gegenstände",
-      "en": "Amulets, small god figurines, and personal belongings"
-   },
-   "Kletterseil, 10 Schritt": {
-      "de": "Kletterseil, 10 Schritt",
-      "en": "Climbing rope, 10 paces"
-   },
-   "Proviant für drei Tage": {
-      "de": "Proviant für drei Tage",
-      "en": "Rations for three days"
-   },
-   "Proviant für fünf Tage": {
-      "de": "Proviant für fünf Tage",
-      "en": "Rations for five days"
-   },
-   "Verband": {
-      "de": "Verband",
-      "en": "Bandage"
-   },
    "Waffenpflegeset (Schleifstein, Tücher)": {
       "de": "Waffenpflegeset (Schleifstein, Tücher)",
       "en": "Weapon care kit (whetstone, cloths)"
-   },
-   "Zunder": {
-      "de": "Zunder",
-      "en": "Tinder"
    },
    "Zunderdose": {
       "de": "Zunderdose",
@@ -2962,10 +2934,6 @@
    "Lampenöl, 8 Stunden Brennzeit": {
       "de": "Lampenöl, 8 Stunden Brennzeit",
       "en": "Lamp oil, 8 hours' burn time"
-   },
-   "Papier": {
-      "de": "Papier",
-      "en": "Paper"
    },
    "Ready-made travel equipment package.": {
       "de": "Fertiges Ausrüstungspaket für Reisen.",
@@ -5219,10 +5187,6 @@
       "de": "Die Verteidigung des Gegners wird halbiert.",
       "en": "The enemy's defense is halved."
    },
-   "Activate this talent to roll a check.": {
-      "de": "Aktiviere dieses Talent, um eine Probe zu würfeln.",
-      "en": "Activate this talent to roll a check."
-   },
    "Rule details": {
       "de": "Regeldetails",
       "en": "Rule details"
@@ -6023,10 +5987,6 @@
       "de": "Dieser Zauber ist nicht bekannt.",
       "en": "This spell is not owned."
    },
-   "This talent is not activated.": {
-      "de": "Dieses Talent ist nicht aktiviert.",
-      "en": "This talent is not activated."
-   },
    "Time interval (set by the GM)": {
       "de": "Zeitintervall (legt der Meister fest)",
       "en": "Time interval (set by the GM)"
@@ -6223,14 +6183,6 @@
       "de": "Körperbeherrschung (Kampfmanöver)",
       "en": "Körperbeherrschung (Kampfmanöver)"
    },
-   "Körperbeherrschung is not activated.": {
-      "de": "Körperbeherrschung ist nicht aktiviert.",
-      "en": "Körperbeherrschung is not activated."
-   },
-   "Körperbeherrschung is not activated: the hero falls.": {
-      "de": "Körperbeherrschung ist nicht aktiviert: Der Held stürzt.",
-      "en": "Körperbeherrschung is not activated: the hero falls."
-   },
    "Large (ogre, troll)": {
       "de": "Groß (Oger, Troll)",
       "en": "Large (ogre, troll)"
@@ -6418,10 +6370,6 @@
    "Sight": {
       "de": "Sicht",
       "en": "Sight"
-   },
-   "Sinnesschärfe is not activated.": {
-      "de": "Sinnesschärfe ist nicht aktiviert.",
-      "en": "Sinnesschärfe is not activated."
    },
    "Situation": {
       "de": "Situation",
@@ -7931,10 +7879,6 @@
       "de": "AT −2. Bestätigt der Meister, dass der Biss nicht verteidigt wurde, verbeißt sich das Tier: weitere Bisse treffen automatisch mit +1 TP je weiterer KR, das Ziel ist Fixiert und die VW des Begleiters sinkt auf 0 (S. 362).",
       "en": "AT −2. If the GM confirms the bite was not defended, it holds on: later bites hit automatically with +1 TP per further combat round, the target is Fixiert and the companion’s VW drops to 0 (p. 362)."
    },
-   "Activate the talent to roll a knowledge check.": {
-      "de": "Aktiviere das Talent, um eine Wissensprobe abzulegen.",
-      "en": "Activate the talent to roll a knowledge check."
-   },
    "Additional service": {
       "de": "Zusätzlicher Dienst",
       "en": "Additional service"
@@ -8839,10 +8783,6 @@
       "de": "Starten (1 AsP)",
       "en": "Take off (1 AsP)"
    },
-   "Talent Alchimie not activated.": {
-      "de": "Talent Alchimie nicht aktiviert.",
-      "en": "Talent Alchimie not activated."
-   },
    "The Flammenschwert is available as a weapon in the fight panel.": {
       "de": "Das Flammenschwert steht im Kampfpanel als Waffe bereit.",
       "en": "The Flammenschwert is available as a weapon in the fight panel."
@@ -9527,10 +9467,6 @@
       "de": "Zauberprobe würfeln",
       "en": "Roll the spell Probe"
    },
-   "Selbstbeherrschung is not activated.": {
-      "de": "Selbstbeherrschung ist nicht aktiviert.",
-      "en": "Selbstbeherrschung is not activated."
-   },
    "Start casting": {
       "de": "Wirken beginnen",
       "en": "Start casting"
@@ -10107,13 +10043,9 @@
       "de": "{name} braucht {requirement}.",
       "en": "{name} needs {requirement}."
    },
-   "Deactivate": {
-      "de": "Deaktivieren",
-      "en": "Deactivate"
-   },
-   "Talents from your packages are activated; others start not activated and cost their activation (A 1, B 2, C 3, D 4 AP) to reach FW 0 — the app’s house rule, as on the hero sheet. Combat techniques start at 6. Raising costs AP, lowering a package value refunds it (S. 45, 50). Maximum: the Erfahrungsgrad and the highest attribute of the check + 2.": {
-      "de": "Talente aus deinen Paketen sind aktiviert; andere beginnen nicht aktiviert und kosten ihre Aktivierung (A 1, B 2, C 3, D 4 AP) bis FW 0 — die Hausregel der App, wie auf dem Heldenbogen. Kampftechniken beginnen bei 6. Steigern kostet AP, Senken eines Paketwerts erstattet sie (S. 45, 50). Maximum: Erfahrungsgrad und höchste Probeneigenschaft + 2.",
-      "en": "Talents from your packages are activated; others start not activated and cost their activation (A 1, B 2, C 3, D 4 AP) to reach FW 0 — the app’s house rule, as on the hero sheet. Combat techniques start at 6. Raising costs AP, lowering a package value refunds it (p. 45, 50). Maximum: the Erfahrungsgrad and the highest attribute of the check + 2."
+   "All talents are active from FW 0; packages add their values. Combat techniques start at 6. Raising costs AP, lowering a package value refunds it (S. 25, 45, 50). Maximum: the Erfahrungsgrad and the highest attribute of the check + 2.": {
+      "de": "Alle Talente sind ab FW 0 aktiv; Pakete addieren ihre Werte. Kampftechniken beginnen bei 6. Steigern kostet AP, Senken eines Paketwerts erstattet sie (S. 25, 45, 50). Maximum: Erfahrungsgrad und höchste Probeneigenschaft + 2.",
+      "en": "All talents are active from FW 0; packages add their values. Combat techniques start at 6. Raising costs AP, lowering a package value refunds it (p. 25, 45, 50). Maximum: the Erfahrungsgrad and the highest attribute of the check + 2."
    },
    "Disadvantages at creation": {
       "de": "Nachteile bei der Erschaffung",
@@ -10462,5 +10394,497 @@
    "System": {
       "de": "System",
       "en": "System"
+   },
+   "Edit character record": {
+      "de": "Heldenakte bearbeiten",
+      "en": "Edit character record"
+   },
+   "Edit appearance": {
+      "de": "Aussehen bearbeiten",
+      "en": "Edit appearance"
+   },
+   "Edit family": {
+      "de": "Familie bearbeiten",
+      "en": "Edit family"
+   },
+   "Edit chronicle": {
+      "de": "Chronik bearbeiten",
+      "en": "Edit chronicle"
+   },
+   "Back to top": {
+      "de": "Nach oben",
+      "en": "Back to top"
+   },
+   "Amulette, Götterfigürchen und andere persönliche Gegenstände": {
+      "de": "Amulette, Götterfigürchen und andere persönliche Gegenstände",
+      "en": "Amulets, small god figurines and other personal belongings"
+   },
+   "Each item is added to the inventory on its own, so you can use, move or drop it separately.": {
+      "de": "Jeder Gegenstand kommt einzeln ins Inventar, damit du ihn getrennt benutzen, verstauen oder ablegen kannst.",
+      "en": "Each item is added to the inventory on its own, so you can use, move or drop it separately."
+   },
+   "Badeöl": {
+      "de": "Badeöl",
+      "en": "Bath oil"
+   },
+   "Bier, kleines Fässchen": {
+      "de": "Bier, kleines Fässchen",
+      "en": "Beer, small keg"
+   },
+   "Kaffee, geröstet": {
+      "de": "Kaffee, geröstet",
+      "en": "Coffee, roasted"
+   },
+   "Kakao": {
+      "de": "Kakao",
+      "en": "Cocoa"
+   },
+   "Kreide": {
+      "de": "Kreide",
+      "en": "Chalk"
+   },
+   "Lippenrot": {
+      "de": "Lippenrot",
+      "en": "Lip rouge"
+   },
+   "Papier, 1 Blatt": {
+      "de": "Papier, 1 Blatt",
+      "en": "Paper, 1 sheet"
+   },
+   "Parfüm": {
+      "de": "Parfüm",
+      "en": "Perfume"
+   },
+   "Pergament, 1 Blatt": {
+      "de": "Pergament, 1 Blatt",
+      "en": "Parchment, 1 sheet"
+   },
+   "Pfeffer": {
+      "de": "Pfeffer",
+      "en": "Pepper"
+   },
+   "Puder": {
+      "de": "Puder",
+      "en": "Powder"
+   },
+   "Schnaps": {
+      "de": "Schnaps",
+      "en": "Schnapps"
+   },
+   "Schokolade": {
+      "de": "Schokolade",
+      "en": "Chocolate"
+   },
+   "Seife": {
+      "de": "Seife",
+      "en": "Soap"
+   },
+   "Siegelwachs": {
+      "de": "Siegelwachs",
+      "en": "Sealing wax"
+   },
+   "Tabak": {
+      "de": "Tabak",
+      "en": "Tobacco"
+   },
+   "Tinte": {
+      "de": "Tinte",
+      "en": "Ink"
+   },
+   "Wein": {
+      "de": "Wein",
+      "en": "Wine"
+   },
+   "Use up": {
+      "de": "Aufbrauchen",
+      "en": "Use up"
+   },
+   "Used items are removed from the inventory.": {
+      "de": "Aufgebrauchte Gegenstände werden aus dem Inventar entfernt.",
+      "en": "Used items are removed from the inventory."
+   },
+   "{count} left afterwards.": {
+      "de": "Danach bleiben {count}.",
+      "en": "{count} left afterwards."
+   },
+   "This item is no longer in the inventory in that amount.": {
+      "de": "Dieser Gegenstand ist nicht mehr in dieser Menge im Inventar.",
+      "en": "This item is no longer in the inventory in that amount."
+   },
+   "What is the hero doing with the talent? If they have a Fertigkeitsspezialisierung for it, its +2 FW is applied (S. 216). New applications need their advantage or special ability (S. 186). “General use” rolls without either.": {
+      "de": "Wofür setzt der Held das Talent ein? Hat er dafür eine Fertigkeitsspezialisierung, gilt deren +2 FW (S. 216). Neue Anwendungsgebiete brauchen ihren Vorteil oder ihre Sonderfertigkeit (S. 186). „Allgemeine Anwendung“ würfelt ohne beides.",
+      "en": "What is the hero doing with the talent? If they have a Fertigkeitsspezialisierung for it, its +2 FW is applied (p. 216). New applications need their advantage or special ability (p. 186). “General use” rolls without either."
+   },
+   "Fertigkeitsspezialisierung applied: +2 FW.": {
+      "de": "Fertigkeitsspezialisierung angewendet: +2 FW.",
+      "en": "Fertigkeitsspezialisierung applied: +2 FW."
+   },
+   "This check always uses this application. If the hero has a Fertigkeitsspezialisierung for it, its +2 FW is applied (S. 216).": {
+      "de": "Diese Probe nutzt immer dieses Anwendungsgebiet. Hat der Held dafür eine Fertigkeitsspezialisierung, gilt deren +2 FW (S. 216).",
+      "en": "This check always uses this application. If the hero has a Fertigkeitsspezialisierung for it, its +2 FW is applied (p. 216)."
+   },
+   "AP awarded.": {
+      "de": "AP vergeben.",
+      "en": "AP awarded."
+   },
+   "Accept": {
+      "de": "Annehmen",
+      "en": "Accept"
+   },
+   "All parties": {
+      "de": "Alle Gruppen",
+      "en": "All parties"
+   },
+   "All your heroes are already in a party. Create a hero or leave a party first.": {
+      "de": "Alle deine Helden sind bereits in einer Gruppe. Lege einen Helden an oder verlasse zuerst eine Gruppe.",
+      "en": "All your heroes are already in a party. Create a hero or leave a party first."
+   },
+   "Archive party": {
+      "de": "Gruppe archivieren",
+      "en": "Archive party"
+   },
+   "As game master": {
+      "de": "Als Meister",
+      "en": "As game master"
+   },
+   "As player": {
+      "de": "Als Spieler",
+      "en": "As player"
+   },
+   "AsP changed.": {
+      "de": "AsP geändert.",
+      "en": "AsP changed."
+   },
+   "Award": {
+      "de": "Vergeben",
+      "en": "Award"
+   },
+   "Award AP": {
+      "de": "AP vergeben",
+      "en": "Award AP"
+   },
+   "Back to the party": {
+      "de": "Zurück zur Gruppe",
+      "en": "Back to the party"
+   },
+   "Checking the invite...": {
+      "de": "Einladung wird geprüft …",
+      "en": "Checking the invite..."
+   },
+   "Choose a hero": {
+      "de": "Held wählen",
+      "en": "Choose a hero"
+   },
+   "Choose your hero": {
+      "de": "Wähle deinen Helden",
+      "en": "Choose your hero"
+   },
+   "Condition changed.": {
+      "de": "Zustand geändert.",
+      "en": "Condition changed."
+   },
+   "Copy link": {
+      "de": "Link kopieren",
+      "en": "Copy link"
+   },
+   "Copying failed. Select the link and copy it by hand.": {
+      "de": "Kopieren fehlgeschlagen. Markiere den Link und kopiere ihn von Hand.",
+      "en": "Copying failed. Select the link and copy it by hand."
+   },
+   "Create a new link? The old one stops working.": {
+      "de": "Neuen Link erstellen? Der alte funktioniert dann nicht mehr.",
+      "en": "Create a new link? The old one stops working."
+   },
+   "Create party": {
+      "de": "Gruppe anlegen",
+      "en": "Create party"
+   },
+   "Default visibility": {
+      "de": "Standard-Sichtbarkeit",
+      "en": "Default visibility"
+   },
+   "Deny": {
+      "de": "Ablehnen",
+      "en": "Deny"
+   },
+   "Everything above plus the read-only character sheet.": {
+      "de": "Alles oben Genannte und dazu der Heldenbogen zum Lesen.",
+      "en": "Everything above plus the read-only character sheet."
+   },
+   "Full sheet": {
+      "de": "Ganzer Heldenbogen",
+      "en": "Full sheet"
+   },
+   "GM actions": {
+      "de": "Meisteraktionen",
+      "en": "GM actions"
+   },
+   "Game master": {
+      "de": "Meister",
+      "en": "Game master"
+   },
+   "Heal LeP": {
+      "de": "LeP heilen",
+      "en": "Heal LeP"
+   },
+   "Invite link": {
+      "de": "Einladungslink",
+      "en": "Invite link"
+   },
+   "Invite link copied.": {
+      "de": "Einladungslink kopiert.",
+      "en": "Invite link copied."
+   },
+   "Invite players": {
+      "de": "Spieler einladen",
+      "en": "Invite players"
+   },
+   "Join a party": {
+      "de": "Einer Gruppe beitreten",
+      "en": "Join a party"
+   },
+   "Join requests": {
+      "de": "Beitrittsanfragen",
+      "en": "Join requests"
+   },
+   "KaP": {
+      "de": "KaP",
+      "en": "KaP"
+   },
+   "KaP changed.": {
+      "de": "KaP geändert.",
+      "en": "KaP changed."
+   },
+   "LeP damage": {
+      "de": "LeP-Schaden",
+      "en": "LeP damage"
+   },
+   "LeP healed.": {
+      "de": "LeP geheilt.",
+      "en": "LeP healed."
+   },
+   "LeP lost.": {
+      "de": "LeP abgezogen.",
+      "en": "LeP lost."
+   },
+   "Lead a new party": {
+      "de": "Neue Gruppe leiten",
+      "en": "Lead a new party"
+   },
+   "Leave party": {
+      "de": "Gruppe verlassen",
+      "en": "Leave party"
+   },
+   "Leave the party with this hero?": {
+      "de": "Die Gruppe mit diesem Helden verlassen?",
+      "en": "Leave the party with this hero?"
+   },
+   "Loading the party...": {
+      "de": "Gruppe wird geladen …",
+      "en": "Loading the party..."
+   },
+   "Loading the sheet...": {
+      "de": "Heldenbogen wird geladen …",
+      "en": "Loading the sheet..."
+   },
+   "Loading your parties...": {
+      "de": "Deine Gruppen werden geladen …",
+      "en": "Loading your parties..."
+   },
+   "Name only": {
+      "de": "Nur der Name",
+      "en": "Name only"
+   },
+   "Name, species, profession, energy bars, pain, statuses and conditions.": {
+      "de": "Name, Spezies, Profession, Energiebalken, Schmerz, Status und Zustände.",
+      "en": "Name, species, profession, energy bars, pain, statuses and conditions."
+   },
+   "New link": {
+      "de": "Neuer Link",
+      "en": "New link"
+   },
+   "No equipment yet.": {
+      "de": "Noch keine Ausrüstung.",
+      "en": "No equipment yet."
+   },
+   "No heroes have joined yet.": {
+      "de": "Noch sind keine Helden beigetreten.",
+      "en": "No heroes have joined yet."
+   },
+   "No heroes yet. Share the invite link with your players.": {
+      "de": "Noch keine Helden. Teile den Einladungslink mit deinen Spielern.",
+      "en": "No heroes yet. Share the invite link with your players."
+   },
+   "No statuses or conditions.": {
+      "de": "Keine Status oder Zustände.",
+      "en": "No statuses or conditions."
+   },
+   "None of your heroes is in a party yet.": {
+      "de": "Noch ist keiner deiner Helden in einer Gruppe.",
+      "en": "None of your heroes is in a party yet."
+   },
+   "Open sheet": {
+      "de": "Heldenbogen öffnen",
+      "en": "Open sheet"
+   },
+   "Open the party": {
+      "de": "Gruppe öffnen",
+      "en": "Open the party"
+   },
+   "Other players see only the hero's name.": {
+      "de": "Andere Spieler sehen nur den Namen des Helden.",
+      "en": "Other players see only the hero's name."
+   },
+   "Others see": {
+      "de": "Andere sehen",
+      "en": "Others see"
+   },
+   "Parties": {
+      "de": "Gruppen",
+      "en": "Parties"
+   },
+   "Party name": {
+      "de": "Name der Gruppe",
+      "en": "Party name"
+   },
+   "Play together: a game master leads the party and sees the heroes live.": {
+      "de": "Gemeinsam spielen: Ein Meister leitet die Gruppe und sieht die Helden live.",
+      "en": "Play together: a game master leads the party and sees the heroes live."
+   },
+   "Player": {
+      "de": "Spieler",
+      "en": "Player"
+   },
+   "Players open the link, choose one of their heroes and send a request. You accept or deny it here.": {
+      "de": "Spieler öffnen den Link, wählen einen ihrer Helden und senden eine Anfrage. Du nimmst sie hier an oder lehnst sie ab.",
+      "en": "Players open the link, choose one of their heroes and send a request. You accept or deny it here."
+   },
+   "Privacy in parties": {
+      "de": "Privatsphäre in Gruppen",
+      "en": "Privacy in parties"
+   },
+   "Reactivate party": {
+      "de": "Gruppe reaktivieren",
+      "en": "Reactivate party"
+   },
+   "Read-only view. Values update live.": {
+      "de": "Nur zum Lesen. Die Werte aktualisieren sich live.",
+      "en": "Read-only view. Values update live."
+   },
+   "Remove this hero from the party?": {
+      "de": "Diesen Helden aus der Gruppe entfernen?",
+      "en": "Remove this hero from the party?"
+   },
+   "Request sent. The game master decides.": {
+      "de": "Anfrage gesendet. Der Meister entscheidet.",
+      "en": "Request sent. The game master decides."
+   },
+   "Send join request": {
+      "de": "Beitrittsanfrage senden",
+      "en": "Send join request"
+   },
+   "Settings": {
+      "de": "Einstellungen",
+      "en": "Settings"
+   },
+   "Settings saved.": {
+      "de": "Einstellungen gespeichert.",
+      "en": "Settings saved."
+   },
+   "Status and conditions": {
+      "de": "Status und Zustände",
+      "en": "Status and conditions"
+   },
+   "Status changed.": {
+      "de": "Status geändert.",
+      "en": "Status changed."
+   },
+   "Summary (LeP, statuses)": {
+      "de": "Übersicht (LeP, Status)",
+      "en": "Summary (LeP, statuses)"
+   },
+   "The game master will see your hero live and can apply damage, conditions and AP. You choose what the other players see.": {
+      "de": "Der Meister sieht deinen Helden live und kann Schaden, Zustände und AP vergeben. Was die anderen Spieler sehen, bestimmst du.",
+      "en": "The game master will see your hero live and can apply damage, conditions and AP. You choose what the other players see."
+   },
+   "This invite link is not valid (any more). Ask the game master for a new one.": {
+      "de": "Dieser Einladungslink ist (nicht mehr) gültig. Bitte den Meister um einen neuen.",
+      "en": "This invite link is not valid (any more). Ask the game master for a new one."
+   },
+   "This party is archived.": {
+      "de": "Diese Gruppe ist archiviert.",
+      "en": "This party is archived."
+   },
+   "This party is not available. You may have left it, or the invitation was not accepted yet.": {
+      "de": "Diese Gruppe ist nicht verfügbar. Vielleicht hast du sie verlassen oder deine Anfrage wurde noch nicht angenommen.",
+      "en": "This party is not available. You may have left it, or the invitation was not accepted yet."
+   },
+   "This player shares only the name.": {
+      "de": "Dieser Spieler teilt nur den Namen.",
+      "en": "This player shares only the name."
+   },
+   "This sheet is not shared with you.": {
+      "de": "Dieser Heldenbogen ist nicht für dich freigegeben.",
+      "en": "This sheet is not shared with you."
+   },
+   "To join someone else's party, open the invite link the game master sends you.": {
+      "de": "Um einer anderen Gruppe beizutreten, öffne den Einladungslink, den dir der Meister schickt.",
+      "en": "To join someone else's party, open the invite link the game master sends you."
+   },
+   "Waiting for the GM": {
+      "de": "Wartet auf den Meister",
+      "en": "Waiting for the GM"
+   },
+   "We could not load your parties.": {
+      "de": "Deine Gruppen konnten nicht geladen werden.",
+      "en": "We could not load your parties."
+   },
+   "We could not load your settings.": {
+      "de": "Deine Einstellungen konnten nicht geladen werden.",
+      "en": "We could not load your settings."
+   },
+   "What other players see of a hero that joins a party. The game master always sees everything. You can change it per hero in the party.": {
+      "de": "Was andere Spieler von einem Helden sehen, der einer Gruppe beitritt. Der Meister sieht immer alles. Du kannst es je Held in der Gruppe ändern.",
+      "en": "What other players see of a hero that joins a party. The game master always sees everything. You can change it per hero in the party."
+   },
+   "Withdraw request": {
+      "de": "Anfrage zurückziehen",
+      "en": "Withdraw request"
+   },
+   "You are the game master of this party.": {
+      "de": "Du bist der Meister dieser Gruppe.",
+      "en": "You are the game master of this party."
+   },
+   "You do not lead a party yet.": {
+      "de": "Du leitest noch keine Gruppe.",
+      "en": "You do not lead a party yet."
+   },
+   "You lead this party as game master.": {
+      "de": "Du leitest diese Gruppe als Meister.",
+      "en": "You lead this party as game master."
+   },
+   "archived": {
+      "de": "archiviert",
+      "en": "archived"
+   },
+   "hero": {
+      "de": "Held",
+      "en": "hero"
+   },
+   "heroes": {
+      "de": "Helden",
+      "en": "heroes"
+   },
+   "join requests": {
+      "de": "Beitrittsanfragen",
+      "en": "join requests"
+   },
+   "waiting for the GM": {
+      "de": "wartet auf den Meister",
+      "en": "waiting for the GM"
+   },
+   "your hero": {
+      "de": "dein Held",
+      "en": "your hero"
    }
 }

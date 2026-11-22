@@ -65,7 +65,8 @@ export function LeaderBonus({ heroId, fight }: { heroId: string; fight: Fight })
 
 function talentFor(stats: Stats, key: string) {
    const talent = talentCatalog.find((entry) => entry.key === key)!
-   return { talent, value: stats.talents.find((entry) => entry.key === key)?.value ?? null }
+   // Every talent is active from FW 0 (S. 25)
+   return { talent, value: stats.talents.find((entry) => entry.key === key)?.value ?? 0 }
 }
 
 // A confirmed Patzer: 1W6+2 SP, or with the optional rule a 2W6 table result (S. 231–244).
@@ -160,13 +161,10 @@ export function PatzerResolver({ stats, heroId, fight, table, unarmed, dodge, we
       </div>
       {action.kind === 'weapon' && slot && ['damaged', 'broken'].includes(action.state) && <p className='fight-note'>{t('Stays on the item until it is repaired (equipment tab).', language)}</p>}
       {action.kind === 'weapon' && slot && action.state === 'destroyed' && <p className='fight-note'>{t('Apply removes the destroyed item from the inventory.', language)}</p>}
-      {falling && (fall.value === null
-         ? <div className='fight-followup'><p className='fight-note'>{t('Körperbeherrschung is not activated: the hero falls.', language)}</p>
-            <button className='primary-button' type='button' onClick={() => { settings.mutate({ statuses: [...stats.statuses, 'Liegend'] }); setFalling(false); finish() }}>{t('Set Liegend', language)}</button></div>
-         : <TalentProbeDialog stats={stats} talent={fall.talent} value={fall.value} extraSources={[{ label: 'Patzer: fall', value: -2 }]}
-            renderResult={({ result }) => result.success ? null : <button className='primary-button' type='button'
-               disabled={stats.statuses.includes('Liegend')} onClick={() => settings.mutate({ statuses: [...stats.statuses, 'Liegend'] })}>{t('Set Liegend', language)}</button>}
-            onClose={() => { setFalling(false); finish() }} />)}
+      {falling && <TalentProbeDialog stats={stats} talent={fall.talent} value={fall.value} extraSources={[{ label: 'Patzer: fall', value: -2 }]}
+         renderResult={({ result }) => result.success ? null : <button className='primary-button' type='button'
+            disabled={stats.statuses.includes('Liegend')} onClick={() => settings.mutate({ statuses: [...stats.statuses, 'Liegend'] })}>{t('Set Liegend', language)}</button>}
+         onClose={() => { setFalling(false); finish() }} />}
    </div>
 }
 
@@ -187,12 +185,11 @@ export function FleeAction({ stats, heroId, speed, actionReason }: { stats: Stat
             <span>{t('Enemies in reach', language)}</span>
             <ProbeStepper value={enemies} min={0} max={10} label={t('Enemies in reach', language)} lowerLabel={t('Less', language)} raiseLabel={t('More', language)} onChange={setEnemies} />
          </div>
-         {value === null ? <p className='field-error'>{t('Körperbeherrschung is not activated.', language)}</p>
-            : <button className='primary-button' type='button' disabled={actionReason !== null} onClick={() => { spend(heroId, 'action'); setRolling(true) }}>{t('Körperbeherrschung (Kampfmanöver)', language)}</button>}
+         <button className='primary-button' type='button' disabled={actionReason !== null} onClick={() => { spend(heroId, 'action'); setRolling(true) }}>{t('Körperbeherrschung (Kampfmanöver)', language)}</button>
          {actionReason && <small className='fight-note'>{t(actionReason, language)}</small>}
          <button className='quiet-button' type='button' onClick={() => setOpen(false)}>{t('Cancel', language)}</button>
       </>}
-      {rolling && value !== null && <TalentProbeDialog stats={stats} talent={talent} value={value}
+      {rolling && <TalentProbeDialog stats={stats} talent={talent} value={value}
          extraSources={enemies ? [{ label: 'Enemies in reach', value: -enemies }] : []}
          renderResult={({ result }) => {
             const gs = speed ?? 0
@@ -211,9 +208,8 @@ export function AmbushAction({ stats }: { stats: Stats }) {
    const [rolling, setRolling] = useState(false)
    const { talent, value } = talentFor(stats, 'sinnesschaerfe')
    return <>
-      <button className='quiet-button' type='button' disabled={value === null} title={value === null ? t('Sinnesschärfe is not activated.', language) : undefined}
-         onClick={() => setRolling(true)}><Telescope size={16} />{t('Ambush check', language)}</button>
-      {rolling && value !== null && <TalentProbeDialog stats={stats} talent={talent} value={value} opposedRole='passive'
+      <button className='quiet-button' type='button' onClick={() => setRolling(true)}><Telescope size={16} />{t('Ambush check', language)}</button>
+      {rolling && <TalentProbeDialog stats={stats} talent={talent} value={value} opposedRole='passive'
          renderResult={({ contest }) => contest?.winner === 'opponent' ? <div className='fight-followup'>
             <p className='fight-note'>{t('The ambush was not noticed: the hero is Überrascht.', language)}</p>
             <button className='primary-button' type='button' disabled={settings.isPending || stats.statuses.includes('Überrascht')}

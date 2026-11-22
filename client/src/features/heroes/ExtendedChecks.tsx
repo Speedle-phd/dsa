@@ -75,11 +75,11 @@ function ExtendedCheckCard({ stats, check, onChange }: { stats: Stats; check: Ex
    const name = skillLabel(check, language)
    const talent = check.skill.kind === 'talent' ? talentCatalog.find((entry) => entry.key === check.skill.key) : undefined
    const ownCritical = Boolean(talent && talentCriticalRules[talent.key])
-   const value = talent ? stats.talents.find((entry) => entry.key === talent.key)?.value ?? null
+   const value = talent ? stats.talents.find((entry) => entry.key === talent.key)?.value ?? 0
       : stats.spells.find((spell) => spell.key === check.skill.key)?.value ?? null
    const open = check.status === 'open'
    // source: DSA5 Regelwerk, S. 25 (inactive skills cannot be rolled)
-   const rollReason = !open ? null : value === null ? (talent ? 'This talent is not activated.' : 'This spell is not owned.') : null
+   const rollReason = !open ? null : value === null ? 'This spell is not owned.' : null
    const status = check.status === 'done' ? 'Task completed' : check.status === 'failed'
       ? check.collected >= partialQuality ? 'Failed after a partial success' : 'Failed'
       : check.collected >= partialQuality ? 'Partial success reached' : 'In progress'

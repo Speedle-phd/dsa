@@ -46,7 +46,7 @@ export function HeroAlchemy({ hero }: { hero: Hero }) {
    const owned = stats.equipment.filter((item) => item.amount > 0)
    const supplies = owned.filter((item) => isConsumableItem(item.item))
    const lab = bestLaboratory(owned.map((item) => item.item))
-   const talentValue = stats.talents.find((entry) => entry.key === 'alchimie')?.value ?? null
+   const talentValue = stats.talents.find((entry) => entry.key === 'alchimie')?.value ?? 0
    const known = (name: string) => stats.generalSpecialAbilities.includes(recipeKey(name))
 
    return <div className='hero-alchemy'>
@@ -62,7 +62,7 @@ export function HeroAlchemy({ hero }: { hero: Hero }) {
       <section className='overview-section'>
          <header className='section-heading'><FlaskConical size={19} /><div><p className='eyebrow'>{t('S.', language)} 270–274</p><h2>{t('Laboratory and recipes', language)}</h2></div></header>
          <p className='combat-note'>{lab ? `${t('Best laboratory', language)}: ${lab}` : t('No laboratory in the inventory (Archaisches Labor, Hexenküche or Alchemistenlabor).', language)}
-            {' · '}{talentValue === null ? t('Talent Alchimie not activated.', language) : `${t('Alchimie', language)} FW ${talentValue}`}</p>
+            {' · '}{`${t('Alchimie', language)} FW ${talentValue}`}</p>
          <p className='combat-note'>{t('Brewing needs the recipe (a Berufsgeheimnis), ingredients and a laboratory. One elixir per day; the ingredient level caps the QS. The GM may roll secretly (S. 271).', language)}</p>
          <div className='table-scroll'><table className='talent-table alchemy-table'>
             <thead><tr><th>{t('Elixir', language)}</th><th>{t('Laboratory', language)}</th><th>{t('Brauschwierigkeit', language)}</th>
@@ -78,9 +78,9 @@ export function HeroAlchemy({ hero }: { hero: Hero }) {
                   <td data-label={t('Recipe', language)}>{known(elixir.name) ? <Check size={16} aria-label={t('Known', language)} /> : <button className='quiet-button' type='button'
                      onClick={() => setLearning(recipeKey(elixir.name))}><Plus size={14} />{t('Learn', language)}</button>}</td>
                   <td className='alchemy-actions'>
-                     <button className='quiet-button' type='button' disabled={!known(elixir.name) || labModifier === null || talentValue === null}
+                     <button className='quiet-button' type='button' disabled={!known(elixir.name) || labModifier === null}
                         onClick={() => setBrewing(elixir)}><FlaskConical size={15} />{t('Brew', language)}</button>
-                     <button className='quiet-button' type='button' disabled={talentValue === null} onClick={() => setAnalysing(elixir)}>
+                     <button className='quiet-button' type='button' onClick={() => setAnalysing(elixir)}>
                         <Search size={15} />{t('Analyse', language)}</button>
                   </td>
                </tr>
@@ -90,7 +90,7 @@ export function HeroAlchemy({ hero }: { hero: Hero }) {
 
       {consume && <ConsumeDialog stats={stats} entry={consume} index={stats.equipment.indexOf(consume)} onClose={() => setConsume(null)} />}
       {brewing && lab && <BrewDialog stats={stats} elixir={brewing} lab={lab} onClose={() => setBrewing(null)} />}
-      {analysing && <TalentProbeDialog stats={stats} talent={alchimie} value={talentValue ?? 0} onClose={() => setAnalysing(null)}
+      {analysing && <TalentProbeDialog stats={stats} talent={alchimie} value={talentValue} onClose={() => setAnalysing(null)}
          extraSources={analysisModifiers(analysing.alchemy!.brewingDifficulty, lab, known(analysing.name))}
          renderResult={({ result, quality }) => result.success ? <p className='probe-asp-spent'><Check size={16} />
             {t(quality && quality >= 2 ? 'Identified: {name}, and its quality is known (S. 272).' : 'Identified: {name}; the quality stays unknown (needs QS 2).', language)

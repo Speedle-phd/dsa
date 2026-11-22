@@ -21,6 +21,7 @@ import { CheckValue, TalentSkillValue } from './CheckValue'
 import { CharacterEntryList } from './CharacterEntryList'
 import { TalentProbeDialog } from './TalentProbeDialog'
 import { talentDetails } from './talentDetails'
+import { applicationLabel } from './talentApplicationGlosses'
 import { hardestRoutineModifier } from './skillCheck'
 import { useTalentOptions, useTalentProbe } from './talentOptions'
 import { ExtendedChecks } from './ExtendedChecks'
@@ -44,9 +45,8 @@ function burdenLabelKey(level: BurdenLevel) {
 }
 
 // source: DSA5 Regelwerk, S. 184–185 (routine FP and the hardest modifier that still allows a routine check)
-function RoutineCell({ attributes, value, language }: { attributes: number[]; value: number | null; language: 'de' | 'en' }) {
+function RoutineCell({ attributes, value, language }: { attributes: number[]; value: number; language: 'de' | 'en' }) {
    const trade = useTalentOptions((state) => state.routineTrade)
-   if (value === null) return <>—</>
    const hardest = hardestRoutineModifier(attributes, value, trade)
    if (hardest === null) return <span title={t(attributes.some((attribute) => attribute < 13) && !trade
       ? 'Routine needs 13 or more in every probe attribute.' : 'FW too low for a routine check at this modifier.', language)}>—</span>
@@ -76,8 +76,8 @@ function TalentRow({
    stats: Stats
    spendAP: boolean
 }) {
-   const value = entry?.value ?? null
-   const isLocked = value === null
+   // Every talent is active from FW 0 (S. 25)
+   const value = entry?.value ?? 0
    const [isEditingNote, setIsEditingNote] = useState(false)
    const [noteDraft, setNoteDraft] = useState(entry?.notes ?? '')
    const [isRolling, setIsRolling] = useState(false)
@@ -94,12 +94,12 @@ function TalentRow({
    }
 
    return (
-      <tr className={isLocked ? 'talent-row is-locked' : 'talent-row'}>
+      <tr className='talent-row'>
          <td data-label={t('Talent', language)}>
             <div className='talent-name-cell'>
-               <button type='button' className='talent-probe-button' disabled={isLocked}
+               <button type='button' className='talent-probe-button'
                   aria-label={`${t('Roll check', language)}: ${t(talent.label, language)}`}
-                  title={t(isLocked ? 'Activate this talent to roll a check.' : 'Roll check', language)}
+                  title={t('Roll check', language)}
                   onClick={() => setIsRolling(true)}>
                   <DieIcon sides={20} />
                </button>
@@ -108,7 +108,7 @@ function TalentRow({
                   checkKey={talent.key} label={t(talent.label, language)} complex={talent.category === 'knowledge'}
                   burden={getTalentBurdenLevel(talent.key) === 'maybe' ? 'maybe' : getTalentBurdenLevel(talent.key) === 'yes'} />
             </div>
-            {isRolling && value !== null && <TalentProbeDialog stats={stats} talent={talent} value={value} onClose={() => setIsRolling(false)} />}
+            {isRolling && <TalentProbeDialog stats={stats} talent={talent} value={value} onClose={() => setIsRolling(false)} />}
          </td>
          <td className='talent-probe-cell' data-label={t('Probe', language)}>
             {probe
@@ -121,7 +121,7 @@ function TalentRow({
          <td data-label={t('StF', language)}>{talent.stfClass.toUpperCase()}</td>
          <td data-label={t('FW', language)}>
             <div className='talent-value-inner'>
-               {value === null ? <span>—</span> : <TalentSkillValue stats={stats} checkKey={talent.key} value={value} />}
+               <TalentSkillValue stats={stats} checkKey={talent.key} value={value} />
                <AdvancementValue label={t(talent.label, language)} value={value}
                   maximum={spendAP ? Math.min(25, stats.skillMaxima.talents[talent.key] ?? 25) : 25}
                   cost={nextStepCost(value, talent.stfClass)} availableAP={stats.experience.total - stats.experience.spent}
@@ -273,8 +273,8 @@ function BaseAttributesReference({
 // source: DSA5 Regelwerk, S. 188–213 (applications, new applications and tools from the talent description)
 function TalentInfo({ talent, language }: { talent: TalentDefinition; language: 'de' | 'en' }) {
    const details = talentDetails[talent.key]
-   const parts = [`${t('Applications', language)}: ${details.applications.join(', ')}`,
-      ...(details.newApplications.length ? [`${t('New applications (S. 186)', language)}: ${details.newApplications.map((entry) => `${entry.name} (${entry.unlockedBy})`).join(', ')}`] : []),
+   const parts = [`${t('Applications', language)}: ${details.applications.map((name) => applicationLabel(name, language)).join(', ')}`,
+      ...(details.newApplications.length ? [`${t('New applications (S. 186)', language)}: ${details.newApplications.map((entry) => `${applicationLabel(entry.name, language)} – ${entry.unlockedBy}`).join(', ')}`] : []),
       ...(details.uses.length ? [`${t('Uses from SF', language)}: ${details.uses.join(', ')}`] : []),
       ...(details.tools ? [`${t('Tools', language)}: ${details.tools}`] : []),
       `${t('DSA5 Rulebook', language)}, ${t('S.', language)} ${details.page}`]
@@ -341,7 +341,7 @@ export function TalentsTab({ hero }: { hero: Hero }) {
       const nextTalents = stats!.talents.map((entry) =>
          entry.key === key ? { ...entry, notes } : entry,
       )
-      if (!nextTalents.some((entry) => entry.key === key)) nextTalents.push({ key, value: null, notes })
+      if (!nextTalents.some((entry) => entry.key === key)) nextTalents.push({ key, value: 0, notes })
       notesMutation.mutate(nextTalents)
    }
 

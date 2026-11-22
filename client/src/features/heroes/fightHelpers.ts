@@ -11,6 +11,17 @@ import type { Stats } from './statsApi'
 
 const damageColor = '#b7791f'
 
+// source: DSA5 Regelwerk, S. 56, 248 (INI-Basiswert = (MU + GE) / 2 + modifiers + highest Kampfreflexe level);
+// `modifier` are the situational INI modifiers (e.g. Belastung). Used by the fight panel and the party fight.
+export function heroInitiative(stats: Pick<Stats, 'courage' | 'dexterity' | 'combatModifiers' | 'combatSpecialAbilities' | 'checkModifiers'>) {
+   const reflexLevel = ['I', 'II', 'III'].reduce((level, roman, index) =>
+      stats.combatSpecialAbilities.includes(`Kampfreflexe ${roman}`) ? index + 1 : level, 0)
+   return {
+      base: Math.round((stats.courage + stats.dexterity) / 2) + stats.combatModifiers.initiative + reflexLevel,
+      modifier: stats.checkModifiers.initiative.total,
+   }
+}
+
 // W3 dice are read from a W6: 1–2 → 1, 3–4 → 2, 5–6 → 3 (S. 16).
 export async function rollDamage(dice: DamageDice, color = damageColor) {
    const rolls = await throwColoredDice(dice.sides === 3 ? 6 : dice.sides, Array.from({ length: dice.count }, () => color))

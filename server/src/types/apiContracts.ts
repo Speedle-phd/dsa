@@ -138,7 +138,7 @@ export type Equipments = {
 
 export type TalentEntry = {
    key: string
-   value: number | null
+   value: number
    notes: string
 }
 

@@ -117,7 +117,7 @@ export interface IStatsDocument extends Document {
 
    talents: Array<{
       key: string
-      value: number | null
+      value: number
       notes: string
    }>
    languages: string[]
@@ -369,7 +369,7 @@ const statsSchema = new Schema<IStatsDocument>(
          type: [
             {
                key: { type: String, required: true },
-               value: { type: Number, default: null, min: 0 },
+               value: { type: Number, required: true, default: 0, min: 0 },
                notes: { type: String, default: '' },
             },
          ],

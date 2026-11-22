@@ -16,7 +16,7 @@ export function useAdvancementMode(heroId: string) {
    return { spendAP, setSpendAP: (value: boolean) => setSpendAP(heroId, value) }
 }
 
-// source: DSA5 Regelwerk, S. 50 (next target step; existing unset-talent activation policy)
+// source: DSA5 Regelwerk, S. 50 (next target step; null = not activated spell/liturgy, its activation costs one step)
 export function nextStepCost(value: number | null, factor: 'a' | 'b' | 'c' | 'd' | 'e') {
    if (factor === 'e') return value !== null && value >= 14 ? (value - 12) * 15 : 15
    const base = { a: 1, b: 2, c: 3, d: 4 }[factor]

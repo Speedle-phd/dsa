@@ -256,7 +256,6 @@ function CreatureCard({ stats, creature, reference, magic, onKnowledge, onSummon
       onError: (error) => toast.error(getErrorMessage(error)),
    })
    const Icon = kindIcon[creature.kind]
-   const knowledgeValue = stats.talents.find((entry) => entry.key === creature.knowledge.talent)?.value ?? null
    const ritual = creature.summonedBy
    const ownsRitual = ritual !== null && stats.spells.some((spell) => spell.key === ritual) && Boolean(magic?.spells.some((spell) => spell.key === ritual))
    return <li className='companion-card'>
@@ -276,9 +275,8 @@ function CreatureCard({ stats, creature, reference, magic, onKnowledge, onSummon
          <div>
             <strong>{t('Knowledge', language)}</strong>
             <small>{talentLabel(creature.knowledge.talent, language)} (<span lang='de'>{creature.knowledge.application}</span>)</small>
-            {knowledgeValue === null && <small className='field-error'>{t('Activate the talent to roll a knowledge check.', language)}</small>}
          </div>
-         <button className='quiet-button' type='button' disabled={knowledgeValue === null} onClick={onKnowledge}
+         <button className='quiet-button' type='button' onClick={onKnowledge}
             aria-label={`${t('Knowledge check', language)}: ${creature.key}`}><BookOpen size={16} />{t('Knowledge check', language)}</button>
       </div>
       {ritual && <div className='bestiary-actions'>

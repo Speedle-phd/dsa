@@ -58,8 +58,8 @@ export function finishedHero(draft: CreationDraftData, ledger: CreationLedger) {
          combatAbilityPurchases,
          entryPurchases: purchases,
          entryCredits: credits,
-         // Not activated talents stay unset (null), as on the hero page
-         talents: talentCatalog.map(({ key }) => ({ key, value: ledger.talents[key]?.value ?? null, notes: '' })),
+         // Every talent is active from FW 0 (S. 25)
+         talents: talentCatalog.map(({ key }) => ({ key, value: ledger.talents[key]?.value ?? 0, notes: '' })),
          combatTechniques: combatTechniques.map(({ key }) => ({ key, value: ledger.techniques[key]?.value ?? 6 })),
          // Package spells and tricks are part of the profession price (S. 128): only what was bought on top counts as paid
          spells: Object.entries(ledger.spells).map(([key, spell]) => ({ key, value: spell.value, notes: '', paidAP: Math.max(0, spell.cost) })),

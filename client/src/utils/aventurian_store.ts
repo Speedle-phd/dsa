@@ -21,9 +21,12 @@ export type AventurianStoreItem = {
    poison?: { level: number; type: string; resistance: 'ZK' | 'SK'; onset: string; duration: string; effect: [LocalizedText, LocalizedText] }
    herb?: { search: number; identify: number; applications: string; effect: LocalizedText; rawPrice: number }
    book?: { script: string }
+   // Bundle contents by catalog name; each becomes its own inventory entry (S. 364–365). `weight` only for pieces the
+   // catalog does not sell on their own (taken from the package table).
    contents?: Array<{
       name: string
       amount: number
+      weight?: number
    }>
    weapon?: {
       combatTechnique: string
@@ -796,26 +799,27 @@ export const aventurianStore: Record<string, AventurianStoreItem[]> = {
          weight: 20,
          description: 'Ready-made travel equipment package.',
          contents: [
-            { name: 'Amulette, Götterfigürchen und persönliche Gegenstände', amount: 1 },
+            // source: DSA5 Regelwerk, S. 364 (Reisepaket, 20 Stein, 120 S)
+            { name: 'Amulette, Götterfigürchen und andere persönliche Gegenstände', amount: 1, weight: 2.175 },
             { name: 'Becher', amount: 1 },
             { name: 'Beil/Handaxt', amount: 1 },
             { name: 'Essbesteck', amount: 1 },
             { name: 'Wolldecke', amount: 1 },
             { name: 'Feuerstein und Stahl', amount: 1 },
             { name: 'Geldbeutel', amount: 1 },
-            { name: 'Kletterseil, 10 Schritt', amount: 1 },
+            { name: 'Kletterseil', amount: 10 },
             { name: 'Lederrucksack', amount: 1 },
             { name: 'Messer', amount: 1 },
             { name: 'Nadel- und Zwirnset', amount: 1 },
             { name: 'Fackel', amount: 1 },
-            { name: 'Proviant für drei Tage', amount: 1 },
+            { name: 'Proviant für einen Tag', amount: 3 },
             { name: 'Holzschale', amount: 1 },
-            { name: 'Verband', amount: 10 },
+            { name: 'Verband, 10 Stück', amount: 1 },
             { name: 'Waffenpflegeset (Schleifstein, Tücher)', amount: 1 },
             { name: 'Wasserschlauch', amount: 1 },
             { name: 'Wurfhaken', amount: 1 },
-            { name: 'Zunder', amount: 25 },
-            { name: 'Zunderdose', amount: 1 },
+            { name: 'Zunder, 25 Portionen', amount: 1 },
+            { name: 'Zunderdose (Platz für 25 Portionen)', amount: 1 },
          ],
       },
       {
@@ -825,16 +829,17 @@ export const aventurianStore: Record<string, AventurianStoreItem[]> = {
          weight: 1.325,
          description: 'Ready-made city equipment package.',
          contents: [
+            // source: DSA5 Regelwerk, S. 365 (Stadtpaket, 1,325 Stein, 31,1 S)
             { name: 'Geldkatze', amount: 1 },
             { name: 'Kohlestift', amount: 1 },
-            { name: 'Lampenöl, 8 Stunden Brennzeit', amount: 1 },
+            { name: 'Lampenöl, 8 Stunden Brennzeit', amount: 1, weight: 0.25 },
             { name: 'Messer', amount: 1 },
             { name: 'Nadel- und Zwirnset', amount: 1 },
             { name: 'Öllampe', amount: 1 },
-            { name: 'Papier', amount: 1 },
-            { name: 'Verband', amount: 10 },
-            { name: 'Zunder', amount: 25 },
-            { name: 'Zunderdose', amount: 1 },
+            { name: 'Papier, 1 Blatt', amount: 1 },
+            { name: 'Verband, 10 Stück', amount: 1 },
+            { name: 'Zunder, 25 Portionen', amount: 1 },
+            { name: 'Zunderdose (Platz für 25 Portionen)', amount: 1 },
          ],
       },
       {
@@ -844,22 +849,23 @@ export const aventurianStore: Record<string, AventurianStoreItem[]> = {
          weight: 22.825,
          description: 'Ready-made wilderness equipment package.',
          contents: [
+            // source: DSA5 Regelwerk, S. 365 (Wildnispaket, 22,825 Stein, 133,5 S)
             { name: 'Beil/Handaxt', amount: 1 },
             { name: 'Wolldecke', amount: 1 },
             { name: 'Feuerstein und Stahl', amount: 1 },
-            { name: 'Kletterseil, 10 Schritt', amount: 1 },
+            { name: 'Kletterseil', amount: 10 },
             { name: 'Lederrucksack', amount: 1 },
             { name: 'Messer', amount: 1 },
             { name: 'Nadel- und Zwirnset', amount: 1 },
             { name: 'Fackel', amount: 1 },
-            { name: 'Proviant für fünf Tage', amount: 1 },
+            { name: 'Proviant für einen Tag', amount: 5 },
             { name: 'Holzschale', amount: 1 },
-            { name: 'Verband', amount: 10 },
+            { name: 'Verband, 10 Stück', amount: 1 },
             { name: 'Wasserschlauch', amount: 2 },
             { name: 'Wurfhaken', amount: 1 },
             { name: 'Zelt, 1 Person', amount: 1 },
-            { name: 'Zunder', amount: 25 },
-            { name: 'Zunderdose', amount: 1 },
+            { name: 'Zunder, 25 Portionen', amount: 1 },
+            { name: 'Zunderdose (Platz für 25 Portionen)', amount: 1 },
          ],
       },
    ],

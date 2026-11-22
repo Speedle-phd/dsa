@@ -6,6 +6,8 @@ import { aventurianStore, type AventurianStoreItem } from './aventurian_store'
 export type StoreVariant = NonNullable<AventurianStoreItem['variants']>[number]
 
 const catalogItems = Object.values(aventurianStore).flat()
+// Package pieces the catalog does not sell on their own (e.g. "Amulette, Götterfigürchen …"): known names, translated
+const bundlePieceNames = new Set(catalogItems.flatMap((item) => item.contents?.map((piece) => piece.name) ?? []))
 
 // Maps a stored equipment name ("Heiltrank (QS 3)", "Pferd (ausgebildet)") back to its catalog item and variant.
 export function catalogEntry(name: string): { item: AventurianStoreItem; variant?: StoreVariant } | undefined {
@@ -20,7 +22,8 @@ export function catalogEntry(name: string): { item: AventurianStoreItem; variant
 
 export function equipmentDisplayName(name: string, language: Language) {
    const entry = catalogEntry(name)
-   if (!entry) return name
+   // User-entered names stay as typed
+   if (!entry) return bundlePieceNames.has(name) ? t(name, language) : name
    const suffix = entry.variant && entry.variant.id !== 'untrained' ? ` (${t(entry.variant.label, language)})` : ''
    return `${t(entry.item.name, language)}${suffix}`
 }

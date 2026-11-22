@@ -7,6 +7,7 @@ import { updateStats } from '../controllers/statsController'
 import {
    addCombatAbility, adjustHealthController, getCombatReference, levelUpCombatTechnique, removeCombatAbility, updateCombatSettings,
 } from '../controllers/combatController'
+import { mockStatsLookup } from './testing/mockStatsLookup'
 
 function heroStats() {
    return new Stats({
@@ -30,7 +31,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
 
    it('saves health and pain while preserving AP, maximum health and equipment', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       const json = vi.fn()
       await adjustHealthController(request({ direction: 'damage', amount: 30 }), { json } as Response)
@@ -44,7 +45,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
 
    it('saves a technique increment and its AP cost together', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       await levelUpCombatTechnique(request({ techniqueKey: 'Dolche' }), { json: vi.fn() } as Response)
       expect(stat.combatTechniques.find((entry) => entry.key === 'Dolche')?.value).toBe(7)
@@ -56,7 +57,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
    it('does not change or save the hero when an advancement is unaffordable', async () => {
       const stat = heroStats()
       stat.experience.spent = 1100
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockResolvedValue()
       await expect(levelUpCombatTechnique(request({ techniqueKey: 'Dolche' }), { json: vi.fn() } as Response)).rejects.toThrow('Not enough AP')
       expect(stat.experience.spent).toBe(1100)
@@ -66,7 +67,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
 
    it('records an existing custom ability without charging AP', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       await addCombatAbility(request({ abilityKey: 'Custom known ability', mode: 'record' }), { json: vi.fn() } as Response)
       expect(stat.combatSpecialAbilities).toContain('Custom known ability')
@@ -75,7 +76,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
 
    it('rejects unmet purchase prerequisites and leaves AP untouched', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockResolvedValue()
       await expect(addCombatAbility(request({ abilityKey: 'Finte II', mode: 'purchase' }), { json: vi.fn() } as Response)).rejects.toThrow('prerequisites')
       expect(stat.combatSpecialAbilities).toEqual([])
@@ -85,7 +86,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
 
    it('saves manual conditions and rejects duplicate/missing initial technique entries', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       await updateCombatSettings(request({ conditions: { Furcht: 2 } }), { json: vi.fn() } as Response)
       expect(stat.combatConditions).toEqual({ Furcht: 2 })
@@ -94,7 +95,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
    })
 
    it('requires an authenticated user before loading or saving stats', async () => {
-      const load = vi.spyOn(persistence, 'findStatsForUser')
+      const load = vi.spyOn(persistence, 'findStatsForActor')
       const req = request({ direction: 'damage', amount: 1 })
       req.user = undefined
       await expect(adjustHealthController(req, { json: vi.fn() } as Response)).rejects.toThrow('User not authenticated')
@@ -104,7 +105,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
       const stat = heroStats()
       stat.equipment.push({ item: 'Kettenrüstung', amount: 1, weight: 12, carriedOn: 'Body', category: 'Armor', description: '' },
          { item: 'Unterkleidung für Metallrüstungen', amount: 1, weight: 2.5, carriedOn: 'Equipped', category: 'Weapon_Accessories', description: '' })
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       const json = vi.fn()
       await updateCombatSettings(request({ wornArmor: 'Kettenrüstung', conditions: { Belastung: 1 } }), { json } as Response)
@@ -116,7 +117,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
    })
    it('rejects unknown/unowned armor without saving (S. 32)', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockResolvedValue()
       for (const wornArmor of ['Kettenrüstung', 'Invented armor']) {
          await expect(updateCombatSettings(request({ wornArmor }), { json: vi.fn() } as Response)).rejects.toThrow('known armor')
@@ -132,7 +133,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
          { item: 'Plattenrüstung', amount: 1, weight: 25, carriedOn: 'Backpack', category: 'Armor', description: '' },
          { item: 'Unterkleidung für Metallrüstungen', amount: 1, weight: 2.5, carriedOn: 'Equipped', category: 'Weapon_Accessories', description: '' },
       )
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       const equipment = stat.toObject().equipment.map((entry) => entry.item === 'Plattenrüstung' ? { ...entry, carriedOn: 'Equipped' } : entry)
       const json = vi.fn()
@@ -152,7 +153,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
       stat.health.value = 2
       stat.wornArmor = 'Kettenrüstung'
       stat.equipment.push({ item: 'Kettenrüstung', amount: 1, weight: 12, carriedOn: 'Body', category: 'Armor', description: '' })
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       const json = vi.fn()
       const res = { json, status: vi.fn() }
@@ -165,7 +166,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
    it('records the exact paid AP and refunds a purchase only once', async () => {
       const stat = heroStats()
       stat.experience.spent = 1000
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       const json = vi.fn()
       await addCombatAbility(request({ abilityKey: 'Haltegriff', mode: 'purchase' }), { json } as Response)
@@ -183,7 +184,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
    it.each(['Custom known ability', 'Haltegriff'])('removes manual or legacy %s without guessing a refund', async (abilityKey) => {
       const stat = heroStats()
       stat.combatSpecialAbilities = [abilityKey]
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       await removeCombatAbility(request({ abilityKey }), { json: vi.fn() } as Response)
       expect(stat.combatSpecialAbilities).toEqual([])
@@ -194,7 +195,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
       const stat = heroStats()
       stat.combatSpecialAbilities = ['Finte I', 'Finte II', 'Finte III']
       stat.combatAbilityPurchases = [{ key: 'Finte I', ap: 15 }]
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockResolvedValue()
       await expect(removeCombatAbility(request({ abilityKey: 'Finte I' }), { json: vi.fn() } as Response)).rejects.toThrow('Finte II')
       expect(stat.experience.spent).toBe(1097)
@@ -207,7 +208,7 @@ describe('Combat controllers save rule changes (S. 39, 50, 54–55, 234, 340)', 
       stat.combatSpecialAbilities = ['Haltegriff']
       stat.combatAbilityPurchases = [{ key: 'Haltegriff', ap: 5 }]
       stat.experience.spent = 0
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       const save = vi.spyOn(persistence, 'saveStats').mockResolvedValue()
       await expect(removeCombatAbility(request({ abilityKey: 'Haltegriff' }), { json: vi.fn() } as Response)).rejects.toThrow('inconsistent')
       expect(stat.combatSpecialAbilities).toEqual(['Haltegriff'])
@@ -233,7 +234,7 @@ describe('Status settings (S. 34–36)', () => {
    it('stores statuses, adds Handlungsunfähig to Bewusstlos and Betäubung II after Blutrausch', async () => {
       vi.spyOn(ActiveEffect, 'findOneAndDelete').mockResolvedValue(null)
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       vi.spyOn(persistence, 'saveStats').mockImplementation(async (doc) => { await doc.validate() })
       await updateCombatSettings(request({ statuses: ['Blutrausch', 'Bewusstlos'] }), { json: vi.fn() } as Response)
       expect(stat.statuses).toEqual(['Bewusstlos', 'Blutrausch', 'Handlungsunfähig'])
@@ -246,7 +247,7 @@ describe('Status settings (S. 34–36)', () => {
 
    it('rejects unknown statuses', async () => {
       const stat = heroStats()
-      vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+      mockStatsLookup(stat)
       await expect(updateCombatSettings(request({ statuses: ['Versteinert'] }), { json: vi.fn() } as Response)).rejects.toThrow()
    })
 })

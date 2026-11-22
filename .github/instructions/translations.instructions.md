@@ -23,6 +23,7 @@ applyTo: 'client/src/locales/**, client/src/**/*.ts, client/src/**/*.tsx'
 - Use the rulebook's exact German names and abbreviations for talents, combat techniques, advantages, disadvantages, abilities, conditions and equipment.
 - For English rule terminology, prefer verified official English rulebook/glossary equivalents. A German source confirms the rule, not its official English name; do not invent an English term or present a literal translation as official.
 - If the English equivalent cannot be verified, retain the German term and ask for an approved glossary when an English name is required.
+- Approved exception (user decision, Nov 2026): talent applications show the German term plus an app gloss in English mode, "Feilschen (haggling)" (`features/heroes/talentApplicationGlosses.ts`; a test requires a gloss for every non-proper-noun application).
 - Keep effect descriptions concise and faithful to the cited rule: preserve scope, prerequisites, exceptions, levels and numerical modifiers. Translation must not introduce or change mechanics.
 - Retain printed page references (`S. <page>` in source documentation). English UI may display `p.`, but must preserve the source book/edition and page number; never substitute an unverified English-edition page.
 - Record newly verified terminology and its source page in the relevant existing topic documentation so later translations can reuse it. Do not copy rulebook prose.

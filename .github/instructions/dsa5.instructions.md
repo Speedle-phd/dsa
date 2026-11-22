@@ -53,7 +53,7 @@ applyTo: 'docs/dsa5/**, server/src/utils/**, server/src/validations/**, client/s
 
 ## App conventions (user decisions)
 
-- A talent with no stored value (`null`) is **not activated**: it can't be rolled. Don't apply "all talents FW 0" automatically. Guided creation follows this too (package talents activated, others on request for the activation cost).
+- Every talent is active from FW 0 and can be rolled (S. 25, user decision Nov 2026: the former activation house rule was dropped). Hero talents are always numbers, never `null`; only spells, rituals, liturgies and ceremonies are activated for A–D 1–4 AP. Companion/creature talents keep `null` = the creature can't use that talent.
 - Guided creation: the server ledger is the source of truth (the client only renders it); culture bonuses and profession values add up and stay editable (lowering refunds); unusual choices are GM approvals, never blocks. See `character/character-creation.md`.
 - Disadvantage AP from creation are stored as `disadvantageCredit` on the total but shown as negative costs (net spent).
 - Combat is **GM-driven**: the app rolls only the hero's side (the hero plus allies: companions, summoned creatures, Radau brooms); enemy TP are entered. Only equipped items (`carriedOn === 'Equipped'`), weapons in a worn Dolch-/Schwertscheide (not held until drawn) and Waffenlos are available in a fight.

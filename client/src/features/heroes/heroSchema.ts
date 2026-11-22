@@ -105,3 +105,7 @@ export type HeroFormValues = Omit<HeroInput, 'height' | 'weight' | 'familyTree'>
    children: string
    familyNotes: string
 }
+
+// Parts of the hero form that can be edited on their own (overview edit buttons)
+export const heroFormSections = ['identity', 'family', 'appearance', 'chronicle'] as const
+export type HeroFormSection = (typeof heroFormSections)[number]

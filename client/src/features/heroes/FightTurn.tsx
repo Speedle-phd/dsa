@@ -76,7 +76,7 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
    const continueBlocked = casting && !complete
       ? casting.lastRound === fight.round && actionsLeft(use) <= 0 ? 'Continue casting in the next combat round.' : actionBlocked(use, 'action') : null
    const selfControl = talentCatalog.find((entry) => entry.key === 'selbstbeherrschung')!
-   const selfControlValue = stats.talents.find((entry) => entry.key === 'selbstbeherrschung')?.value ?? null
+   const selfControlValue = stats.talents.find((entry) => entry.key === 'selbstbeherrschung')?.value ?? 0
    const penalty = disturbancePenalty(casting?.disturbance ?? 0)
 
    function start() {
@@ -114,18 +114,17 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
          {casting.disturbance !== undefined && !complete && <div className='fight-confirm' role='status'>
             <p>{t('You took {sp} SP while casting: a Selbstbeherrschung (Störungen ignorieren) check keeps the concentration, −{penalty} (S. 229).', language)
                .replace('{sp}', String(casting.disturbance)).replace('{penalty}', String(penalty))}</p>
-            <button className='primary-button' type='button' disabled={selfControlValue === null} onClick={() => setConcentration(true)}>{t('Selbstbeherrschung', language)}</button>
+            <button className='primary-button' type='button' onClick={() => setConcentration(true)}>{t('Selbstbeherrschung', language)}</button>
          </div>}
          <div className='fight-followup'>
             {complete ? <button className='primary-button' type='button' onClick={() => setProbeOpen(true)}><Sparkles size={16} />{t('Roll the spell Probe', language)}</button>
                : <button className='primary-button' type='button' disabled={continueBlocked !== null} onClick={proceed}>
                   <Hourglass size={16} />{t('Continue casting (action {next}/{total})', language).replace('{next}', String(casting.done + 1)).replace('{total}', String(casting.total))}</button>}
-            {casting.disturbance === undefined && !complete && <button className='quiet-button' type='button' disabled={selfControlValue === null}
+            {casting.disturbance === undefined && !complete && <button className='quiet-button' type='button'
                onClick={() => setConcentration(true)}>{t('Disturbed: Selbstbeherrschung', language)}</button>}
             <button className='quiet-button' type='button' onClick={() => abort('Casting {spell} aborted')}><X size={16} />{t('Abort', language)}</button>
          </div>
          {continueBlocked && <small className='fight-note'>{t(continueBlocked, language)}</small>}
-         {selfControlValue === null && !complete && <small className='fight-note'>{t('Selbstbeherrschung is not activated.', language)}</small>}
       </> : <>
          {options.length > 0 && <>
             <label className='field-group fight-situation-field'>
@@ -169,7 +168,7 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
       {probeOpen && castSpell && <SpellProbeDialog stats={stats} spell={castSpell} reference={reference} value={castValue}
          initialModifications={casting?.modification === 'none' || !casting ? [] : [casting.modification]}
          onClose={() => { setProbeOpen(false); update(heroId, { casting: null }) }} />}
-      {concentration && selfControlValue !== null && <TalentProbeDialog stats={stats} talent={selfControl} value={selfControlValue}
+      {concentration && <TalentProbeDialog stats={stats} talent={selfControl} value={selfControlValue}
          extraSources={penalty ? [{ label: 'Damage while casting', value: -penalty }] : []}
          renderResult={({ result }) => {
             failed.current = !result.success

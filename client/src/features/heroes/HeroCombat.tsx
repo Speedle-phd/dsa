@@ -28,6 +28,7 @@ import { soulPowerSources, useActiveEffects } from './activeEffectsApi'
 import { speedBaseBreakdown, speedBaseValue } from './energy'
 import { DieIcon } from '@/components/DieIcon'
 import { throwColoredDice } from '@/components/diceEngine'
+import { heroInitiative } from './fightHelpers'
 
 const initialCombatSchema = z.object({
    modifiers: z.object({
@@ -240,11 +241,7 @@ export function HeroCombat({ hero }: { hero: Hero }) {
    const held = gear.filter(({ entry, item }) => entry.carriedOn === 'Equipped' && item.weapon && item.weapon.reach !== 'ranged')
       .map(({ item }) => ({ name: item.name, technique: item.weapon!.combatTechnique, parryModifier: item.weapon!.parryModifier, shield: item.kind === 'shield' }))
    const armor = gear.filter(({ item }) => item.armor)
-   // source: DSA5 Regelwerk, S. 56, 248 (INI base and highest Kampfreflexe level)
-   const reflexLevel = ['I', 'II', 'III'].reduce((level, roman, index) =>
-      stats.combatSpecialAbilities.includes(`Kampfreflexe ${roman}`) ? index + 1 : level, 0)
-   const initiative = Math.round((stats.courage + stats.dexterity) / 2) + stats.combatModifiers.initiative + reflexLevel
-   const iniModifier = stats.checkModifiers.initiative.total
+   const { base: initiative, modifier: iniModifier } = heroInitiative(stats)
    // source: DSA5 Regelwerk, S. 274 (Willenstrunk raises SK while it runs; only the strongest counts, S. 272)
    const soulPowerBonus = soulPowerSources(running)
    const soulPowerTotal = soulPowerBonus.reduce((sum, source) => sum + source.value, 0)

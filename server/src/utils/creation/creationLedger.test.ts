@@ -178,17 +178,19 @@ describe('Finish: the created hero (S. 25, 38, 46, 58)', () => {
       expect(stats.purse.silbertaler).toBe(750)
       expect(char).toMatchObject({ species: 'Mensch', culture: 'Mittelreich', placeOfOrigin: 'Havena', socialStatus: 'frei', age: 16 })
    })
-   it('keeps untouched talents not activated; package talents are activated (house rule, experience.md)', () => {
+   it('writes every talent active: untouched ones at FW 0, package ones at their value (S. 25)', () => {
       const data = complete()
       const { stats } = finishedHero(data, creationLedger(data))
       expect(stats.talents.find((talent) => talent.key === 'holzbearbeitung')?.value).toBe(1)
-      expect(stats.talents.find((talent) => talent.key === 'zechen')?.value).toBeNull()
+      expect(stats.talents.find((talent) => talent.key === 'zechen')?.value).toBe(0)
+      expect(stats.talents.every((talent) => typeof talent.value === 'number')).toBe(true)
    })
-   it('activating a talent costs its activation; FW 0 is activated, not unset', () => {
+   it('talents start active at FW 0 without activation cost; raises cost the S. 50 steps (S. 25, 50)', () => {
       const ledger = creationLedger(draft({ talents: { zechen: 0, kraftakt: 2 } }))
-      expect(ledger.talents.zechen).toMatchObject({ base: null, value: 0, cost: 1 })
-      expect(ledger.talents.kraftakt).toMatchObject({ base: null, value: 2, cost: 2 + 2 + 2 })
-      expect(ledger.talents.klettern).toMatchObject({ base: null, value: null, cost: 0 })
+      expect(ledger.talents.zechen).toMatchObject({ base: 0, value: 0, cost: 0 })
+      // Kraftakt (B): FW 1 and FW 2 cost 2 AP each
+      expect(ledger.talents.kraftakt).toMatchObject({ base: 0, value: 2, cost: 2 + 2 })
+      expect(ledger.talents.klettern).toMatchObject({ base: 0, value: 0, cost: 0 })
    })
 })
 

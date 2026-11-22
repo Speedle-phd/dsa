@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { AlertTriangle, Dices, Plus, Trash2, X } from 'lucide-react'
+import { AlertTriangle, Dices, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { throwColoredDice } from '@/components/diceEngine'
 import { getEntryReference, type EntryCategory, type EntrySelection } from '@/features/heroes/characterEntryApi'
@@ -147,10 +147,9 @@ export function SkillsStep({ data, ledger, reference, update }: StepProps) {
    ]
    const categories = [...new Set(talentCatalog.map((talent) => talent.category))] as TalentCategory[]
    const setTalent = (key: string, value: number) => update({ talents: { ...data.talents, [key]: value } })
-   const deactivate = (key: string) => update({ talents: Object.fromEntries(Object.entries(data.talents).filter(([name]) => name !== key)) })
    const setTechnique = (key: string, value: number) => update({ techniques: { ...data.techniques, [key]: value } })
    return <section className='creation-step'>
-      <p className='creation-intro'>{t('Talents from your packages are activated; others start not activated and cost their activation (A 1, B 2, C 3, D 4 AP) to reach FW 0 — the app’s house rule, as on the hero sheet. Combat techniques start at 6. Raising costs AP, lowering a package value refunds it (S. 45, 50). Maximum: the Erfahrungsgrad and the highest attribute of the check + 2.', language)}</p>
+      <p className='creation-intro'>{t('All talents are active from FW 0; packages add their values. Combat techniques start at 6. Raising costs AP, lowering a package value refunds it (S. 25, 45, 50). Maximum: the Erfahrungsgrad and the highest attribute of the check + 2.', language)}</p>
       <div className='creation-skill-groups'>
          {categories.map((category) => <div key={category} className='creation-skill-group'>
             <h3>{t(talentCategoryLabels[category], language)}</h3>
@@ -158,17 +157,8 @@ export function SkillsStep({ data, ledger, reference, update }: StepProps) {
                const row = ledger.talents[talent.key]
                if (!row) return null
                const label = t(talent.label, language)
-               // Not activated: one click activates it at FW 0 for its activation cost (house rule, as on the hero page)
-               if (row.value === null) return <div key={talent.key} className='creation-skill is-inactive'>
-                  <span className='creation-skill-name'><span>{label}</span></span>
-                  <button className='quiet-button creation-activate' type='button' aria-label={`${t('Activate', language)}: ${label}`} onClick={() => setTalent(talent.key, 0)}>
-                     {t('Activate', language)}</button>
-                  <span className='creation-ap'>{activationCost[talent.stfClass]} {t('AP', language)}</span>
-                  <small className='creation-skill-max'>—</small>
-               </div>
-               return <SkillRow key={talent.key} label={label} base={row.base ?? 0} value={row.value} cost={row.cost} maximum={row.maximum} min={0}
-                  onChange={(value) => setTalent(talent.key, value)} onRemove={row.base === null ? () => deactivate(talent.key) : undefined}
-                  removeLabel='Deactivate' />
+               return <SkillRow key={talent.key} label={label} base={row.base} value={row.value} cost={row.cost} maximum={row.maximum} min={0}
+                  onChange={(value) => setTalent(talent.key, value)} />
             })}
          </div>)}
          <div className='creation-skill-group'>
@@ -235,17 +225,15 @@ export function SkillsStep({ data, ledger, reference, update }: StepProps) {
    </section>
 }
 
-const activationCost = { a: 1, b: 2, c: 3, d: 4 } as const
-
-function SkillRow({ label, base, value, cost, maximum, min, onChange, onRemove, removeLabel = 'Remove' }: {
-   label: string; base: number; value: number; cost: number; maximum: number; min: number; onChange: (value: number) => void; onRemove?: () => void; removeLabel?: string
+function SkillRow({ label, base, value, cost, maximum, min, onChange, onRemove }: {
+   label: string; base: number; value: number; cost: number; maximum: number; min: number; onChange: (value: number) => void; onRemove?: () => void
 }) {
    const language = useLanguageStore((state) => state.language)
    return <div className={`creation-skill${value > maximum ? ' is-over' : ''}${value !== base ? ' is-changed' : ''}`}>
       <span className='creation-skill-name'>
          <span>{label}{base > 0 && <small> · {t('package', language)} {base}</small>}</span>
-         {onRemove && <button className='icon-button creation-skill-remove' type='button' aria-label={`${t(removeLabel, language)}: ${label}`} title={t(removeLabel, language)}
-            onClick={onRemove}>{removeLabel === 'Deactivate' ? <X size={14} /> : <Trash2 size={14} />}</button>}
+         {onRemove && <button className='icon-button creation-skill-remove' type='button' aria-label={`${t('Remove', language)}: ${label}`} title={t('Remove', language)}
+            onClick={onRemove}><Trash2 size={14} /></button>}
       </span>
       <ProbeStepper value={value} min={min} max={25} label={label} lowerLabel={`${label} −1`} raiseLabel={`${label} +1`} onChange={onChange} />
       <span className={`creation-ap${cost < 0 ? ' is-refund' : ''}`}>{cost ? `${cost < 0 ? '+' : ''}${Math.abs(cost)} ${t('AP', language)}` : ''}</span>

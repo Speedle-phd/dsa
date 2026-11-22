@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { FormEvent } from 'react'
 import { Dices, Minus, Plus, X } from 'lucide-react'
@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { DieIcon } from './DieIcon'
 import { throwDice as throwOnLayer } from './diceEngine'
 import { useModalKeyboard } from './useModalKeyboard'
+import { useScrollingDown } from './scrollHooks'
 import { useLanguageStore } from '../locales/languageStore'
 import type { Language } from '../locales/languageStore'
 import { t } from '../locales/translation'
@@ -31,24 +32,6 @@ const totalDice = (counts: DiceCounts) =>
 
 const dieLabel = (sides: DieSides, language: Language) =>
    `${language === 'de' ? 'W' : 'd'}${sides}`
-
-// True while the page scrolls down (away from the top and the end), so the floating launcher can step aside.
-function useScrollingDown() {
-   const [down, setDown] = useState(false)
-   useEffect(() => {
-      let last = window.scrollY
-      const onScroll = () => {
-         const y = window.scrollY
-         const atEnd = y + window.innerHeight >= document.documentElement.scrollHeight - 8
-         if (Math.abs(y - last) < 8 && !atEnd) return
-         setDown(y > last && y > 80 && !atEnd)
-         last = y
-      }
-      window.addEventListener('scroll', onScroll, { passive: true })
-      return () => window.removeEventListener('scroll', onScroll)
-   }, [])
-   return down
-}
 
 export function DiceRoller() {
    const language = useLanguageStore((state) => state.language)

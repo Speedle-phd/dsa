@@ -54,11 +54,12 @@ export type EquipmentPurchaseInput = {
    unitPriceSilbertaler: number
    description?: string
    quality?: number
+   contents?: Array<{ item: string; category: string; unitWeight: number; amount: number; description?: string }>
 }
 
 export type TalentEntry = {
    key: string
-   value: number | null
+   value: number
    notes: string
 }
 export type ModifierSource = { label: string; value: number; page: number }

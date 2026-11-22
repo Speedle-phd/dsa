@@ -88,10 +88,11 @@ export function isTalentKey(value: string): boolean {
    return talentKeys.includes(value)
 }
 
+// source: DSA5 Regelwerk, S. 25 ("Alle Talente sind aktiv"): every talent starts at FW 0, no activation cost
 export function defaultTalents() {
    return talentCatalog.map((entry) => ({
       key: entry.key,
-      value: null as number | null,
+      value: 0,
       notes: '',
    }))
 }

@@ -5,6 +5,7 @@ import { Stats } from '../models/stats.model'
 import * as persistence from './statsPersistence'
 import { addCompanion, addCompanionTrick, removeCompanion, removeCompanionTrick, setCompanionResources, updateCompanion } from '../controllers/companionController'
 import type { CompanionsResponse } from '../types/apiContracts'
+import { mockStatsLookup } from './testing/mockStatsLookup'
 
 const statsId = '507f1f77bcf86cd799439010'
 const userId = '507f1f77bcf86cd799439011'
@@ -40,7 +41,7 @@ function setup(abilities: string[] = ['Tradition (Hexe)', 'Vertrautenbindung']) 
       generalSpecialAbilities: abilities, experience: { base: 1100, total: 1100, gathered: 0, spent: 1000 },
       createdAt: new Date(), updatedAt: new Date(),
    })
-   vi.spyOn(persistence, 'findStatsForUser').mockResolvedValue(stat)
+   mockStatsLookup(stat)
    const saveStats = vi.spyOn(persistence, 'saveStats')
    const docs = companionStore()
    const res = { json: vi.fn() } as unknown as Response

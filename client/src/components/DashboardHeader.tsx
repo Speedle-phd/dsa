@@ -1,4 +1,4 @@
-import { HandPlatter, LogOut, Sparkles, Store, UserRound, UsersRound, type LucideIcon } from 'lucide-react'
+import { Flag, HandPlatter, LogOut, Settings, Sparkles, Store, UserRound, UsersRound, type LucideIcon } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { LanguageToggle } from '@/components/LanguageToggle'
 import { ThemeToggle } from '@/components/ThemeToggle'
@@ -18,6 +18,7 @@ export function DashboardHeader({ onLogout, heroId }: DashboardHeaderProps) {
    const hero = useHeroStore((state) => state.hero)
    const links: Array<{ to: string; label: string; Icon: LucideIcon; end?: boolean }> = [
       { to: '/dashboard', label: t('Heroes', language), Icon: UsersRound, end: true },
+      { to: '/parties', label: t('Parties', language), Icon: Flag },
       ...hero ? [
          { to: `/heroes/${hero._id}`, label: hero.name, Icon: UserRound },
          { to: '/store', label: t('Store', language), Icon: Store },
@@ -42,6 +43,9 @@ export function DashboardHeader({ onLogout, heroId }: DashboardHeaderProps) {
             {heroId && <APToggle heroId={heroId} />}
             <LanguageToggle />
             <ThemeToggle />
+            <Link className='header-control' to='/settings' aria-label={t('Settings', language)} title={t('Settings', language)}>
+               <Settings size={17} aria-hidden='true' />
+            </Link>
             {onLogout && (
                <button
                   className='quiet-button'

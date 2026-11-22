@@ -5,6 +5,7 @@ import * as persistence from "./statsPersistence"
 import { addCharacterEntry, previewCharacterEntry, previewCharacterEntryRemoval, removeCharacterEntry } from "../controllers/characterEntryController"
 import { updateExperience, updateStats } from "../controllers/statsController"
 import { assertEntryListsPreserved } from "./characterEntryRules"
+import { mockStatsLookup } from "./testing/mockStatsLookup"
 
 function heroStats() {
    return new Stats({
@@ -21,7 +22,7 @@ function request(body: Record<string, unknown>) {
 }
 function setup() {
    const stat = heroStats()
-   vi.spyOn(persistence, "findStatsForUser").mockResolvedValue(stat)
+   mockStatsLookup(stat)
    const save = vi.spyOn(persistence, "saveStats").mockImplementation(async (doc) => { await doc.validate() })
    const res = { json: vi.fn(), status: vi.fn().mockReturnThis() } as unknown as Response
    return { stat, save, res }

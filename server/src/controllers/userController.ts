@@ -21,6 +21,7 @@ import {
    UnauthorizedError,
 } from '@/utils/appError'
 import { signToken } from '@/utils/jwt'
+import { removeUserFromParties } from '@/utils/partyCleanup'
 import {
    buildAuthResponse,
    buildPasswordResetResponse,
@@ -101,6 +102,7 @@ export async function deleteCurrentUser(req: Request, res: Response) {
       Summon.deleteMany({ userId: user._id }),
       Artifact.deleteMany({ userId: user._id }),
       ActiveEffect.deleteMany({ userId: user._id }),
+      removeUserFromParties(user._id),
    ])
    await user.deleteOne()
 
@@ -185,4 +187,19 @@ export async function updateProfile(
    res.status(200).json(
       buildAuthResponse('Profile updated successfully', token, user),
    )
+}
+
+export async function getSettings(req: Request, res: Response) {
+   if (!req.user) throw new UnauthorizedError('User not authenticated')
+   const user = await User.findById(req.user._id).select('settings')
+   if (!user) throw new NotFoundError('User not found')
+   res.json({ settings: { defaultPartyVisibility: user.settings?.defaultPartyVisibility ?? 'summary' } })
+}
+
+export async function updateSettings(req: Request, res: Response) {
+   if (!req.user) throw new UnauthorizedError('User not authenticated')
+   const user = await User.findByIdAndUpdate(req.user._id,
+      { $set: { 'settings.defaultPartyVisibility': req.body.defaultPartyVisibility } }, { new: true, runValidators: true }).select('settings')
+   if (!user) throw new NotFoundError('User not found')
+   res.json({ settings: { defaultPartyVisibility: user.settings?.defaultPartyVisibility ?? 'summary' } })
 }

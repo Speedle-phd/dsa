@@ -66,7 +66,7 @@ function RepairDialog({ stats, entry, index, onClose }: { stats: Stats; entry: E
    const price = Object.fromEntries(coinKeys.map((key) => [key, Math.max(0, Math.trunc(Number(coins[key] || 0)))])) as Record<typeof coinKeys[number], number>
    const hasPrice = coinKeys.some((key) => price[key] > 0)
    const talent = talentCatalog.find((item) => item.key === craft)!
-   const value = stats.talents.find((item) => item.key === craft)?.value ?? null
+   const value = stats.talents.find((item) => item.key === craft)?.value ?? 0
 
    return createPortal(
       <div className='modal-backdrop' role='presentation' onMouseDown={onClose}>
@@ -95,10 +95,9 @@ function RepairDialog({ stats, entry, index, onClose }: { stats: Stats; entry: E
                      {crafts.map((key) => <option key={key} value={key}>{t(talentCatalog.find((item) => item.key === key)!.label, language)}</option>)}
                   </select>
                </label>
-               {value === null ? <p className='field-error'>{t('This talent is not activated.', language)}</p>
-                  : <button className='primary-button' type='button' onClick={() => setRolling(true)}><Hammer size={16} />{t('Roll repair check', language)}</button>}
+               <button className='primary-button' type='button' onClick={() => setRolling(true)}><Hammer size={16} />{t('Roll repair check', language)}</button>
             </fieldset>
-            {rolling && value !== null && <TalentProbeDialog stats={stats} talent={talent} value={value}
+            {rolling && <TalentProbeDialog stats={stats} talent={talent} value={value}
                renderResult={({ result }) => result.success
                   ? <button className='primary-button' type='button' disabled={mutation.isPending} onClick={() => mutation.mutate({ method: 'self' })}>
                      <Wrench size={16} />{t('Mark as repaired', language)}</button>
