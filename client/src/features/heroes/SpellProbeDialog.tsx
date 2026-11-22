@@ -227,7 +227,7 @@ export function SpellProbeDialog({ stats, spell, reference, value, extraSources:
          {/* source: DSA5 Regelwerk, S. 297 (Radau: the broom attacks on its own with INI 12+1W6, AT 10+QS) */}
          {result.success && quality && spell.key === 'Radau' && <section className='probe-asp'>
             {broomJoined ? <p className='probe-asp-spent'><Check size={16} />{t('The broom joined the fight.', language)}</p>
-               : fightRunning ? <button className='primary-button' type='button' onClick={() => void joinFightAs(stats.charId, { kind: 'radau', quality }, 'Radau', radau.initiative)
+               : fightRunning ? <button className='primary-button' type='button' onClick={() => void joinFightAs(stats.charId, { kind: 'radau', quality }, 'Radau', radau.initiative, radau.speed)
                   .then(() => setBroomJoined(true))}><Sparkles size={16} />{t('Bring the broom into the fight', language)}</button>
                : <p className='probe-spell-hint'>{t('Start a fight on the Combat tab to let the broom fight there.', language)}</p>}
          </section>}

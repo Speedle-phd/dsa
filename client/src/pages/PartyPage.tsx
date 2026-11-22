@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, Archive, Copy, RefreshCw, UsersRound } from 'lucide-react'
+import { ArrowLeft, Archive, Copy, RefreshCw, Swords, UsersRound } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { DashboardHeader } from '@/components/DashboardHeader'
@@ -39,7 +39,11 @@ function PartyContent({ party }: { party: Party }) {
 
    return <>
       <PageHeading Icon={UsersRound} title={party.name}
-         description={`${t(isGm ? 'You lead this party as game master.' : 'Game master', language)}${isGm ? '' : `: ${party.gm.username}`}`} />
+         description={`${t(isGm ? 'You lead this party as game master.' : 'Game master', language)}${isGm ? '' : `: ${party.gm.username}`}`}>
+         {party.role !== 'pending' && party.status === 'active' && <div className='add-hero-actions'>
+            <Link className='primary-button' to={`/parties/${party._id}/fight`}><Swords size={16} aria-hidden='true' />{t('Fight & battle board', language)}</Link>
+         </div>}
+      </PageHeading>
       {party.status === 'archived' && <p className='state-panel'>{t('This party is archived.', language)}</p>}
       {isGm && <GmPanel party={party} />}
       {isGm && pending.length > 0 && <section className='overview-section'>

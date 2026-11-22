@@ -236,7 +236,7 @@ function SummonCard({ stats, summon, reference }: { stats: Stats; summon: Summon
       {summon.task === 'fight' ? <div className='bestiary-service'>
          <p className='combat-note'>{t('Fighting on the hero’s side; the Kampf ends with the fight (S. 265).', language)}</p>
          <button className='quiet-button' type='button' disabled={mutation.isPending} onClick={() => mutation.mutate({ action: 'fight-over', summonId: summon._id })}>
-            <Check size={16} />{t('Fight over', language)}</button>
+            <Check size={16} />{t('Release from the fight', language)}</button>
       </div>
          : task && <p className='combat-note'>{t('This task used all services. Dismiss the creature when it is over (S. 265).', language)}</p>}
       {summon.health && summon.health.current < summon.health.max && <p className='combat-note'>{t('LeP', language)} {summon.health.current} / {summon.health.max}</p>}

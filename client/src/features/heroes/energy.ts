@@ -61,3 +61,24 @@ export function speedBaseValue(stats: Stats, base: number) {
    const adjusted = base + stats.checkModifiers.speedBase.sources.reduce((sum, source) => sum + source.value, 0)
    return stats.checkModifiers.speedBase.halved ? Math.ceil(adjusted / 2) : adjusted
 }
+
+// source: DSA5 Regelwerk, S. 40 (unknown/custom species require an explicit base)
+export function speciesSpeed(species: string) {
+   const name = species.trim().toLowerCase()
+   if (['zwerg', 'zwerge', 'dwarf', 'dwarves'].includes(name)) return 6
+   if (['mensch', 'menschen', 'human', 'elf', 'elfen', 'halbelf', 'half-elf'].includes(name)) return 8
+   return null
+}
+
+// GS for the fight panel: species base (or the entered one) with its modifiers (S. 40)
+export function heroSpeed(stats: Stats, species: string) {
+   const speciesBase = stats.combatModifiers.speedBase ?? speciesSpeed(species)
+   const base = speciesBase === null ? null : speedBaseValue(stats, speciesBase)
+   return base === null ? null : Math.max(0, base + stats.combatModifiers.speed)
+}
+
+// GS in a fight (S. 29, 32–36): status overrides, else GS + modifiers, scaled by Paralyse. Same as the fight panel and the server.
+export function fightSpeed(stats: Stats, speed: number | null) {
+   const modifiers = stats.checkModifiers.speed
+   return speed === null ? null : modifiers.override ?? (modifiers.blocked ? 0 : Math.max(0, Math.round((speed + modifiers.total) * modifiers.factor)))
+}

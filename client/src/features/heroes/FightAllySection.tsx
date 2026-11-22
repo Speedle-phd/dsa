@@ -69,11 +69,11 @@ export function FightAllySection({ stats, heroId, fight }: { stats: Stats; heroI
    }
 
    async function joinChosen() {
-      if (chosenCompanion) await joinFightAs(heroId, { kind: 'companion', id: chosenCompanion.id }, chosenCompanion.name, chosenCompanion.initiative)
+      if (chosenCompanion) await joinFightAs(heroId, { kind: 'companion', id: chosenCompanion.id }, chosenCompanion.name, chosenCompanion.initiative, parseSpeed(chosenCompanion.speed))
       if (chosenSummon?.effective) {
          const creature = chosenSummon.effective
          await summonAction.mutateAsync({ action: 'join-fight', summonId: chosenSummon._id, service })
-         await joinFightAs(heroId, { kind: 'summon', id: chosenSummon._id }, chosenSummon.creature, creature.initiative)
+         await joinFightAs(heroId, { kind: 'summon', id: chosenSummon._id }, chosenSummon.creature, creature.initiative, parseSpeed(creature.speed))
       }
    }
 
@@ -273,7 +273,7 @@ function AllyCard({ heroId, ally, fighter, subtitle, healthPending = false, onHe
 
 // source: DSA5 Regelwerk, S. 297 (Radau: 2 AsP per KR; target down → random target within 16 Schritt; Haltegriff, Kraftakt 10 with 14/14/14),
 // S. 285–286 (sustained spell: −1 on further spells)
-function RadauControls({ stats, heroId, fight, ally, onEnd }: { stats: Stats; heroId: string; fight: Fight; ally: FightAlly; onEnd: () => void }) {
+export function RadauControls({ stats, heroId, fight, ally, onEnd }: { stats: Stats; heroId: string; fight: Fight; ally: FightAlly; onEnd: () => void }) {
    const language = useLanguageStore((state) => state.language)
    const { updateAlly, log } = useFightStore.getState()
    const spend = useManaSpend(stats, (amount) => {

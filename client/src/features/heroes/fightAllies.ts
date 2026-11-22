@@ -16,6 +16,9 @@ export type FightAlly = {
    paidRound?: number
    // Actions used in the current KR (S. 228)
    turn?: ActionUse
+   // Name and ground GS when it joined (a party fight shows the ally as its own token)
+   name?: string
+   speed?: number | null
 }
 
 // `penalty`: lowered by 3 per further defense in the KR (PA/AW, S. 232); a VW is not (S. 354).

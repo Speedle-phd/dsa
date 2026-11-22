@@ -10,6 +10,7 @@ import { SpellProbeDialog } from './SpellProbeDialog'
 import type { Stats } from './statsApi'
 import { talentCatalog } from './talentCatalog'
 import { TalentProbeDialog } from './TalentProbeDialog'
+import { useTurnGate } from './turnGate'
 
 // Action and free action of the current KR, movement and the GM's extra action (S. 227–229). Without `allyId` it is the hero's.
 export function TurnBar({ heroId, fight, allyId, name, speed }: { heroId: string; fight: Fight; allyId?: string; name: string; speed: number | null }) {
@@ -50,7 +51,8 @@ type CastOption = { key: string; time: string }
 export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: string; fight: Fight }) {
    const language = useLanguageStore((state) => state.language)
    const reference = useQuery({ queryKey: ['magic-reference'], queryFn: getMagicReference, staleTime: Infinity }).data
-   const { spend, update, log } = useFightStore.getState()
+   const { update, log } = useFightStore.getState()
+   const gate = useTurnGate(heroId, fight)
    const use = actionUse(fight.turn, fight.round)
    const casting = fight.casting ?? null
    const [choice, setChoice] = useState('')
@@ -69,29 +71,29 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
    const chosenValue = stats.spells.find((spell) => spell.key === choice)?.value ?? 0
    const modifiable = chosen?.kind === 'Zauberspruch' && spellRules(stats, chosen, reference, chosenValue).modifications > 0
    const total = chosen ? castingActions(chosen.castingTime, modifiable ? modification : 'none') : null
-   const startBlocked = actionBlocked(use, 'action', casting)
+   const startBlocked = gate.reason('action', casting)
    const castSpell = casting ? reference.spells.find((spell) => spell.key === casting.spell) : undefined
    const castValue = stats.spells.find((spell) => spell.key === casting?.spell)?.value ?? 0
    const complete = casting !== null && casting.done >= casting.total
    const continueBlocked = casting && !complete
-      ? casting.lastRound === fight.round && actionsLeft(use) <= 0 ? 'Continue casting in the next combat round.' : actionBlocked(use, 'action') : null
+      ? casting.lastRound === fight.round && actionsLeft(use) <= 0 ? 'Continue casting in the next combat round.' : gate.reason('action', null) : null
    const selfControl = talentCatalog.find((entry) => entry.key === 'selbstbeherrschung')!
    const selfControlValue = stats.talents.find((entry) => entry.key === 'selbstbeherrschung')?.value ?? 0
    const penalty = disturbancePenalty(casting?.disturbance ?? 0)
 
-   function start() {
+   async function start() {
       if (!chosen || !total) return
-      spend(heroId, 'action')
+      if (!await gate.spend('action', 'Casting', `${chosen.key} 1/${total}`)) return
       update(heroId, { casting: { spell: chosen.key, total, done: 1, lastRound: fight.round, modification: modifiable ? modification : 'none' } })
       log(heroId, 'Casting {spell}: action {done}/{total}', { spell: chosen.key, done: 1, total })
       setChoice('')
       setModification('none')
       if (total === 1) setProbeOpen(true)
    }
-   function proceed() {
+   async function proceed() {
       if (!casting) return
       const done = casting.done + 1
-      spend(heroId, 'action')
+      if (!await gate.spend('action', 'Casting', `${casting.spell} ${done}/${casting.total}`)) return
       update(heroId, { casting: { ...casting, done, lastRound: fight.round } })
       log(heroId, 'Casting {spell}: action {done}/{total}', { spell: casting.spell, done, total: casting.total })
       if (done >= casting.total) setProbeOpen(true)
@@ -118,7 +120,7 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
          </div>}
          <div className='fight-followup'>
             {complete ? <button className='primary-button' type='button' onClick={() => setProbeOpen(true)}><Sparkles size={16} />{t('Roll the spell Probe', language)}</button>
-               : <button className='primary-button' type='button' disabled={continueBlocked !== null} onClick={proceed}>
+               : <button className='primary-button' type='button' disabled={continueBlocked !== null} onClick={() => void proceed()}>
                   <Hourglass size={16} />{t('Continue casting (action {next}/{total})', language).replace('{next}', String(casting.done + 1)).replace('{total}', String(casting.total))}</button>}
             {casting.disturbance === undefined && !complete && <button className='quiet-button' type='button'
                onClick={() => setConcentration(true)}>{t('Disturbed: Selbstbeherrschung', language)}</button>}
@@ -146,7 +148,7 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
             </div>}
             {chosen && total && <p className='fight-note'>{t(total === 1 ? 'Takes this round’s action; the spell Probe follows right away.'
                : 'Takes {total} actions, one per combat round starting now; the spell Probe comes at the end (S. 228–229).', language).replace('{total}', String(total))}</p>}
-            <button className='primary-button' type='button' disabled={!chosen || !total || startBlocked !== null} onClick={start}>
+            <button className='primary-button' type='button' disabled={!chosen || !total || startBlocked !== null} onClick={() => void start()}>
                <Wand2 size={16} />{t('Start casting', language)}</button>
             {startBlocked && chosen && <small className='fight-note'>{t(startBlocked, language)}</small>}
          </>}
@@ -156,12 +158,12 @@ export function CastingCard({ stats, heroId, fight }: { stats: Stats; heroId: st
                {tricks.map((key) => <option key={key} value={key}>{key}</option>)}
             </select>
             <button className='quiet-button' type='button' disabled={!trick || startBlocked !== null || mana.isPending || stats.mana.current < 1}
-               onClick={() => {
-                  spend(heroId, 'action')
+               onClick={() => void (async () => {
+                  if (!await gate.spend('action', 'Zaubertrick', trick)) return
                   mana.mutate(1)
                   log(heroId, 'Zaubertrick {spell}: 1 action, 1 AsP', { spell: trick })
                   setTrick('')
-               }}><Sparkles size={16} />{t('Use · 1 action, 1 AsP', language)}</button>
+               })()}><Sparkles size={16} />{t('Use · 1 action, 1 AsP', language)}</button>
          </div>}
       </>}
 

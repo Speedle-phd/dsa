@@ -10,5 +10,7 @@ export function keysForNotice(notice: RealtimeNotice): QueryKey[] {
          return [['parties', notice.partyId], ['parties']]
       case 'parties':
          return [['parties']]
+      case 'encounter':
+         return [['encounter', notice.partyId]]
    }
 }

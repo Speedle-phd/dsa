@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { equippedArmor, normalizeArmorEquipment } from './armorEquipment'
+import { armorProtection, equippedArmor, normalizeArmorEquipment } from './armorEquipment'
 
 describe('Single worn armor from equipment placement (S. 32, 374)', () => {
    const equipment = [
@@ -29,5 +29,16 @@ describe('Single worn armor from equipment placement (S. 32, 374)', () => {
    })
    it('ignores empty or unknown items instead of assigning invented armor penalties', () => {
       expect(equippedArmor([{ item: 'Invented armor', amount: 1, carriedOn: 'Equipped' }, { item: 'Kettenrüstung', amount: 0, carriedOn: 'Equipped' }])).toBeNull()
+   })
+})
+
+
+describe('armorProtection (S. 374)', () => {
+   it('gives the RS of the worn armor', () => {
+      expect(armorProtection('Kettenrüstung')).toBe(4)
+      expect(armorProtection('Gambeson')).toBe(2)
+      expect(armorProtection('Winterkleidung')).toBe(1)
+      expect(armorProtection(null)).toBe(0)
+      expect(armorProtection('Zauberrobe')).toBe(0)
    })
 })

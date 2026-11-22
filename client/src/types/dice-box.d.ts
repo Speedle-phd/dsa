@@ -20,6 +20,7 @@ declare module '@3d-dice/dice-box' {
       container?: string
       id?: string
       offscreen?: boolean
+      enableShadows?: boolean
       scale?: number
       theme?: string
       themeColor?: string
@@ -27,6 +28,10 @@ declare module '@3d-dice/dice-box' {
       spinForce?: number
       startingHeight?: number
       settleTimeout?: number
+      // Physics (dice-box 1.1 config, passed to the physics worker)
+      gravity?: number
+      linearDamping?: number
+      angularDamping?: number
       onRollComplete?: () => void
    }
 

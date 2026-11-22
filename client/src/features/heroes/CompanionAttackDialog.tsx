@@ -6,7 +6,7 @@ import { useModalKeyboard } from '@/components/useModalKeyboard'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { displayDamage, type CompanionAttack } from './companionApi'
-import { evaluateCombatRoll, formatDamage, hitPoints, needsConfirmation, parseDamage, type CombatOutcome } from './combatRoll'
+import { evaluateCombatRoll, formatDamage, hitPoints, needsConfirmation, parseDamage, type CombatOutcome, type DamageDice } from './combatRoll'
 import { ProbeStepper } from './ProbeDialog'
 import { availableManeuvers, heldBiteBonus, maneuverDamage, maneuverPenalty, type CompanionManeuver } from './companionManeuvers'
 
@@ -29,8 +29,11 @@ type FightLog = (key: string, values: Record<string, string | number>) => void
 
 // Attack → damage for one natural weapon of a companion or fight ally; the GM rolls the defense (S. 227–234).
 // `onLog` writes the rolls to a running fight's log; `onAttack` uses the ally's action when the attack is rolled.
-export function CompanionAttackDialog({ fighter, attack, onLog, onAttack, blockedReason = null, onClose }: {
+// `onSettled` (party fight, user decision Nov 2026): the rolled attack goes out when the player confirms it; the damage
+// follows only after a failed defense
+export function CompanionAttackDialog({ fighter, attack, onLog, onAttack, blockedReason = null, onClose, onSettled }: {
    fighter: Fighter; attack: CompanionAttack; onLog?: FightLog; onAttack?: () => void; blockedReason?: string | null; onClose: () => void
+   onSettled?: (roll: { roll: number; confirmation?: number; target: number; outcome: CombatOutcome; success: boolean }, dice: DamageDice | null) => void
 }) {
    const language = useLanguageStore((state) => state.language)
    const titleId = useId()
@@ -59,7 +62,8 @@ export function CompanionAttackDialog({ fighter, attack, onLog, onAttack, blocke
       // source: DSA5 Regelwerk, S. 231–233 (Bestätigungswurf with the same modifiers)
       const confirmation = needsConfirmation(roll) ? (await throwColoredDice(20, [attackColor]))[0] : undefined
       const next = evaluateCombatRoll(roll, target, confirmation)
-      setResult({ roll, confirmation, target, ...next })
+      const rolled = { roll, confirmation, target, ...next }
+      setResult(rolled)
       setRolling(false)
       onLog?.('{weapon} {label}: W20 {roll} vs {target} → {outcome}', {
          weapon: `${fighter.name} · ${attack.name}`, label: maneuver === 'none' ? 'AT' : `AT (${maneuver})`,
@@ -78,6 +82,7 @@ export function CompanionAttackDialog({ fighter, attack, onLog, onAttack, blocke
       onLog?.('{weapon} damage: {tp} TP ({dice}: {rolls}){critical}', {
          weapon: `${fighter.name} · ${attack.name}`, tp, dice: formatDamage(nextDice), rolls: rolls.join('+'), critical: doubled ? ' ×2' : '',
       })
+      return tp
    }
 
    // source: DSA5 Regelwerk, S. 362 (a held bite hits automatically in the next KR, +1 TP per further KR)
@@ -169,7 +174,10 @@ export function CompanionAttackDialog({ fighter, attack, onLog, onAttack, blocke
             </section>}
 
             <footer className='editor-actions'>
-               {result && !rolling
+               {result && !rolling && onSettled
+                  ? <button className='primary-button' type='button' autoFocus onClick={() => onSettled(result, dice)}>
+                     {t(result.success ? 'Send to the fight' : 'Accept the miss', language)}</button>
+                  : result && !rolling
                   ? <>
                      <button className='quiet-button' type='button' onClick={reset}><Dices size={18} />{t('Roll again', language)}</button>
                      <button className='primary-button' type='button' autoFocus onClick={onClose}>{t('Done', language)}</button>

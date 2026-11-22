@@ -62,11 +62,11 @@ export function useWeaponCondition(stats: Stats) {
 }
 
 // An ally joins the running fight with its own INI (base + 1W6, S. 227); Radau's activation pays its first KR (S. 297).
-export async function joinFightAs(heroId: string, source: AllySource, name: string, base: number) {
+export async function joinFightAs(heroId: string, source: AllySource, name: string, base: number, speed: number | null = null) {
    const fight = useFightStore.getState().fights[heroId]
    if (!fight) return
    const [roll] = await throwColoredDice(6, ['#2f855a'])
-   const ally = { id: `${source.kind}-${Date.now()}`, source, initiative: { base, roll }, joinedRound: fight.round, defenses: 0,
+   const ally = { id: `${source.kind}-${Date.now()}`, source, initiative: { base, roll }, joinedRound: fight.round, defenses: 0, name, speed,
       ...(source.kind === 'radau' ? { paidRound: fight.round } : {}) }
    const { update, log } = useFightStore.getState()
    update(heroId, { allies: [...(fight.allies ?? []), ally] })

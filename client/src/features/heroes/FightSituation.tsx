@@ -2,27 +2,29 @@ import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { rangeBands, withVision, type RangedSituation, type Situation, type Source, type Vision } from './combatSituation'
 import { rangedOf, situationOf, useFightStore, type Fight } from './fightStore'
+import { useEncounterLink } from './encounterLink'
+import { useTurnGate } from './turnGate'
 
 const signed = (value: number) => value > 0 ? `+${value}` : `${value}`
 
 type Choice<T extends string | number> = { value: T; label: string }
-function Select<T extends string | number>({ label, value, choices, onChange }: {
-   label: string; value: T; choices: Choice<T>[]; onChange: (value: T) => void
+function Select<T extends string | number>({ label, value, choices, onChange, hint }: {
+   label: string; value: T; choices: Choice<T>[]; onChange: (value: T) => void; hint?: string
 }) {
    const language = useLanguageStore((state) => state.language)
    return <label className='field-group fight-situation-field'>
-      <span>{t(label, language)}</span>
+      <span>{t(label, language)}{hint && <small> · {t(hint, language)}</small>}</span>
       <select value={String(value)} onChange={(event) => onChange(choices.find((choice) => String(choice.value) === event.target.value)!.value)}>
          {choices.map((choice) => <option key={String(choice.value)} value={String(choice.value)}>{t(choice.label, language)}</option>)}
       </select>
    </label>
 }
 
-function Toggle({ label, note, checked, onChange }: { label: string; note?: string; checked: boolean; onChange: (checked: boolean) => void }) {
+function Toggle({ label, note, checked, onChange, hint }: { label: string; note?: string; checked: boolean; onChange: (checked: boolean) => void; hint?: string }) {
    const language = useLanguageStore((state) => state.language)
    return <label className='regen-toggle'>
       <input type='checkbox' checked={checked} onChange={(event) => onChange(event.target.checked)} />
-      <span><strong>{t(label, language)}</strong>{note && <small>{t(note, language)}</small>}</span>
+      <span><strong>{t(label, language)}</strong>{note && <small>{t(note, language)}{hint && ` · ${t(hint, language)}`}</small>}</span>
    </label>
 }
 
@@ -65,26 +67,45 @@ export function SituationCard({ heroId, fight, vision }: { heroId: string; fight
 }
 
 // Ranged attack inputs (S. 241–242): distance from the weapon's range, target, movement, aiming.
-export function RangedControls({ heroId, fight, range }: { heroId: string; fight: Fight; range: string | undefined }) {
+// `board`: values the battle board suggests in a party fight (distance, movement, into melee; S. 241–242). They are
+// defaults: a change is kept for this attack (`override`) and marked as changed (user feedback, Nov 2026).
+export function RangedControls({ heroId, fight, range, board = {}, override = {}, onOverride }: {
+   heroId: string; fight: Fight; range: string | undefined; board?: Partial<RangedSituation>
+   override?: Partial<RangedSituation>; onOverride?: (change: Partial<RangedSituation>) => void
+}) {
    const language = useLanguageStore((state) => state.language)
    const update = useFightStore((state) => state.update)
-   const ranged = rangedOf(fight)
+   const ranged = { ...rangedOf(fight), ...board, ...override }
+   const choose = <K extends keyof RangedSituation>(key: K) => (value: RangedSituation[K]) =>
+      key in board && onOverride ? onOverride({ ...override, [key]: value }) : set({ [key]: value } as Partial<RangedSituation>)
+   const note = (key: keyof RangedSituation) => !(key in board) ? undefined : key in override ? 'changed' : 'from the board'
    const bands = rangeBands(range)
-   const set = (change: Partial<RangedSituation>) => update(heroId, { ranged: { ...ranged, ...change } })
+   const set = (change: Partial<RangedSituation>) => update(heroId, { ranged: { ...rangedOf(fight), ...change } })
+   // source: DSA5 Regelwerk, S. 242 (aiming: +2 per action, at most +4, a longer action); in a party fight each step is the action
+   const link = useEncounterLink()
+   const gate = useTurnGate(heroId, fight)
+   const aimReason = gate.reason('action')
+   async function aim() {
+      if (await gate.spend('action', 'Aiming')) set({ aim: rangedOf(fight).aim >= 1 ? 2 : 1 })
+   }
    const metres = (index: number) => bands ? ` (≤ ${bands[index]} ${t('paces', language)})` : ''
    return <div className='fight-situation-grid fight-ranged'>
-      <Select label='Distance' value={ranged.distance} onChange={(distance) => set({ distance })}
+      <Select label='Distance' value={ranged.distance} hint={note('distance')} onChange={choose('distance')}
          choices={[{ value: 'near', label: `${t('Near · +2 FK, +1 TP', language)}${metres(0)}` }, { value: 'medium', label: `${t('Medium · ±0', language)}${metres(1)}` },
             { value: 'far', label: `${t('Far · −2 FK, −1 TP', language)}${metres(2)}` }]} />
       <Select label='Target size or cover' value={ranged.size} onChange={(size) => set({ size })} choices={sizes} />
-      <Select label='Target movement' value={ranged.targetMove} onChange={(targetMove) => set({ targetMove })}
+      <Select label='Target movement' value={ranged.targetMove} hint={note('targetMove')} onChange={choose('targetMove')}
          choices={[{ value: 'still', label: 'Standing still (+2)' }, { value: 'slow', label: 'Moving ≤ 4 paces (±0)' }, { value: 'fast', label: 'Moving ≥ 5 paces (−2)' }]} />
-      <Select label='Your movement' value={ranged.shooterMove} onChange={(shooterMove) => set({ shooterMove })}
+      <Select label='Your movement' value={ranged.shooterMove} hint={note('shooterMove')} onChange={choose('shooterMove')}
          choices={[{ value: 'still', label: 'Standing (±0)' }, { value: 'walk', label: 'Walked ≤ 4 paces (−2)' }, { value: 'run', label: 'Ran ≥ 5 paces (−4)' }]} />
-      <Select label='Aiming' value={ranged.aim} onChange={(aim) => set({ aim })}
-         choices={[{ value: 0, label: 'No aiming' }, { value: 1, label: '1 action (+2)' }, { value: 2, label: '2 actions (+4)' }]} />
+      {link ? <div className='field-group fight-situation-field'>
+         <span>{t('Aiming', language)} · +{ranged.aim * 2}</span>
+         <button className='quiet-button' type='button' disabled={ranged.aim >= 2 || aimReason !== null}
+            title={aimReason ? t(aimReason, language) : undefined} onClick={() => void aim()}>{t('Aim · 1 action (+2, max +4)', language)}</button>
+      </div> : <Select label='Aiming' value={ranged.aim} onChange={(aim) => set({ aim })}
+         choices={[{ value: 0, label: 'No aiming' }, { value: 1, label: '1 action (+2)' }, { value: 2, label: '2 actions (+4)' }]} />}
       <Toggle label='Target zigzags' note='−4, its GS is halved' checked={ranged.zigzag} onChange={(zigzag) => set({ zigzag })} />
-      <Toggle label='Shooting into melee' note='−2; a miss hits nobody' checked={ranged.intoMelee} onChange={(intoMelee) => set({ intoMelee })} />
+      <Toggle label='Shooting into melee' note='−2; a miss hits nobody' checked={ranged.intoMelee} hint={note('intoMelee')} onChange={choose('intoMelee')} />
    </div>
 }
 

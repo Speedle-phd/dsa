@@ -1,5 +1,6 @@
 import type DiceBox from '@3d-dice/dice-box'
 import type { DiceNotation } from '@3d-dice/dice-box'
+import { quickRolls } from './diceSettings'
 
 const hiddenCanvasClass = 'dice-box-canvas--hide'
 const visibleAfterRollMs = 2500
@@ -13,6 +14,11 @@ function scheduleHide() {
    hideTimeout = window.setTimeout(() => box?.hide(hiddenCanvasClass), visibleAfterRollMs)
 }
 
+// Firefox schedules frames of a WebGL OffscreenCanvas worker less evenly, and with fingerprinting protection it caps frames
+// at 60 fps with a coarse clock. The dice physics advance by the time between frames (at most 2 × 1/90 s per frame), so late
+// frames make the dice stutter in slow motion. There the dice render on the page and without the shadow (cheaper frames).
+const isFirefox = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent)
+
 function loadDiceBox() {
    loading ??= import('@3d-dice/dice-box')
       .then(async ({ default: DiceBoxEngine }) => {
@@ -23,8 +29,17 @@ function loadDiceBox() {
             scale: 5,
             theme: 'default',
             themeColor: '#20734a',
-            throwForce: 6,
-            settleTimeout: 4000,
+            // Quicker throws (user feedback: rolls felt slow): stronger gravity and damping, lower drop, shorter settle wait
+            gravity: 6,
+            throwForce: 4,
+            spinForce: 4,
+            startingHeight: 5,
+            linearDamping: 0.75,
+            angularDamping: 0.75,
+            // Safety net only: dice normally rest after about a second
+            settleTimeout: 2500,
+            offscreen: !isFirefox,
+            enableShadows: !isFirefox,
             onRollComplete: scheduleHide,
          })
          await engine.init()
@@ -38,8 +53,22 @@ function loadDiceBox() {
    return loading
 }
 
+// Loads the 3D dice in the background (after sign-in), so the first roll does not wait for the engine
+export function preloadDice() {
+   if (!quickRolls()) loadDiceBox().catch(() => undefined)
+}
+
+type RolledDie = { value: number; sides: number; data?: string }
+
 // Throws the dice on the shared 3D layer and resolves with each die's value, tagged by `data`.
-export async function throwDice(notation: DiceNotation[]) {
+// Quick rolls (setting or "reduce motion") skip the animation and roll at once.
+export async function throwDice(notation: DiceNotation[]): Promise<RolledDie[]> {
+   if (quickRolls()) {
+      return notation.flatMap((group) => Array.from({ length: Number(group.qty ?? 1) }, () => {
+         const sides = Number(group.sides)
+         return { value: randomDie(sides), sides, data: typeof group.data === 'string' ? group.data : undefined }
+      }))
+   }
    window.clearTimeout(hideTimeout)
    const engine = await loadDiceBox()
    engine.clear().show()

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { FormEvent } from 'react'
 import { Dices, Minus, Plus, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { DieIcon } from './DieIcon'
-import { throwDice as throwOnLayer } from './diceEngine'
+import { preloadDice, throwDice as throwOnLayer } from './diceEngine'
+import { quickRolls } from './diceSettings'
 import { useModalKeyboard } from './useModalKeyboard'
 import { useScrollingDown } from './scrollHooks'
 import { useLanguageStore } from '../locales/languageStore'
@@ -41,16 +42,27 @@ export function DiceRoller() {
    const showLauncher = useLocation().pathname !== '/login'
    // On phones the launcher covers row ends; it hides while scrolling down and returns on scroll up (CSS, ≤ 760 px).
    const scrollingDown = useScrollingDown()
+   // Load the 3D dice while the user reads the page, not on the first roll
+   useEffect(() => {
+      if (!showLauncher) return
+      const timer = window.setTimeout(preloadDice, 1500)
+      return () => window.clearTimeout(timer)
+   }, [showLauncher])
 
    async function throwDice(selection: DiceCounts) {
       setCounts(selection)
       setIsOpen(false)
       try {
-         await throwOnLayer(
+         const results = await throwOnLayer(
             diceSides
                .filter((sides) => selection[sides] > 0)
                .map((sides) => ({ qty: selection[sides], sides })),
          )
+         // Without the animation the values appear as a message
+         if (quickRolls()) {
+            const values = results.map((die) => `${dieLabel(die.sides as DieSides, language)}: ${die.value}`)
+            toast(`${values.join(' · ')} — ${t('Sum', language)} ${results.reduce((sum, die) => sum + die.value, 0)}`)
+         }
       } catch {
          toast.error(t('The dice could not be thrown.', language))
       }
