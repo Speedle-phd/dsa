@@ -115,7 +115,7 @@ const npcSchema = new Schema<NpcValues>({
 // whole-document saves use optimistic concurrency, token moves are single atomic updates.
 const encounterSchema = new Schema<IEncounterDocument>(
    {
-      partyId: { type: Schema.Types.ObjectId, ref: 'Party', required: true, index: true },
+      partyId: { type: Schema.Types.ObjectId, ref: 'Party', required: true },
       status: { type: String, enum: ['active', 'ended', 'prepared'], default: 'active' },
       name: { type: String, default: '', maxlength: 80 },
       round: { type: Number, default: 0 },
@@ -191,6 +191,9 @@ const encounterSchema = new Schema<IEncounterDocument>(
    { timestamps: true, optimisticConcurrency: true },
 )
 
+// Party lookups (prepared fights, cleanup). A separate key from the unique index below:
+// with `index: true` on partyId both got the name `partyId_1`, so the unique one was never built.
+encounterSchema.index({ partyId: 1, status: 1 })
 // At most one running fight per party
 encounterSchema.index({ partyId: 1 }, { unique: true, partialFilterExpression: { status: 'active' } })
 

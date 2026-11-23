@@ -35,7 +35,7 @@ export function SpeciesStep({ data, reference, update }: StepProps) {
             onClick={() => update({ species: species.key, speciesChoice: null })}>
             <strong lang='de'>{species.key}</strong>
             <span className='creation-card-ap'>{species.ap} {t('AP', language)}</span>
-            <small>LE {species.health} · SK {species.soulPower} · ZK {species.toughness} · GS {species.speed}</small>
+            <small>{t('LE', language)} {species.health} · {t('SK', language)} {species.soulPower} · {t('ZK', language)} {species.toughness} · {t('GS', language)} {species.speed}</small>
             <small>{[...Object.entries(species.attributeMax).map(([key, value]) => `${getAttributeAbbreviation(key as never, language)} +${value}`),
                species.choice.value > 0 ? t('one of choice +1', language)
                   : species.choice.options.map((key) => getAttributeAbbreviation(key, language)).join(` ${t('or', language)} `) + ` ${species.choice.value}`].join(' · ')}</small>

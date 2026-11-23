@@ -25,6 +25,15 @@ export function actionBlocked(use: ActionUse, cost: ActionCost, casting?: Castin
    return null
 }
 
+// In a party fight the server decides. The panel spends an attack's action when the attack is rolled, the server only once
+// the roll is sent: until then the action is taken, so loading, aiming, casting or Flucht must wait (bug fix, Nov 2026).
+export function partyActionBlocked(serverReason: string | null, use: ActionUse, cost: ActionCost, casting?: Casting | null) {
+   if (serverReason) return serverReason
+   if (cost !== 'action') return null
+   if (!canSpend(use, 'action')) return 'Confirm the roll first.'
+   return casting ? actionBlocked(use, cost, casting) : null
+}
+
 // source: DSA5 Regelwerk, S. 256 (Zauberdauer steps 1–32 Aktionen: one step shorter or longer per modification), S. 281 (curses: at least 1 action)
 // null: not cast in actions (rituals, minutes, hours), so not castable in a fight.
 const castingSteps = [1, 2, 4, 8, 16, 32]

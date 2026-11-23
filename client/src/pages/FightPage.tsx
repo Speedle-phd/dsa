@@ -8,6 +8,7 @@ import { BattleBoard, type TerrainTool } from '@/features/encounter/BattleBoard'
 import { FightDock } from '@/features/encounter/FightDock'
 import { FightLog } from '@/features/encounter/GmCombat'
 import { GmTools } from '@/features/encounter/GmTools'
+import { GmHeroOverview } from '@/features/encounter/GmHeroOverview'
 import { InitiativeTracker } from '@/features/encounter/InitiativeTracker'
 import { PreparedFights } from '@/features/encounter/PreparedFights'
 import { useAllySync } from '@/features/encounter/allySync'
@@ -59,6 +60,7 @@ export function FightPage() {
                   <header className='section-heading'><h2>{t('Initiative', language)}</h2></header>
                   <InitiativeTracker encounter={encounter} partyId={partyId} selectedId={selectedId} onSelect={setSelectedId} />
                </section>
+               {isGm && <GmHeroOverview encounter={encounter} partyId={partyId} />}
                <FightLog encounter={encounter} />
             </aside>
          </div>}

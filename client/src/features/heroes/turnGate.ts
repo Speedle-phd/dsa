@@ -1,5 +1,5 @@
 import { useEncounterLink } from './encounterLink'
-import { actionBlocked, actionUse, type ActionCost, type Casting } from './fightActions'
+import { actionBlocked, actionUse, partyActionBlocked, type ActionCost, type Casting } from './fightActions'
 import { useFightStore, type Fight } from './fightStore'
 
 // One gate for every turn-bound action of the fight panel (user decision, Nov 2026: everything counts on the shared turn).
@@ -11,7 +11,7 @@ export function useTurnGate(heroId: string, fight: Fight) {
       // `casting`: a spell being cast blocks other actions (S. 228); continuing that spell passes null
       reason(cost: ActionCost, casting: Casting | null = fight.casting ?? null) {
          if (!link) return actionBlocked(local, cost, casting)
-         return link.gate.reason(cost) ?? (cost === 'action' && casting ? actionBlocked(local, cost, casting) : null)
+         return partyActionBlocked(link.gate.reason(cost), local, cost, casting)
       },
       // `label`: English action name for the shared log (translated per viewer); `move`: squares a Flucht allows (S. 237)
       async spend(cost: ActionCost, label: string, detail = '', move?: number) {

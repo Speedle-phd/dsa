@@ -3816,6 +3816,51 @@
       outline: 3px solid hsl(var(--primary-300));
       outline-offset: 3px;
    }
+   /* Party fight quicklink on the hero page: right-aligned directly above the dice launcher; back to top moves above it. */
+   .fight-quicklink {
+      position: fixed;
+      right: max(1rem, env(safe-area-inset-right));
+      bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 4.25rem);
+      z-index: 30;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      height: 2.75rem;
+      padding-inline: 0.9rem 1rem;
+      border: 1px solid hsl(var(--primary-300));
+      border-radius: 999px;
+      background: hsl(var(--background-50));
+      color: hsl(var(--primary-700));
+      font-weight: 600;
+      white-space: nowrap;
+      text-decoration: none;
+      box-shadow: 0 8px 22px hsl(var(--shadow-color) / 0.2);
+      animation: scroll-top-in 160ms ease-out;
+      transition: transform 160ms ease, background 160ms ease;
+   }
+   .fight-quicklink:hover {
+      background: hsl(var(--primary-100));
+      transform: translateY(-2px);
+   }
+   .fight-quicklink:focus-visible {
+      outline: 3px solid hsl(var(--primary-300));
+      outline-offset: 3px;
+   }
+   /* The fight needs this hero: coloured text and a double ring, readable on the card surface in both themes */
+   .fight-quicklink.is-turn,
+   .fight-quicklink.is-initiative {
+      border-color: hsl(var(--warning));
+      box-shadow: 0 0 0 2px hsl(var(--warning) / 0.35), 0 8px 22px hsl(var(--shadow-color) / 0.2);
+      color: hsl(var(--warning));
+   }
+   .fight-quicklink.is-defend {
+      border-color: hsl(var(--danger));
+      box-shadow: 0 0 0 2px hsl(var(--danger) / 0.35), 0 8px 22px hsl(var(--shadow-color) / 0.2);
+      color: hsl(var(--danger));
+   }
+   body:has(.fight-quicklink) .scroll-top-button {
+      bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 7.5rem);
+   }
    @keyframes scroll-top-in {
       from { opacity: 0; transform: translateY(0.5rem); }
    }
@@ -7773,18 +7818,21 @@
          transition: transform 200ms ease, opacity 200ms ease, background 160ms ease;
       }
       .dice-launcher.is-tucked:not(:focus-visible),
-      .scroll-top-button.is-tucked:not(:focus-visible) {
+      .scroll-top-button.is-tucked:not(:focus-visible),
+      .fight-quicklink.is-tucked:not(:focus-visible) {
          opacity: 0;
          pointer-events: none;
          transform: translateY(calc(100% + 1.5rem));
       }
-      .scroll-top-button {
+      .scroll-top-button,
+      .fight-quicklink {
          transition: transform 200ms ease, opacity 200ms ease, background 160ms ease;
       }
    }
    @media (max-width: 760px) and (prefers-reduced-motion: reduce) {
       .dice-launcher,
-      .scroll-top-button {
+      .scroll-top-button,
+      .fight-quicklink {
          transition: none;
       }
    }
@@ -8400,9 +8448,86 @@
       overflow-y: auto;
       overscroll-behavior: contain;
       scrollbar-width: thin;
+      /* A card cut off at the scroll edge keeps the cards' rounded corners instead of a sharp border end */
+      border-radius: var(--radius-md);
    }
    .fight-side > .overview-section {
       margin: 0;
+   }
+   /* GM overview of the heroes in the fight: one collapsible card per hero, key values in the summary line */
+   .gm-hero-list {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0.6rem 0 0;
+      padding: 0;
+      list-style: none;
+   }
+   .gm-hero {
+      border: 1px solid hsl(var(--background-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+   }
+   .gm-hero.is-active {
+      border-color: hsl(var(--primary-400));
+   }
+   .gm-hero summary {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 44px;
+      padding: 0.45rem 0.7rem;
+      cursor: pointer;
+   }
+   .gm-hero-title {
+      display: grid;
+      flex: 1;
+      min-width: 0;
+   }
+   .gm-hero-title small {
+      color: hsl(var(--text-600));
+      font-size: var(--fs-xs);
+   }
+   .gm-hero-alert {
+      flex: none;
+      color: hsl(var(--danger));
+   }
+   .gm-hero-body {
+      display: grid;
+      gap: 0.6rem;
+      padding: 0 0.7rem 0.75rem;
+   }
+   .gm-hero-body .quiet-button {
+      justify-self: start;
+   }
+   .gm-hero-weapons {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--fs-sm);
+   }
+   .gm-hero-weapons th,
+   .gm-hero-weapons td {
+      padding: 0.3rem 0.35rem;
+      border-bottom: 1px solid hsl(var(--background-200));
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+   }
+   .gm-hero-weapons thead th {
+      color: hsl(var(--text-600));
+      font-size: var(--fs-xs);
+   }
+   .gm-hero-weapons th:first-child {
+      text-align: left;
+      white-space: normal;
+   }
+   .gm-hero-weapons tbody th {
+      font-weight: 600;
+   }
+   .gm-hero-weapons tbody th small {
+      display: block;
+      color: hsl(var(--text-600));
+      font-weight: 400;
+      font-size: var(--fs-xs);
    }
    .fight-gm-tools > summary {
       cursor: pointer;

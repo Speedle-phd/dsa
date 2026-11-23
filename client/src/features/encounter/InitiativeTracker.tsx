@@ -102,14 +102,14 @@ function GmControls({ combatant, partyId, encounter }: { combatant: Combatant; p
       </div>
       {npc?.npc && <>
          <dl className='initiative-stats'>
-            <div><dt>LeP</dt><dd>{npc.npc.health} / {npc.npc.maxHealth}</dd></div>
-            <div><dt>RS</dt><dd>{npc.npc.armor}</dd></div>
-            {npc.npc.attack !== null && <div><dt>AT</dt><dd>{npc.npc.attack}</dd></div>}
-            {npc.npc.parry !== null && <div><dt>PA</dt><dd>{npc.npc.parry}</dd></div>}
-            {npc.npc.defense !== null && <div><dt>VW</dt><dd>{npc.npc.defense}</dd></div>}
-            {npc.npc.dodge !== null && <div><dt>AW</dt><dd>{npc.npc.dodge}</dd></div>}
-            {npc.npc.damage && <div><dt>TP</dt><dd>{npc.npc.damage}</dd></div>}
-            {npc.npc.speed !== null && <div><dt>GS</dt><dd>{npc.npc.speed}</dd></div>}
+            <div><dt>{t('LeP', language)}</dt><dd>{npc.npc.health} / {npc.npc.maxHealth}</dd></div>
+            <div><dt>{t('RS', language)}</dt><dd>{npc.npc.armor}</dd></div>
+            {npc.npc.attack !== null && <div><dt>{t('AT', language)}</dt><dd>{npc.npc.attack}</dd></div>}
+            {npc.npc.parry !== null && <div><dt>{t('PA', language)}</dt><dd>{npc.npc.parry}</dd></div>}
+            {npc.npc.defense !== null && <div><dt>{t('VW', language)}</dt><dd>{npc.npc.defense}</dd></div>}
+            {npc.npc.dodge !== null && <div><dt>{t('AW', language)}</dt><dd>{npc.npc.dodge}</dd></div>}
+            {npc.npc.damage && <div><dt>{t('TP', language)}</dt><dd>{npc.npc.damage}</dd></div>}
+            {npc.npc.speed !== null && <div><dt>{t('GS', language)}</dt><dd>{npc.npc.speed}</dd></div>}
          </dl>
          {npc.npc.notes && <p className='party-muted'>{npc.npc.notes}</p>}
          {encounter.round >= 1 && npc.state !== 'down' && <details className='battle-dock-more'>

@@ -330,7 +330,7 @@ export const AdventurianStore = () => {
                               {item.kind === 'elixir' && (
                                  <span className='store-quality-pips' aria-label={t('Available in QS 1–6', language)}>
                                     {[1, 2, 3, 4, 5, 6].map((quality) => <i key={quality} aria-hidden='true' />)}
-                                    <small>QS 1–6</small>
+                                    <small>{t('QS', language)} 1–6</small>
                                  </span>
                               )}
                               <div className='store-card-meta'>

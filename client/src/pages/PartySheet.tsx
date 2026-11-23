@@ -71,7 +71,7 @@ function SheetBody({ stats }: { stats: Stats }) {
             <div><dt>{t('Pain', language)}</dt><dd>{stats.pain}</dd></div>
             <div><dt>{t('Fate points', language)}</dt><dd>{stats.fatePoints.current} / {stats.fatePoints.max}</dd></div>
             <div><dt>{t('Dodge', language)}</dt><dd>{stats.dodge.max}</dd></div>
-            <div><dt>SK / ZK</dt><dd>{stats.soulPower.max} / {stats.toughness.max}</dd></div>
+            <div><dt>{t('SK', language)} / {t('ZK', language)}</dt><dd>{stats.soulPower.max} / {stats.toughness.max}</dd></div>
          </dl>
          {(stats.statuses.length > 0 || stats.permanentStatuses.length > 0) && <ul className='party-chips'>
             {[...new Set([...stats.statuses, ...stats.permanentStatuses])].map((status) => <li key={status} lang='de'>{status}</li>)}

@@ -7,13 +7,14 @@ import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { getErrorMessage } from '@/utils/errorHandling'
 import { GmHeroActions } from './GmHeroActions'
+import { levelsLabel } from './levels'
 import { answerRequest, partiesKey, removeMember, setVisibility, type Party, type PartyMember, type Visibility } from './partyApi'
 
 const visibilityLabels: Record<Visibility, string> = {
    private: 'Name only', summary: 'Summary (LeP, statuses)', full: 'Full sheet',
 }
 
-function Meter({ label, value }: { label: string; value?: { current: number; max: number } }) {
+export function Meter({ label, value }: { label: string; value?: { current: number; max: number } }) {
    if (!value) return null
    const percent = value.max > 0 ? Math.max(0, Math.min(100, (value.current / value.max) * 100)) : 0
    return <div className='resource-meter'>
@@ -96,8 +97,4 @@ export function PartyMemberCard({ party, member }: { party: Party; member: Party
       </div>
       {isGm && actionsOpen && !pending && <GmHeroActions hero={hero} partyId={party._id} />}
    </li>
-}
-
-function levelsLabel(level: number) {
-   return level > 0 ? ['I', 'II', 'III', 'IV'][Math.min(level, 4) - 1] : '—'
 }

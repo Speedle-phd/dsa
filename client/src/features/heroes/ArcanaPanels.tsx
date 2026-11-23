@@ -188,7 +188,7 @@ export function ArcanoviPanel({ stats, reference }: { stats: Stats; reference: M
             </select></label>
          <label className='field-group'><span>{t('Stored spell', language)}</span>
             <select value={form.spell} onChange={(event) => set({ spell: event.target.value })}>
-               {own.map((entry) => <option key={entry.key} value={entry.key}>{entry.key} (FW {entry.value})</option>)}
+               {own.map((entry) => <option key={entry.key} value={entry.key}>{entry.key} ({t('FW', language)} {entry.value})</option>)}
             </select></label>
          <label className='field-group'><span>{t('AsP of the spell per charge', language)} {spell && <small>({spell.cost})</small>}</span>
             <input type='number' min={1} max={200} value={form.spellCost} onChange={(event) => set({ spellCost: Math.max(1, Math.trunc(event.target.valueAsNumber) || 1) })} /></label>

@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { useLanguageStore } from '@/locales/languageStore'
 import { translateRuleLabel } from '@/locales/translation'
 import { effectBonus, useActiveEffects } from './activeEffectsApi'
+import { findProfile } from './checkProfiles'
 import { useFightStore } from './fightStore'
 import type { CheckContext, CheckProfile, Stats, TargetRule } from './statsApi'
 import { talentCatalog } from './talentCatalog'
@@ -71,10 +72,10 @@ export function useCheckState(stats: Stats, kind: CheckProfile['kind'], checkKey
    }
    if (stats.pain >= 4 || stats.checkModifiers.effectivePain >= 4) options.push('preserveAction')
    if ((stats.pain >= 4 || stats.checkModifiers.effectivePain >= 4) && kind === 'talent' && checkKey === 'selbstbeherrschung') options.push('preserveActionCheck')
-   const profile = stats.checkModifiers.profiles.find((entry) => entry.kind === kind &&
-      entry.burden === (combat ? kind !== 'ranged' : kind === 'talent' && (burden === 'maybe' ? context.burden === true : burden)) &&
-      entry.movement === (combat || context.movement === true) &&
-      entry.pleasing === (kind === 'talent' && context.pleasing === true) && entry.complex === complex)
+   const profile = findProfile(stats, kind, {
+      burden: combat ? kind !== 'ranged' : kind === 'talent' && (burden === 'maybe' ? context.burden === true : burden),
+      movement: combat || context.movement === true,
+      pleasing: kind === 'talent' && context.pleasing === true, complex })
    // source: DSA5 Regelwerk, S. 219 (Schmerzen unterdrücken: one Schmerz level per QS is ignored for the fight)
    const suppressed = effectBonus(running, 'ignorePain')
    const painLevel = stats.checkModifiers.effectivePain

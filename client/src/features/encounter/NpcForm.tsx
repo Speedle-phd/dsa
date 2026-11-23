@@ -89,7 +89,7 @@ export function NpcForm({ partyId, onDone }: { partyId: string; onDone: () => vo
                onChange={(event) => setValues({ ...values, [key]: event.target.value === '' ? (key === 'maxHealth' || key === 'armor' || key === 'initiativeBase' ? 0 : null) : Math.trunc(event.target.valueAsNumber) })} />
          </label>)}
          <label className='field-group'>
-            <span>TP</span>
+            <span>{t('TP', language)}</span>
             <input value={values.damage} maxLength={40} onChange={(event) => setValues({ ...values, damage: event.target.value })} />
          </label>
          <label className='field-group npc-form-name'>

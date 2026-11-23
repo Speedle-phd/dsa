@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { DashboardHeader } from '../components/DashboardHeader'
 import { HeroTabs } from '../features/heroes/HeroTabs'
 import { ActiveEffectsStrip } from '../features/heroes/ActiveEffectsStrip'
+import { FightQuicklink } from '@/features/encounter/FightQuicklink'
 import { getHero } from '../features/heroes/heroApi'
 import { useHeroStore } from '@/features/heroes/heroStore'
 import { useEffect } from 'react'
@@ -78,6 +79,7 @@ export function HeroPage() {
                   </header>
                   <ActiveEffectsStrip heroId={heroQuery.data._id} />
                   <HeroTabs hero={heroQuery.data} />
+                  <FightQuicklink heroId={heroQuery.data._id} />
                </>
             )}
          </section>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { actionBlocked, actionUse, actionsLeft, canSpend, castingActions, disturbancePenalty, freeLeft, parseSpeed, spendAction } from './fightActions'
+import { actionBlocked, actionUse, partyActionBlocked, actionsLeft, canSpend, castingActions, disturbancePenalty, freeLeft, parseSpeed, spendAction } from './fightActions'
 
 describe('Actions per combat round (S. 227–228)', () => {
    it('starts every KR with one action and one free action', () => {
@@ -49,5 +49,25 @@ describe('Disturbance while casting (S. 229)', () => {
 describe('Speed values', () => {
    it('reads the first GS of a stat block', () => {
       expect([parseSpeed('12'), parseSpeed('12/36'), parseSpeed('')]).toEqual([12, 12, null])
+   })
+})
+
+describe('Party fight gate', () => {
+   const fresh = actionUse(undefined, 2)
+   // the attack was rolled: the panel spent the action, the server has not recorded it yet
+   const rolled = spendAction(fresh, 'action')
+   it('follows the server while the panel agrees', () => {
+      expect(partyActionBlocked(null, fresh, 'action')).toBeNull()
+      expect(partyActionBlocked('It is not your turn.', fresh, 'action')).toBe('It is not your turn.')
+   })
+   it('blocks loading, aiming or casting while a rolled attack is not sent (one action per KR, S. 228)', () => {
+      expect(partyActionBlocked(null, rolled, 'action')).toBe('Confirm the roll first.')
+   })
+   it('leaves the free action open after the attack roll (Ladezeit 0, S. 245)', () => {
+      expect(partyActionBlocked(null, rolled, 'free')).toBeNull()
+   })
+   it('still blocks other actions while a spell is being cast (S. 228)', () => {
+      const casting = { spell: 'Ignifaxius', done: 1, total: 2, lastRound: 2, modification: 'none' as const }
+      expect(partyActionBlocked(null, fresh, 'action', casting)).toBe('You are casting a spell: continue or abort it first (S. 228).')
    })
 })

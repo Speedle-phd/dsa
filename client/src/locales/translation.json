@@ -11695,6 +11695,26 @@
       "de": "Zum Gruppenkampf",
       "en": "Go to the party fight"
    },
+   "Defend!": {
+      "de": "Verteidigen!",
+      "en": "Defend!"
+   },
+   "Heroes in the fight": {
+      "de": "Helden im Kampf",
+      "en": "Heroes in the fight"
+   },
+   "Values with Schmerz, Zustände and Belastung; without the player's stance, Schips, situation and active effects.": {
+      "de": "Werte mit Schmerz, Zuständen und Belastung; ohne Kampfhaltung, Schips, Situation und aktive Effekte des Spielers.",
+      "en": "Values with Schmerz, Zustände and Belastung; without the player's stance, Schips, situation and active effects."
+   },
+   "Attack or defense blocked": {
+      "de": "Angriff oder Verteidigung gesperrt",
+      "en": "Attack or defense blocked"
+   },
+   "The sheet could not be loaded.": {
+      "de": "Der Heldenbogen konnte nicht geladen werden.",
+      "en": "The sheet could not be loaded."
+   },
    "Hit! Roll the damage": {
       "de": "Treffer! Würfle den Schaden",
       "en": "Hit! Roll the damage"
@@ -11918,5 +11938,537 @@
    "Fire": {
       "de": "Feuer",
       "en": "Fire"
+   },
+   "This item is no longer in the equipment.": {
+      "de": "Dieser Gegenstand ist nicht mehr in der Ausrüstung.",
+      "en": "This item is no longer in the equipment."
+   },
+   "This item has no consumable rule effect.": {
+      "de": "Dieser Gegenstand hat keine verbrauchbare Regelwirkung.",
+      "en": "This item has no consumable rule effect."
+   },
+   "Roll the potion dice first.": {
+      "de": "Zuerst die Würfel des Tranks werfen.",
+      "en": "Roll the potion dice first."
+   },
+   "The LeP values of this hero are invalid.": {
+      "de": "Die LeP-Werte dieses Helden sind ungültig.",
+      "en": "The LeP values of this hero are invalid."
+   },
+   "This hero is not Vergiftet.": {
+      "de": "Dieser Held ist nicht vergiftet.",
+      "en": "This hero is not Vergiftet."
+   },
+   "Choose a weapon from the equipment.": {
+      "de": "Eine Waffe aus der Ausrüstung wählen.",
+      "en": "Choose a weapon from the equipment."
+   },
+   "A stronger effect of this kind is already active: only the strongest counts (S. 272).": {
+      "de": "Ein stärkerer Effekt dieser Art ist bereits aktiv: Nur der stärkste zählt (S. 272).",
+      "en": "A stronger effect of this kind is already active: only the strongest counts (S. 272)."
+   },
+   "Effect not found": {
+      "de": "Effekt nicht gefunden.",
+      "en": "Effect not found"
+   },
+   "Choose a valid placement for the elixir.": {
+      "de": "Eine gültige Ablage für das Elixier wählen.",
+      "en": "Choose a valid placement for the elixir."
+   },
+   "Not enough AsP to charge the brew.": {
+      "de": "Nicht genug AsP, um das Gebräu aufzuladen.",
+      "en": "Not enough AsP to charge the brew."
+   },
+   "Charging with AsP uses up an Alraune (S. 271).": {
+      "de": "Das Aufladen mit AsP verbraucht eine Alraune (S. 271).",
+      "en": "Charging with AsP uses up an Alraune (S. 271)."
+   },
+   "Not enough money for the ingredients.": {
+      "de": "Nicht genug Geld für die Zutaten.",
+      "en": "Not enough money for the ingredients."
+   },
+   "A Zauberspeicher needs 1–7 charges (S. 267).": {
+      "de": "Ein Zauberspeicher braucht 1–7 Ladungen (S. 267).",
+      "en": "A Zauberspeicher needs 1–7 charges (S. 267)."
+   },
+   "Choose how often the artifact recharges (S. 268).": {
+      "de": "Wählen, wie oft sich das Artefakt wieder auflädt (S. 268).",
+      "en": "Choose how often the artifact recharges (S. 268)."
+   },
+   "Artifact not found": {
+      "de": "Artefakt nicht gefunden.",
+      "en": "Artifact not found"
+   },
+   "Creating artifacts needs the ritual ARCANOVI (S. 267).": {
+      "de": "Zum Erschaffen von Artefakten ist das Ritual ARCANOVI nötig (S. 267).",
+      "en": "Creating artifacts needs the ritual ARCANOVI (S. 267)."
+   },
+   "Not enough money for the material.": {
+      "de": "Nicht genug Geld für das Material.",
+      "en": "Not enough money for the material."
+   },
+   "The game master can change statuses and conditions only.": {
+      "de": "Der Meister kann nur Status und Zustände ändern.",
+      "en": "The game master can change statuses and conditions only."
+   },
+   "Only triggers of recorded disadvantages can be switched on (S. 170, 173, 177).": {
+      "de": "Nur Auslöser erfasster Nachteile können eingeschaltet werden (S. 170, 173, 177).",
+      "en": "Only triggers of recorded disadvantages can be switched on (S. 170, 173, 177)."
+   },
+   "This weapon is no longer in the inventory.": {
+      "de": "Diese Waffe ist nicht mehr im Inventar.",
+      "en": "This weapon is no longer in the inventory."
+   },
+   "This weapon does not need a repair.": {
+      "de": "Diese Waffe muss nicht repariert werden.",
+      "en": "This weapon does not need a repair."
+   },
+   "Enter a valid repair price.": {
+      "de": "Einen gültigen Reparaturpreis eingeben.",
+      "en": "Enter a valid repair price."
+   },
+   "This companion is not recorded.": {
+      "de": "Dieser Begleiter ist nicht erfasst.",
+      "en": "This companion is not recorded."
+   },
+   "A familiar requires the special ability Vertrautenbindung (S. 279).": {
+      "de": "Ein Vertrautentier erfordert die Sonderfertigkeit Vertrautenbindung (S. 279).",
+      "en": "A familiar requires the special ability Vertrautenbindung (S. 279)."
+   },
+   "A witch cannot bind more than one familiar (S. 278).": {
+      "de": "Eine Hexe kann nicht mehr als ein Vertrautentier an sich binden (S. 278).",
+      "en": "A witch cannot bind more than one familiar (S. 278)."
+   },
+   "Total AP cannot be lower than the AP already spent.": {
+      "de": "Die gesamten AP dürfen nicht unter den bereits ausgegebenen AP liegen.",
+      "en": "Total AP cannot be lower than the AP already spent."
+   },
+   "LeP cannot exceed the maximum.": {
+      "de": "LeP dürfen das Maximum nicht überschreiten.",
+      "en": "LeP cannot exceed the maximum."
+   },
+   "AsP cannot exceed the maximum.": {
+      "de": "AsP dürfen das Maximum nicht überschreiten.",
+      "en": "AsP cannot exceed the maximum."
+   },
+   "This trick is not available for this companion (S. 279–280).": {
+      "de": "Dieser Trick steht diesem Begleiter nicht zur Verfügung (S. 279–280).",
+      "en": "This trick is not available for this companion (S. 279–280)."
+   },
+   "This trick is already known.": {
+      "de": "Dieser Trick ist bereits bekannt.",
+      "en": "This trick is already known."
+   },
+   "Not enough companion AP.": {
+      "de": "Nicht genug AP des Begleiters.",
+      "en": "Not enough companion AP."
+   },
+   "This trick is not recorded.": {
+      "de": "Dieser Trick ist nicht erfasst.",
+      "en": "This trick is not recorded."
+   },
+   "Creation draft not found": {
+      "de": "Entwurf nicht gefunden.",
+      "en": "Creation draft not found"
+   },
+   "Unknown archetype.": {
+      "de": "Unbekannter Archetyp.",
+      "en": "Unknown archetype."
+   },
+   "Not found": {
+      "de": "Nicht gefunden.",
+      "en": "Not found"
+   },
+   "Party not found": {
+      "de": "Gruppe nicht gefunden.",
+      "en": "Party not found"
+   },
+   "Only the game master can do this.": {
+      "de": "Das kann nur der Meister.",
+      "en": "Only the game master can do this."
+   },
+   "No fight is running.": {
+      "de": "Es läuft kein Kampf.",
+      "en": "No fight is running."
+   },
+   "The fight changed in the meantime. Try again.": {
+      "de": "Der Kampf hat sich inzwischen geändert. Bitte erneut versuchen.",
+      "en": "The fight changed in the meantime. Try again."
+   },
+   "Combatant not found": {
+      "de": "Kampfbeteiligte nicht gefunden.",
+      "en": "Combatant not found"
+   },
+   "A fight is already running.": {
+      "de": "Es läuft bereits ein Kampf.",
+      "en": "A fight is already running."
+   },
+   "A fight can have at most 60 combatants.": {
+      "de": "Ein Kampf kann höchstens 60 Kampfbeteiligte haben.",
+      "en": "A fight can have at most 60 combatants."
+   },
+   "Players can only set the initiative of their own hero.": {
+      "de": "Spieler können nur die Initiative ihres eigenen Helden festlegen.",
+      "en": "Players can only set the initiative of their own hero."
+   },
+   "Damage heroes on their sheet (GM actions in the party).": {
+      "de": "Schaden an Helden über ihren Heldenbogen eintragen (Meisteraktionen in der Gruppe).",
+      "en": "Damage heroes on their sheet (GM actions in the party)."
+   },
+   "This square is outside the board.": {
+      "de": "Dieses Feld liegt außerhalb des Kampfplans.",
+      "en": "This square is outside the board."
+   },
+   "Template not found": {
+      "de": "Vorlage nicht gefunden.",
+      "en": "Template not found"
+   },
+   "Target not found": {
+      "de": "Ziel nicht gefunden.",
+      "en": "Target not found"
+   },
+   "Heroes attack opponents and opponents attack heroes.": {
+      "de": "Helden greifen Gegner an und Gegner greifen Helden an.",
+      "en": "Heroes attack opponents and opponents attack heroes."
+   },
+   "This attack is no longer open.": {
+      "de": "Dieser Angriff ist nicht mehr offen.",
+      "en": "This attack is no longer open."
+   },
+   "Choose a talent or an owned spell for this extended check.": {
+      "de": "Ein Talent oder einen beherrschten Zauber für diese Sammelprobe wählen.",
+      "en": "Choose a talent or an owned spell for this extended check."
+   },
+   "Extended check not found": {
+      "de": "Sammelprobe nicht gefunden.",
+      "en": "Extended check not found"
+   },
+   "This extended check is finished.": {
+      "de": "Diese Sammelprobe ist abgeschlossen.",
+      "en": "This extended check is finished."
+   },
+   "The refund exceeds the spent AP.": {
+      "de": "Die Erstattung übersteigt die ausgegebenen AP.",
+      "en": "The refund exceeds the spent AP."
+   },
+   "Choose a verified liturgy or ceremony.": {
+      "de": "Eine geprüfte Liturgie oder Zeremonie wählen.",
+      "en": "Choose a verified liturgy or ceremony."
+   },
+   "This liturgy is not recorded.": {
+      "de": "Diese Liturgie ist nicht erfasst.",
+      "en": "This liturgy is not recorded."
+   },
+   "Choose a verified blessing.": {
+      "de": "Eine geprüfte Segnung wählen.",
+      "en": "Choose a verified blessing."
+   },
+   "Already recorded.": {
+      "de": "Bereits erfasst.",
+      "en": "Already recorded."
+   },
+   "This blessing is not recorded.": {
+      "de": "Diese Segnung ist nicht erfasst.",
+      "en": "This blessing is not recorded."
+   },
+   "KaP must stay between zero and the maximum.": {
+      "de": "KaP müssen zwischen null und dem Maximum bleiben.",
+      "en": "KaP must stay between zero and the maximum."
+   },
+   "Only an owned staff spell of the bound staff can be activated (S. 276).": {
+      "de": "Nur ein erworbener Stabzauber des gebundenen Stabs kann aktiviert werden (S. 276).",
+      "en": "Only an owned staff spell of the bound staff can be activated (S. 276)."
+   },
+   "The flying device needs Flugsalbe and an inventory item (S. 281).": {
+      "de": "Das Fluggerät braucht Flugsalbe und einen Gegenstand aus dem Inventar (S. 281).",
+      "en": "The flying device needs Flugsalbe and an inventory item (S. 281)."
+   },
+   "Only a Zauberer has AsP to lose.": {
+      "de": "Nur ein Zauberer hat AsP, die verloren gehen können.",
+      "en": "Only a Zauberer has AsP to lose."
+   },
+   "Could not create an invite code. Try again.": {
+      "de": "Der Einladungscode konnte nicht erstellt werden. Bitte erneut versuchen.",
+      "en": "Could not create an invite code. Try again."
+   },
+   "This invite link is not valid (any more).": {
+      "de": "Dieser Einladungslink ist nicht (mehr) gültig.",
+      "en": "This invite link is not valid (any more)."
+   },
+   "Hero not found": {
+      "de": "Held nicht gefunden.",
+      "en": "Hero not found"
+   },
+   "This hero is already in a party or waiting for an answer.": {
+      "de": "Dieser Held ist bereits in einer Gruppe oder wartet auf eine Antwort.",
+      "en": "This hero is already in a party or waiting for an answer."
+   },
+   "Member not found": {
+      "de": "Mitglied nicht gefunden.",
+      "en": "Member not found"
+   },
+   "This hero has already joined.": {
+      "de": "Dieser Held ist bereits beigetreten.",
+      "en": "This hero has already joined."
+   },
+   "Unknown service.": {
+      "de": "Unbekannte Dienstleistung.",
+      "en": "Unknown service."
+   },
+   "Not enough money for this service.": {
+      "de": "Nicht genug Geld für diese Dienstleistung.",
+      "en": "Not enough money for this service."
+   },
+   "The purse values are invalid.": {
+      "de": "Die Werte im Geldbeutel sind ungültig.",
+      "en": "The purse values are invalid."
+   },
+   "No fate points left to spend.": {
+      "de": "Keine Schicksalspunkte mehr übrig.",
+      "en": "No fate points left to spend."
+   },
+   "This hero cannot regenerate this energy.": {
+      "de": "Dieser Held kann diese Energie nicht regenerieren.",
+      "en": "This hero cannot regenerate this energy."
+   },
+   "Summoned creature not found": {
+      "de": "Beschworenes Wesen nicht gefunden.",
+      "en": "Summoned creature not found"
+   },
+   "Creature not found": {
+      "de": "Wesen nicht gefunden.",
+      "en": "Creature not found"
+   },
+   "Invalid token payload": {
+      "de": "Ungültige Anmeldung. Bitte erneut anmelden.",
+      "en": "Invalid token payload"
+   },
+   "Invalid or expired token": {
+      "de": "Die Anmeldung ist ungültig oder abgelaufen. Bitte erneut anmelden.",
+      "en": "Invalid or expired token"
+   },
+   "A record with these details already exists.": {
+      "de": "Ein Eintrag mit diesen Angaben existiert bereits.",
+      "en": "A record with these details already exists."
+   },
+   "The hero does not have Eiserner Wille.": {
+      "de": "Der Held besitzt Eiserner Wille nicht.",
+      "en": "The hero does not have Eiserner Wille."
+   },
+   "Enter the QS of the check.": {
+      "de": "Die QS der Probe eingeben.",
+      "en": "Enter the QS of the check."
+   },
+   "The hero does not know Zauberklinge Geisterspeer.": {
+      "de": "Der Held beherrscht Zauberklinge Geisterspeer nicht.",
+      "en": "The hero does not know Zauberklinge Geisterspeer."
+   },
+   "Choose a weapon from the inventory.": {
+      "de": "Eine Waffe aus dem Inventar wählen.",
+      "en": "Choose a weapon from the inventory."
+   },
+   "The hero does not have Aura verbergen.": {
+      "de": "Der Held besitzt Aura verbergen nicht.",
+      "en": "The hero does not have Aura verbergen."
+   },
+   "Enter the QS of the Selbstbeherrschung check.": {
+      "de": "Die QS der Probe auf Selbstbeherrschung eingeben.",
+      "en": "Enter the QS of the Selbstbeherrschung check."
+   },
+   "Choose one of the core elixirs (S. 272–274).": {
+      "de": "Eines der Elixiere aus dem Regelwerk wählen (S. 272–274).",
+      "en": "Choose one of the core elixirs (S. 272–274)."
+   },
+   "Ingredient level must be 1–6 (S. 271).": {
+      "de": "Die Ingredienzienstufe muss zwischen 1 und 6 liegen (S. 271).",
+      "en": "Ingredient level must be 1–6 (S. 271)."
+   },
+   "Charge 0, 4 or 8 AsP (S. 271).": {
+      "de": "Mit 0, 4 oder 8 AsP aufladen (S. 271).",
+      "en": "Charge 0, 4 or 8 AsP (S. 271)."
+   },
+   "Choose one of the core elixirs.": {
+      "de": "Eines der Elixiere aus dem Regelwerk wählen.",
+      "en": "Choose one of the core elixirs."
+   },
+   "Resource not found": {
+      "de": "Nicht gefunden.",
+      "en": "Resource not found"
+   },
+   "Enter the AsP cost of the stored spell.": {
+      "de": "Die AsP-Kosten des gespeicherten Zaubers eingeben.",
+      "en": "Enter the AsP cost of the stored spell."
+   },
+   "An artifact holds 1–7 charges (S. 267).": {
+      "de": "Ein Artefakt fasst 1–7 Ladungen (S. 267).",
+      "en": "An artifact holds 1–7 charges (S. 267)."
+   },
+   "A self-recharging artifact stores one spell (S. 267–268).": {
+      "de": "Ein selbstaufladendes Artefakt speichert einen Zauber (S. 267–268).",
+      "en": "A self-recharging artifact stores one spell (S. 267–268)."
+   },
+   "Material either saves permanent AsP or eases the ARCANOVI (S. 268).": {
+      "de": "Material spart entweder permanente AsP oder erleichtert den ARCANOVI (S. 268).",
+      "en": "Material either saves permanent AsP or eases the ARCANOVI (S. 268)."
+   },
+   "No charge left.": {
+      "de": "Keine Ladung mehr übrig.",
+      "en": "No charge left."
+   },
+   "Only self-recharging artifacts regain their charge (S. 267).": {
+      "de": "Nur selbstaufladende Artefakte erhalten ihre Ladung zurück (S. 267).",
+      "en": "Only self-recharging artifacts regain their charge (S. 267)."
+   },
+   "Unknown entry.": {
+      "de": "Unbekannter Eintrag.",
+      "en": "Unknown entry."
+   },
+   "Already recorded": {
+      "de": "Bereits erfasst",
+      "en": "Already recorded"
+   },
+   "Record the divine tradition of your church first (S. 316–320).": {
+      "de": "Zuerst die geweihte Tradition deiner Kirche erfassen (S. 316–320).",
+      "en": "Record the divine tradition of your church first (S. 316–320)."
+   },
+   "This creature cannot be summoned (S. 262–264).": {
+      "de": "Dieses Wesen kann nicht beschworen werden (S. 262–264).",
+      "en": "This creature cannot be summoned (S. 262–264)."
+   },
+   "Each improvement can be chosen only once (S. 264).": {
+      "de": "Jede Verbesserung kann nur einmal gewählt werden (S. 264).",
+      "en": "Each improvement can be chosen only once (S. 264)."
+   },
+   "Each improvement costs 1 QS (S. 264).": {
+      "de": "Jede Verbesserung kostet 1 QS (S. 264).",
+      "en": "Each improvement costs 1 QS (S. 264)."
+   },
+   "Character name is required and must be between 2 and 100 characters.": {
+      "de": "Der Name ist erforderlich und muss 2 bis 100 Zeichen lang sein.",
+      "en": "Character name is required and must be between 2 and 100 characters."
+   },
+   "Age must be between 1 and 200.": {
+      "de": "Das Alter muss zwischen 1 und 200 liegen.",
+      "en": "Age must be between 1 and 200."
+   },
+   "Species is required.": {
+      "de": "Die Spezies ist erforderlich.",
+      "en": "Species is required."
+   },
+   "Place of origin is required.": {
+      "de": "Der Herkunftsort ist erforderlich.",
+      "en": "Place of origin is required."
+   },
+   "Culture is required.": {
+      "de": "Die Kultur ist erforderlich.",
+      "en": "Culture is required."
+   },
+   "Profession is required.": {
+      "de": "Die Profession ist erforderlich.",
+      "en": "Profession is required."
+   },
+   "Social status is required.": {
+      "de": "Der Sozialstatus ist erforderlich.",
+      "en": "Social status is required."
+   },
+   "Sex must be male, female, or other.": {
+      "de": "Das Geschlecht muss männlich, weiblich oder sonstiges sein.",
+      "en": "Sex must be male, female, or other."
+   },
+   "Status must be active, retired, or deceased.": {
+      "de": "Der Status muss aktiv, im Ruhestand oder verstorben sein.",
+      "en": "Status must be active, retired, or deceased."
+   },
+   "Select a catalog entry or record a custom entry.": {
+      "de": "Einen Katalogeintrag auswählen oder einen eigenen Eintrag erfassen.",
+      "en": "Select a catalog entry or record a custom entry."
+   },
+   "Disadvantages must be selected from the catalog.": {
+      "de": "Nachteile müssen aus dem Katalog gewählt werden.",
+      "en": "Disadvantages must be selected from the catalog."
+   },
+   "Only disadvantages can be bought off.": {
+      "de": "Nur Nachteile können abgelegt werden.",
+      "en": "Only disadvantages can be bought off."
+   },
+   "Each talent only once.": {
+      "de": "Jedes Talent nur einmal.",
+      "en": "Each talent only once."
+   },
+   "Nothing to change.": {
+      "de": "Nichts zu ändern.",
+      "en": "Nothing to change."
+   },
+   "Invalid id": {
+      "de": "Ungültige ID.",
+      "en": "Invalid id"
+   },
+   "Invalid invite code": {
+      "de": "Ungültiger Einladungscode.",
+      "en": "Invalid invite code"
+   },
+   "Attribute must be between 0 and 25.": {
+      "de": "Eigenschaften müssen zwischen 0 und 25 liegen.",
+      "en": "Attribute must be between 0 and 25."
+   },
+   "Roll at least one energy.": {
+      "de": "Mindestens eine Energie auswürfeln.",
+      "en": "Roll at least one energy."
+   },
+   "Please enter a valid email address": {
+      "de": "Bitte eine gültige E-Mail-Adresse eingeben.",
+      "en": "Please enter a valid email address"
+   },
+   "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character": {
+      "de": "Das Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben, eine Ziffer und ein Sonderzeichen enthalten.",
+      "en": "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character"
+   },
+   "Provide a username or password update": {
+      "de": "Einen neuen Benutzernamen oder ein neues Passwort angeben.",
+      "en": "Provide a username or password update"
+   },
+   "Current password is required when changing the password": {
+      "de": "Zum Ändern des Passworts ist das aktuelle Passwort erforderlich.",
+      "en": "Current password is required when changing the password"
+   },
+   "The creature is busy with another task.": {
+      "de": "Das Wesen ist mit einer anderen Aufgabe beschäftigt.",
+      "en": "The creature is busy with another task."
+   },
+   "Not enough services left (S. 265).": {
+      "de": "Nicht genug Dienste übrig (S. 265).",
+      "en": "Not enough services left (S. 265)."
+   },
+   "If the defense fails, the enemy drops the weapon (S. 247).": {
+      "de": "Misslingt die Verteidigung, lässt der Gegner die Waffe fallen (S. 247).",
+      "en": "If the defense fails, the enemy drops the weapon (S. 247)."
+   },
+   "If the defense fails, the enemy falls: Liegend (S. 250).": {
+      "de": "Misslingt die Verteidigung, stürzt der Gegner: Liegend (S. 250).",
+      "en": "If the defense fails, the enemy falls: Liegend (S. 250)."
+   },
+   "Dolche and Fechtwaffen cannot parry Ketten-, Stangen- or Zweihandwaffen (Kreuzblock with two weapons can).": {
+      "de": "Dolche und Fechtwaffen können Ketten-, Stangen- und Zweihandwaffen nicht parieren (Kreuzblock mit zwei Waffen schon).",
+      "en": "Dolche and Fechtwaffen cannot parry Ketten-, Stangen- or Zweihandwaffen (Kreuzblock with two weapons can)."
+   },
+   "Artifact": {
+      "de": "Artefakt",
+      "en": "Artifact"
+   },
+   "Vergiftet removed.": {
+      "de": "Vergiftet aufgehoben.",
+      "en": "Vergiftet removed."
+   },
+   "ranged": {
+      "de": "Fernkampf",
+      "en": "ranged"
+   },
+   "other": {
+      "de": "sonstige",
+      "en": "other"
+   },
+   "LE": {
+      "de": "LE",
+      "en": "LP"
    }
 }
