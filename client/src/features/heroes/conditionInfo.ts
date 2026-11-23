@@ -100,7 +100,7 @@ export function conditionTooltip(key: string, level: number, language: 'de' | 'e
       ...(info.decay ? [info.decay[language]] : []),
       ...(info.note ? [info.note[language]] : []),
       ...(info.levels ? [language === 'de' ? 'Zustände addieren sich, max. −5 gesamt (S. 32).' : 'Penalties add up, max. −5 in total (p. 32).'] : []),
-      `${language === 'de' ? 'DSA5 Regelwerk, S.' : 'DSA5 rulebook, p.'} ${info.page}`,
+      `${language === 'de' ? 'DSA5 Regelwerk, S.' : 'DSA5 rulebook, p.'}\u00A0${info.page}`,
    ].join('\n')
 }
 
@@ -152,6 +152,6 @@ export function statusTooltip(key: string, language: 'de' | 'en') {
       info.text[language],
       info.auto ? (language === 'de' ? 'Zahlen werden automatisch angewandt.' : 'Numbers are applied automatically.')
          : (language === 'de' ? 'Nur Hinweis, keine automatische Wirkung.' : 'Reminder only, no automatic effect.'),
-      `${language === 'de' ? 'DSA5 Regelwerk, S.' : 'DSA5 rulebook, p.'} ${info.page}`,
+      `${language === 'de' ? 'DSA5 Regelwerk, S.' : 'DSA5 rulebook, p.'}\u00A0${info.page}`,
    ].join('\n')
 }

@@ -9227,10 +9227,6 @@
       "de": "Zauber beenden",
       "en": "End spell"
    },
-   "Fight over": {
-      "de": "Kampf vorbei",
-      "en": "Fight over"
-   },
    "Fighting on the hero’s side; the Kampf ends with the fight (S. 265).": {
       "de": "Kämpft auf der Seite des Helden; der Dienst Kampf endet mit dem Kampf (S. 265).",
       "en": "Fighting on the hero’s side; the Kampf ends with the fight (p. 265)."
@@ -10379,10 +10375,6 @@
       "de": "Hauptnavigation",
       "en": "Main navigation"
    },
-   "Theme: {current} (switch to {next})": {
-      "de": "Farbschema: {current} (wechseln zu {next})",
-      "en": "Theme: {current} (switch to {next})"
-   },
    "Light": {
       "de": "Hell",
       "en": "Light"
@@ -10886,5 +10878,1045 @@
    "your hero": {
       "de": "dein Held",
       "en": "your hero"
+   },
+   "Add opponents": {
+      "de": "Gegner hinzufügen",
+      "en": "Add opponents"
+   },
+   "Battle board": {
+      "de": "Kampfplan",
+      "en": "Battle board"
+   },
+   "Begin round 1": {
+      "de": "Runde 1 beginnen",
+      "en": "Begin round 1"
+   },
+   "Choose…": {
+      "de": "Wählen …",
+      "en": "Choose…"
+   },
+   "Count": {
+      "de": "Anzahl",
+      "en": "Count"
+   },
+   "Damage heroes through the GM actions in the party (it changes their sheet).": {
+      "de": "Schaden an Helden über die Meisteraktionen der Gruppe eintragen (er ändert ihren Heldenbogen).",
+      "en": "Damage heroes through the GM actions in the party (it changes their sheet)."
+   },
+   "Drag a token onto a square, or select it and click a square. Arrow keys move a focused token.": {
+      "de": "Ziehe eine Spielfigur auf ein Feld, oder wähle sie aus und klicke ein Feld an. Pfeiltasten bewegen die fokussierte Figur.",
+      "en": "Drag a token onto a square, or select it and click a square. Arrow keys move a focused token."
+   },
+   "End the fight for everyone?": {
+      "de": "Den Kampf für alle beenden?",
+      "en": "End the fight for everyone?"
+   },
+   "Fight & battle board": {
+      "de": "Kampf & Kampfplan",
+      "en": "Fight & battle board"
+   },
+   "From a template": {
+      "de": "Aus einer Vorlage",
+      "en": "From a template"
+   },
+   "From the bestiary": {
+      "de": "Aus dem Bestiarium",
+      "en": "From the bestiary"
+   },
+   "Heal": {
+      "de": "Heilen",
+      "en": "Heal"
+   },
+   "Hidden from players (ambush)": {
+      "de": "Vor den Spielern verborgen (Hinterhalt)",
+      "en": "Hidden from players (ambush)"
+   },
+   "Hide from players": {
+      "de": "Vor Spielern verbergen",
+      "en": "Hide from players"
+   },
+   "Hit (TP − RS)": {
+      "de": "Treffer (TP − RS)",
+      "en": "Hit (TP − RS)"
+   },
+   "INI base": {
+      "de": "INI-Basis",
+      "en": "INI base"
+   },
+   "Ignore armor (RS)": {
+      "de": "Rüstung (RS) ignorieren",
+      "en": "Ignore armor (RS)"
+   },
+   "Loading the fight...": {
+      "de": "Kampf wird geladen …",
+      "en": "Loading the fight..."
+   },
+   "Next turn": {
+      "de": "Nächster Zug",
+      "en": "Next turn"
+   },
+   "No fight is running. Start one: all heroes of the party join, then add opponents.": {
+      "de": "Kein Kampf läuft. Starte einen: Alle Helden der Gruppe nehmen teil, dann fügst du Gegner hinzu.",
+      "en": "No fight is running. Start one: all heroes of the party join, then add opponents."
+   },
+   "No fight is running. The game master starts it; it appears here live.": {
+      "de": "Kein Kampf läuft. Der Meister startet ihn; er erscheint hier live.",
+      "en": "No fight is running. The game master starts it; it appears here live."
+   },
+   "Not on the board": {
+      "de": "Nicht auf dem Plan",
+      "en": "Not on the board"
+   },
+   "Opponents added.": {
+      "de": "Gegner hinzugefügt.",
+      "en": "Opponents added."
+   },
+   "Previous": {
+      "de": "Zurück",
+      "en": "Previous"
+   },
+   "Remove this combatant from the fight?": {
+      "de": "Diesen Kämpfer aus dem Kampf entfernen?",
+      "en": "Remove this combatant from the fight?"
+   },
+   "Resize board": {
+      "de": "Plangröße ändern",
+      "en": "Resize board"
+   },
+   "Reveal to players": {
+      "de": "Den Spielern zeigen",
+      "en": "Reveal to players"
+   },
+   "Roll INI": {
+      "de": "INI würfeln",
+      "en": "Roll INI"
+   },
+   "Roll NPC INI": {
+      "de": "NSC-INI würfeln",
+      "en": "Roll NPC INI"
+   },
+   "Save as template": {
+      "de": "Als Vorlage speichern",
+      "en": "Save as template"
+   },
+   "Select your hero to set the INI. You can move your own token; the GM moves everyone else.": {
+      "de": "Wähle deinen Helden, um die INI einzutragen. Du bewegst deine eigene Figur, der Meister alle anderen.",
+      "en": "Select your hero to set the INI. You can move your own token; the GM moves everyone else."
+   },
+   "Set": {
+      "de": "Setzen",
+      "en": "Set"
+   },
+   "Start fight": {
+      "de": "Kampf starten",
+      "en": "Start fight"
+   },
+   "TP / LeP": {
+      "de": "TP / LeP",
+      "en": "TP / LeP"
+   },
+   "Take off the board": {
+      "de": "Vom Plan nehmen",
+      "en": "Take off the board"
+   },
+   "This fight is not available.": {
+      "de": "Dieser Kampf ist nicht verfügbar.",
+      "en": "This fight is not available."
+   },
+   "Use INI from the fight panel": {
+      "de": "INI aus dem Kampfpanel übernehmen",
+      "en": "Use INI from the fight panel"
+   },
+   "Width": {
+      "de": "Breite",
+      "en": "Width"
+   },
+   "badly wounded": {
+      "de": "schwer verletzt",
+      "en": "badly wounded"
+   },
+   "column": {
+      "de": "Spalte",
+      "en": "column"
+   },
+   "down": {
+      "de": "kampfunfähig",
+      "en": "down"
+   },
+   "e.g. Ork": {
+      "de": "z. B. Ork",
+      "en": "e.g. Ork"
+   },
+   "hidden": {
+      "de": "verborgen",
+      "en": "hidden"
+   },
+   "not on the board": {
+      "de": "nicht auf dem Plan",
+      "en": "not on the board"
+   },
+   "row": {
+      "de": "Reihe",
+      "en": "row"
+   },
+   "unhurt": {
+      "de": "unverletzt",
+      "en": "unhurt"
+   },
+   "wounded": {
+      "de": "verletzt",
+      "en": "wounded"
+   },
+   "Add opponents first.": {
+      "de": "Füge zuerst Gegner hinzu.",
+      "en": "Add opponents first."
+   },
+   "All opponents have their INI.": {
+      "de": "Alle Gegner haben ihre INI.",
+      "en": "All opponents have their INI."
+   },
+   "INI rolled for {count} opponents.": {
+      "de": "INI für {count} Gegner gewürfelt.",
+      "en": "INI rolled for {count} opponents."
+   },
+   "Attack type": {
+      "de": "Angriffsart",
+      "en": "Attack type"
+   },
+   "Cannot defend: take the hit": {
+      "de": "Keine Verteidigung möglich: Treffer nehmen",
+      "en": "Cannot defend: take the hit"
+   },
+   "Critical attack: defense halved": {
+      "de": "Kritischer Angriff: Verteidigung halbiert",
+      "en": "Critical attack: defense halved"
+   },
+   "Critical attack: your defense is halved.": {
+      "de": "Kritischer Angriff: Deine Verteidigung ist halbiert.",
+      "en": "Critical attack: your defense is halved."
+   },
+   "Defend in your fight panel": {
+      "de": "Verteidige dich in deinem Kampfpanel",
+      "en": "Defend in your fight panel"
+   },
+   "Enter an AT value for this opponent to attack.": {
+      "de": "Trage einen AT-Wert für diesen Gegner ein, um anzugreifen.",
+      "en": "Enter an AT value for this opponent to attack."
+   },
+   "No defense": {
+      "de": "Keine Verteidigung",
+      "en": "No defense"
+   },
+   "No opponent on the field.": {
+      "de": "Kein Gegner im Kampf.",
+      "en": "No opponent on the field."
+   },
+   "On a hit: {tp} TP − RS {rs} = {sp} SP.": {
+      "de": "Bei einem Treffer: {tp} TP − RS {rs} = {sp} SP.",
+      "en": "On a hit: {tp} TP − RS {rs} = {sp} SP."
+   },
+   "Open attacks": {
+      "de": "Offene Angriffe",
+      "en": "Open attacks"
+   },
+   "Report the defense to the fight": {
+      "de": "Verteidigung an den Kampf melden",
+      "en": "Report the defense to the fight"
+   },
+   "Report the miss to the fight": {
+      "de": "Fehlschlag an den Kampf melden",
+      "en": "Report the miss to the fight"
+   },
+   "Reported to the fight.": {
+      "de": "An den Kampf gemeldet.",
+      "en": "Reported to the fight."
+   },
+   "Roll the damage, then send the attack to {target}.": {
+      "de": "Würfle den Schaden, dann sende den Angriff an {target}.",
+      "en": "Roll the damage, then send the attack to {target}."
+   },
+   "Send attack to the hero": {
+      "de": "Angriff an den Helden senden",
+      "en": "Send attack to the hero"
+   },
+   "Send attack to {target} ({tp} TP)": {
+      "de": "Angriff an {target} senden ({tp} TP)",
+      "en": "Send attack to {target} ({tp} TP)"
+   },
+   "Sent to the fight: the GM rolls the defense.": {
+      "de": "An den Kampf gesendet: Der Meister würfelt die Verteidigung.",
+      "en": "Sent to the fight: the GM rolls the defense."
+   },
+   "Take the hit and report it": {
+      "de": "Treffer nehmen und melden",
+      "en": "Take the hit and report it"
+   },
+   "Waiting for the player to defend.": {
+      "de": "Wartet auf die Verteidigung des Spielers.",
+      "en": "Waiting for the player to defend."
+   },
+   "{attacker} attacks you!": {
+      "de": "{attacker} greift dich an!",
+      "en": "{attacker} attacks you!"
+   },
+   "{attacker} attacks you with {weapon}.": {
+      "de": "{attacker} greift dich an ({weapon}).",
+      "en": "{attacker} attacks you with {weapon}."
+   },
+   "{attacker} attacks {target} ({weapon})": {
+      "de": "{attacker} greift {target} an ({weapon})",
+      "en": "{attacker} attacks {target} ({weapon})"
+   },
+   "{attacker} attacks {target} ({weapon}): {outcome}": {
+      "de": "{attacker} greift {target} an ({weapon}): {outcome}",
+      "en": "{attacker} attacks {target} ({weapon}): {outcome}"
+   },
+   "{attacker} attacks {target} ({weapon}): W20 {roll} vs {value} → {outcome}": {
+      "de": "{attacker} greift {target} an ({weapon}): W20 {roll} gegen {value} → {outcome}",
+      "en": "{attacker} attacks {target} ({weapon}): W20 {roll} vs {value} → {outcome}"
+   },
+   "{target} defends ({defense}): {outcome}": {
+      "de": "{target} verteidigt ({defense}): {outcome}",
+      "en": "{target} defends ({defense}): {outcome}"
+   },
+   "{target} defends ({defense}): W20 {roll} vs {value} → {outcome}": {
+      "de": "{target} verteidigt ({defense}): W20 {roll} gegen {value} → {outcome}",
+      "en": "{target} defends ({defense}): W20 {roll} vs {value} → {outcome}"
+   },
+   "{target} cannot defend": {
+      "de": "{target} kann sich nicht verteidigen",
+      "en": "{target} cannot defend"
+   },
+   "{target} is hit: {sp} SP": {
+      "de": "{target} wird getroffen: {sp} SP",
+      "en": "{target} is hit: {sp} SP"
+   },
+   "{target} is hit: {tp} TP − RS {rs} = {sp} SP (LeP {before} → {after})": {
+      "de": "{target} wird getroffen: {tp} TP − RS {rs} = {sp} SP (LeP {before} → {after})",
+      "en": "{target} is hit: {tp} TP − RS {rs} = {sp} SP (LeP {before} → {after})"
+   },
+   "{target} is hit: {tp} TP, {sp} SP": {
+      "de": "{target} wird getroffen: {tp} TP, {sp} SP",
+      "en": "{target} is hit: {tp} TP, {sp} SP"
+   },
+   "GM cancels the attack of {attacker} on {target}": {
+      "de": "Der Meister bricht den Angriff von {attacker} auf {target} ab",
+      "en": "GM cancels the attack of {attacker} on {target}"
+   },
+   "{name} appears": {
+      "de": "{name} taucht auf",
+      "en": "{name} appears"
+   },
+   "{name} already defended {count}× this round (PA/AW −3 each).": {
+      "de": "{name} hat sich in dieser Runde schon {count}× verteidigt (PA/AW je −3).",
+      "en": "{name} already defended {count}× this round (PA/AW −3 each)."
+   },
+   "Dice": {
+      "de": "Würfel",
+      "en": "Dice"
+   },
+   "Quick rolls": {
+      "de": "Schnelle Würfe",
+      "en": "Quick rolls"
+   },
+   "Sum": {
+      "de": "Summe",
+      "en": "Sum"
+   },
+   "Your system asks for reduced motion, so dice roll without animation.": {
+      "de": "Dein System wünscht reduzierte Bewegung, daher wird ohne Animation gewürfelt.",
+      "en": "Your system asks for reduced motion, so dice roll without animation."
+   },
+   "Roll instantly without the 3D dice animation. Saved in this browser.": {
+      "de": "Sofort würfeln, ohne 3D-Würfelanimation. In diesem Browser gespeichert.",
+      "en": "Roll instantly without the 3D dice animation. Saved in this browser."
+   },
+   "Stand next to an opponent on the board to attack in melee (diagonals count).": {
+      "de": "Stelle dich auf ein Feld neben einem Gegner, um im Nahkampf anzugreifen (diagonal zählt).",
+      "en": "Stand next to an opponent on the board to attack in melee (diagonals count)."
+   },
+   "Place your token on the board to attack in melee.": {
+      "de": "Setze deine Figur auf den Plan, um im Nahkampf anzugreifen.",
+      "en": "Place your token on the board to attack in melee."
+   },
+   "No opponent in reach.": {
+      "de": "Kein Gegner in Reichweite.",
+      "en": "No opponent in reach."
+   },
+   "No hero in reach (melee needs a neighbouring square).": {
+      "de": "Kein Held in Reichweite (Nahkampf braucht ein Nachbarfeld).",
+      "en": "No hero in reach (melee needs a neighbouring square)."
+   },
+   "Place this opponent on the board to attack in melee.": {
+      "de": "Setze diesen Gegner auf den Plan, um im Nahkampf anzugreifen.",
+      "en": "Place this opponent on the board to attack in melee."
+   },
+   "A melee attack needs the target on a neighbouring square (diagonals count).": {
+      "de": "Ein Nahkampfangriff braucht das Ziel auf einem Nachbarfeld (diagonal zählt).",
+      "en": "A melee attack needs the target on a neighbouring square (diagonals count)."
+   },
+   "Accept the miss": {
+      "de": "Fehlschlag annehmen",
+      "en": "Accept the miss"
+   },
+   "An open attack holds the fight: defend or cancel it first.": {
+      "de": "Ein offener Angriff hält den Kampf an: erst verteidigen oder abbrechen.",
+      "en": "An open attack holds the fight: defend or cancel it first."
+   },
+   "Bush": {
+      "de": "Gebüsch",
+      "en": "Bush"
+   },
+   "Cancel the attack": {
+      "de": "Angriff abbrechen",
+      "en": "Cancel the attack"
+   },
+   "Drag over squares to paint terrain. Tokens cannot enter it.": {
+      "de": "Über Felder ziehen, um Gelände zu malen. Spielfiguren können es nicht betreten.",
+      "en": "Drag over squares to paint terrain. Tokens cannot enter it."
+   },
+   "Drag the token to move it. The attack ends the turn.": {
+      "de": "Zum Bewegen die Spielfigur ziehen. Der Angriff beendet den Zug.",
+      "en": "Drag the token to move it. The attack ends the turn."
+   },
+   "End this turn": {
+      "de": "Diesen Zug beenden",
+      "en": "End this turn"
+   },
+   "End turn": {
+      "de": "Zug beenden",
+      "en": "End turn"
+   },
+   "Enter confirms.": {
+      "de": "Enter bestätigt.",
+      "en": "Enter confirms."
+   },
+   "Enter the damage (TP) of this opponent to hit.": {
+      "de": "Trage den Schaden (TP) dieses Gegners ein, damit er treffen kann.",
+      "en": "Enter the damage (TP) of this opponent to hit."
+   },
+   "Erase": {
+      "de": "Radieren",
+      "en": "Erase"
+   },
+   "Game master tools": {
+      "de": "Meisterwerkzeuge",
+      "en": "Game master tools"
+   },
+   "Hide the actions": {
+      "de": "Aktionen ausblenden",
+      "en": "Hide the actions"
+   },
+   "Show the actions": {
+      "de": "Aktionen einblenden",
+      "en": "Show the actions"
+   },
+   "Marked squares: move up to your GS (free action).": {
+      "de": "Markierte Felder: Bewegung bis zu deiner GS (freie Aktion).",
+      "en": "Marked squares: move up to your GS (free action)."
+   },
+   "Marked squares: sprint (uses your action and ends your turn).": {
+      "de": "Markierte Felder: Sprint (kostet deine Aktion und beendet deinen Zug).",
+      "en": "Marked squares: sprint (uses your action and ends your turn)."
+   },
+   "More of your fight panel: status, stances, Schips, situation, manual hits": {
+      "de": "Mehr aus deinem Kampfpanel: Status, Haltungen, Schips, Situation, Treffer von Hand",
+      "en": "More of your fight panel: status, stances, Schips, situation, manual hits"
+   },
+   "Move first if you like (drag your token): your attack ends the turn.": {
+      "de": "Bewege dich vorher, wenn du willst (Spielfigur ziehen): dein Angriff beendet den Zug.",
+      "en": "Move first if you like (drag your token): your attack ends the turn."
+   },
+   "No action left to move this round.": {
+      "de": "In dieser Kampfrunde ist keine Aktion mehr für eine Bewegung übrig.",
+      "en": "No action left to move this round."
+   },
+   "No one is acting": {
+      "de": "Niemand ist am Zug",
+      "en": "No one is acting"
+   },
+   "Painting: drag over the board. Choose the tool again to stop.": {
+      "de": "Malen: über das Spielfeld ziehen. Werkzeug erneut wählen zum Beenden.",
+      "en": "Painting: drag over the board. Choose the tool again to stop."
+   },
+   "Place the tokens, paint terrain and roll the INI of the opponents. Then begin round 1.": {
+      "de": "Stelle die Spielfiguren auf, male Gelände und würfle die INI der Gegner. Beginne dann Kampfrunde 1.",
+      "en": "Place the tokens, paint terrain and roll the INI of the opponents. Then begin round 1."
+   },
+   "Place your token on the board. The GM begins round 1.": {
+      "de": "Stelle deine Spielfigur auf das Spielfeld. Die Spielleitung beginnt Kampfrunde 1.",
+      "en": "Place your token on the board. The GM begins round 1."
+   },
+   "Planned move": {
+      "de": "Geplante Bewegung",
+      "en": "Planned move"
+   },
+   "Rock": {
+      "de": "Fels",
+      "en": "Rock"
+   },
+   "Roll your initiative": {
+      "de": "Würfle deine Initiative",
+      "en": "Roll your initiative"
+   },
+   "Set up the fight": {
+      "de": "Kampf vorbereiten",
+      "en": "Set up the fight"
+   },
+   "Terrain": {
+      "de": "Gelände",
+      "en": "Terrain"
+   },
+   "Terrain blocks movement only.": {
+      "de": "Gelände blockiert nur die Bewegung.",
+      "en": "Terrain blocks movement only."
+   },
+   "The action of this round is already used.": {
+      "de": "Die Aktion dieser Kampfrunde ist bereits verbraucht.",
+      "en": "The action of this round is already used."
+   },
+   "The fight begins soon": {
+      "de": "Der Kampf beginnt gleich",
+      "en": "The fight begins soon"
+   },
+   "The fight has not begun yet.": {
+      "de": "Der Kampf hat noch nicht begonnen.",
+      "en": "The fight has not begun yet."
+   },
+   "This square is blocked by terrain.": {
+      "de": "Dieses Feld ist durch Gelände blockiert.",
+      "en": "This square is blocked by terrain."
+   },
+   "This square is out of reach (GS) or cut off by terrain.": {
+      "de": "Dieses Feld ist außer Reichweite (GS) oder durch Gelände abgeschnitten.",
+      "en": "This square is out of reach (GS) or cut off by terrain."
+   },
+   "This square is taken.": {
+      "de": "Dieses Feld ist besetzt.",
+      "en": "This square is taken."
+   },
+   "Tree": {
+      "de": "Baum",
+      "en": "Tree"
+   },
+   "Wait for your turn.": {
+      "de": "Warte, bis du am Zug bist.",
+      "en": "Wait for your turn."
+   },
+   "Wait until the open attack is defended.": {
+      "de": "Warte, bis der offene Angriff verteidigt ist.",
+      "en": "Wait until the open attack is defended."
+   },
+   "Waiting for the player. You can end the turn for them.": {
+      "de": "Warten auf die Spielerin oder den Spieler. Du kannst den Zug für sie beenden.",
+      "en": "Waiting for the player. You can end the turn for them."
+   },
+   "Waiting for {name} to defend.": {
+      "de": "Warten auf die Verteidigung von {name}.",
+      "en": "Waiting for {name} to defend."
+   },
+   "Wall": {
+      "de": "Mauer",
+      "en": "Wall"
+   },
+   "You can move on your turn.": {
+      "de": "Du kannst dich in deinem Zug bewegen.",
+      "en": "You can move on your turn."
+   },
+   "You can only move your own hero.": {
+      "de": "Du kannst nur deine eigene Heldin bzw. deinen eigenen Helden bewegen.",
+      "en": "You can only move your own hero."
+   },
+   "Your attack ends the turn.": {
+      "de": "Dein Angriff beendet den Zug.",
+      "en": "Your attack ends the turn."
+   },
+   "Your turn": {
+      "de": "Du bist am Zug",
+      "en": "Your turn"
+   },
+   "{attacker} attacks {target}": {
+      "de": "{attacker} greift {target} an",
+      "en": "{attacker} attacks {target}"
+   },
+   "{name} acts": {
+      "de": "{name} handelt",
+      "en": "{name} acts"
+   },
+   "{name}'s turn": {
+      "de": "{name} ist am Zug",
+      "en": "{name}'s turn"
+   },
+   "open": {
+      "de": "offen",
+      "en": "open"
+   },
+   "It is not this combatant's turn.": {
+      "de": "Diese Kampfteilnehmerin bzw. dieser Kampfteilnehmer ist nicht am Zug.",
+      "en": "It is not this combatant's turn."
+   },
+   "It is not your turn.": {
+      "de": "Du bist nicht am Zug.",
+      "en": "It is not your turn."
+   },
+   "This opponent is already down.": {
+      "de": "Dieser Gegner ist bereits kampfunfähig.",
+      "en": "This opponent is already down."
+   },
+   "Only the game master can take a token off the board during the fight.": {
+      "de": "Während des Kampfs kann nur die Spielleitung Spielfiguren vom Spielfeld nehmen.",
+      "en": "Only the game master can take a token off the board during the fight."
+   },
+   "{name} moves": {
+      "de": "{name} bewegt sich",
+      "en": "{name} moves"
+   },
+   "{name} sprints": {
+      "de": "{name} sprintet",
+      "en": "{name} sprints"
+   },
+   "{name} ends the turn": {
+      "de": "{name} beendet den Zug",
+      "en": "{name} ends the turn"
+   },
+   "Ally": {
+      "de": "Verbündeter",
+      "en": "Ally"
+   },
+   "Casting": {
+      "de": "Zaubern",
+      "en": "Casting"
+   },
+   "Loading": {
+      "de": "Laden",
+      "en": "Loading"
+   },
+   "Flucht": {
+      "de": "Flucht",
+      "en": "Flucht"
+   },
+   "Drag to move": {
+      "de": "Zum Verschieben ziehen",
+      "en": "Drag to move"
+   },
+   "Flucht: drag your token up to the marked squares.": {
+      "de": "Flucht: zieh deine Spielfigur bis zu den markierten Feldern.",
+      "en": "Flucht: drag your token up to the marked squares."
+   },
+   "In melee: no ranged attacks (S. 241).": {
+      "de": "Im Nahkampf: keine Fernkampfangriffe (S. 241).",
+      "en": "In melee: no ranged attacks (S. 241)."
+   },
+   "Long weapon: reaches 2 squares (house rule)": {
+      "de": "Lange Waffe: reicht 2 Felder weit (Hausregel)",
+      "en": "Long weapon: reaches 2 squares (house rule)"
+   },
+   "Marked squares: your Flucht move.": {
+      "de": "Markierte Felder: deine Bewegung nach der Flucht.",
+      "en": "Marked squares: your Flucht move."
+   },
+   "Minimize the fight window": {
+      "de": "Kampffenster minimieren",
+      "en": "Minimize the fight window"
+   },
+   "Open the fight window": {
+      "de": "Kampffenster öffnen",
+      "en": "Open the fight window"
+   },
+   "Move the fight window (arrow keys, Home resets)": {
+      "de": "Kampffenster verschieben (Pfeiltasten, Pos1 setzt zurück)",
+      "en": "Move the fight window (arrow keys, Home resets)"
+   },
+   "Move first if you like (drag your token): your action ends the turn.": {
+      "de": "Bewege dich vorher, wenn du willst (Spielfigur ziehen): deine Aktion beendet den Zug.",
+      "en": "Move first if you like (drag your token): your action ends the turn."
+   },
+   "Move it first if you like (drag its token): its attack ends the turn.": {
+      "de": "Bewege es vorher, wenn du willst (Spielfigur ziehen): sein Angriff beendet den Zug.",
+      "en": "Move it first if you like (drag its token): its attack ends the turn."
+   },
+   "No defense against a Passierschlag (S. 237).": {
+      "de": "Gegen einen Passierschlag ist keine Verteidigung möglich (S. 237).",
+      "en": "No defense against a Passierschlag (S. 237)."
+   },
+   "No opponent on the board.": {
+      "de": "Kein Gegner auf dem Spielfeld.",
+      "en": "No opponent on the board."
+   },
+   "No spells to cast in a fight.": {
+      "de": "Keine Zauber, die im Kampf gewirkt werden können.",
+      "en": "No spells to cast in a fight."
+   },
+   "Out of range: beyond the maximum only unaimed area shots (S. 241). Ask the GM.": {
+      "de": "Außer Reichweite: jenseits des Maximums nur ungezielte Flächenschüsse (S. 241). Frag die Spielleitung.",
+      "en": "Out of range: beyond the maximum only unaimed area shots (S. 241). Ask the GM."
+   },
+   "Passierschlag (AT −4, no action, no defense)": {
+      "de": "Passierschlag (AT −4, keine Aktion, keine Verteidigung)",
+      "en": "Passierschlag (AT −4, no action, no defense)"
+   },
+   "Passierschlag: no defense (S. 237).": {
+      "de": "Passierschlag: keine Verteidigung (S. 237).",
+      "en": "Passierschlag: no defense (S. 237)."
+   },
+   "Place your token on the board to attack.": {
+      "de": "Stelle deine Spielfigur auf das Spielfeld, um anzugreifen.",
+      "en": "Place your token on the board to attack."
+   },
+   "Second weapon: strike with it now or end the turn.": {
+      "de": "Zweite Waffe: schlag jetzt damit zu oder beende den Zug.",
+      "en": "Second weapon: strike with it now or end the turn."
+   },
+   "Stand at most 2 squares from an opponent (long weapon, house rule).": {
+      "de": "Stell dich höchstens 2 Felder von einem Gegner entfernt auf (lange Waffe, Hausregel).",
+      "en": "Stand at most 2 squares from an opponent (long weapon, house rule)."
+   },
+   "Status, stances, Schips, situation, manual hits": {
+      "de": "Status, Haltungen, Schips, Situation, Treffer von Hand",
+      "en": "Status, stances, Schips, situation, manual hits"
+   },
+   "Strike with the first weapon first (S. 238).": {
+      "de": "Schlag zuerst mit der ersten Waffe zu (S. 238).",
+      "en": "Strike with the first weapon first (S. 238)."
+   },
+   "The free action of this round is already used.": {
+      "de": "Die freie Aktion dieser Kampfrunde ist bereits verbraucht.",
+      "en": "The free action of this round is already used."
+   },
+   "This ally is fought from its hero's fight panel on the device that brought it in.": {
+      "de": "Dieser Verbündete wird über das Kampfpanel seines Helden auf dem Gerät geführt, das ihn ins Gefecht gebracht hat.",
+      "en": "This ally is fought from its hero's fight panel on the device that brought it in."
+   },
+   "Your action ends the turn.": {
+      "de": "Deine Aktion beendet den Zug.",
+      "en": "Your action ends the turn."
+   },
+   "{attacker} attacks {target}!": {
+      "de": "{attacker} greift {target} an!",
+      "en": "{attacker} attacks {target}!"
+   },
+   "{name} flees": {
+      "de": "{name} flieht",
+      "en": "{name} flees"
+   },
+   "{name}: {action}{detail}": {
+      "de": "{name}: {action}{detail}",
+      "en": "{name}: {action}{detail}"
+   },
+   "{name} joins the fight": {
+      "de": "{name} tritt dem Kampf bei",
+      "en": "{name} joins the fight"
+   },
+   "There is no open second strike.": {
+      "de": "Es gibt keinen offenen zweiten Schlag.",
+      "en": "There is no open second strike."
+   },
+   "A Passierschlag is a single melee attack.": {
+      "de": "Ein Passierschlag ist ein einzelner Nahkampfangriff.",
+      "en": "A Passierschlag is a single melee attack."
+   },
+   "A long weapon reaches 2 squares (diagonals count).": {
+      "de": "Eine lange Waffe reicht 2 Felder weit (Diagonalen zählen).",
+      "en": "A long weapon reaches 2 squares (diagonals count)."
+   },
+   "Aim · 1 action (+2, max +4)": {
+      "de": "Zielen · 1 Aktion (+2, max. +4)",
+      "en": "Aim · 1 action (+2, max +4)"
+   },
+   "from the board": {
+      "de": "vom Spielfeld",
+      "en": "from the board"
+   },
+   "{attacker}: Passierschlag on {target}, {sp} SP": {
+      "de": "{attacker}: Passierschlag gegen {target}, {sp} SP",
+      "en": "{attacker}: Passierschlag on {target}, {sp} SP"
+   },
+   "{attacker}: Passierschlag on {target}, W20 {roll} vs {value}: {tp} TP − RS {rs} = {sp} SP (LeP {before} → {after})": {
+      "de": "{attacker}: Passierschlag gegen {target}, W20 {roll} gegen {value}: {tp} TP − RS {rs} = {sp} SP (LeP {before} → {after})",
+      "en": "{attacker}: Passierschlag on {target}, W20 {roll} vs {value}: {tp} TP − RS {rs} = {sp} SP (LeP {before} → {after})"
+   },
+   "Narrow fight window": {
+      "de": "Schmales Kampffenster",
+      "en": "Narrow fight window"
+   },
+   "Wide fight window (two columns)": {
+      "de": "Breites Kampffenster (zwei Spalten)",
+      "en": "Wide fight window (two columns)"
+   },
+   "Fullscreen": {
+      "de": "Vollbild",
+      "en": "Fullscreen"
+   },
+   "Leave fullscreen (Esc)": {
+      "de": "Vollbild verlassen (Esc)",
+      "en": "Leave fullscreen (Esc)"
+   },
+   "A prepared fight can be unlocked when the running fight has ended.": {
+      "de": "Ein vorbereiteter Kampf kann freigegeben werden, sobald der laufende Kampf beendet ist.",
+      "en": "A prepared fight can be unlocked when the running fight has ended."
+   },
+   "Accept the failed defense": {
+      "de": "Misslungene Verteidigung annehmen",
+      "en": "Accept the failed defense"
+   },
+   "Attacks, defenses and turns run on the party's fight page, together with the GM and the other players.": {
+      "de": "Angriffe, Verteidigungen und Züge laufen auf der Kampfseite der Gruppe, gemeinsam mit der Spielleitung und den anderen.",
+      "en": "Attacks, defenses and turns run on the party's fight page, together with the GM and the other players."
+   },
+   "Back to the fight": {
+      "de": "Zurück zum Kampf",
+      "en": "Back to the fight"
+   },
+   "Cannot defend": {
+      "de": "Keine Verteidigung möglich",
+      "en": "Cannot defend"
+   },
+   "Combatants": {
+      "de": "Kampfbeteiligte",
+      "en": "Combatants"
+   },
+   "Critical: TP × 2": {
+      "de": "Kritisch: TP × 2",
+      "en": "Critical: TP × 2"
+   },
+   "Delete this prepared fight?": {
+      "de": "Diesen vorbereiteten Kampf löschen?",
+      "en": "Delete this prepared fight?"
+   },
+   "End the fight for everyone? It is deleted with its board and log.": {
+      "de": "Den Kampf für alle beenden? Er wird mit Spielfeld und Protokoll gelöscht.",
+      "en": "End the fight for everyone? It is deleted with its board and log."
+   },
+   "End the running fight first.": {
+      "de": "Beende zuerst den laufenden Kampf.",
+      "en": "End the running fight first."
+   },
+   "Go to the party fight": {
+      "de": "Zum Gruppenkampf",
+      "en": "Go to the party fight"
+   },
+   "Hit! Roll the damage": {
+      "de": "Treffer! Würfle den Schaden",
+      "en": "Hit! Roll the damage"
+   },
+   "If the defense fails, the attacker rolls the damage; you take TP − RS {rs} automatically.": {
+      "de": "Misslingt die Verteidigung, würfelt der Angreifer den Schaden; du erleidest automatisch TP − RS {rs}.",
+      "en": "If the defense fails, the attacker rolls the damage; you take TP − RS {rs} automatically."
+   },
+   "New fight": {
+      "de": "Neuer Kampf",
+      "en": "New fight"
+   },
+   "No fight is running. Start one now (all heroes of the party join), or unlock a prepared fight.": {
+      "de": "Es läuft kein Kampf. Starte jetzt einen (alle Helden der Gruppe nehmen teil) oder gib einen vorbereiteten Kampf frei.",
+      "en": "No fight is running. Start one now (all heroes of the party join), or unlock a prepared fight."
+   },
+   "No prepared fights yet. Players do not see them until you unlock one.": {
+      "de": "Noch keine vorbereiteten Kämpfe. Die Spieler sehen sie erst, wenn du einen freigibst.",
+      "en": "No prepared fights yet. Players do not see them until you unlock one."
+   },
+   "Only you see this fight. Place the opponents and the heroes' starting squares, paint terrain; unlock it when the fight begins.": {
+      "de": "Nur du siehst diesen Kampf. Stelle Gegner und Startfelder der Helden auf, male Gelände; gib ihn frei, wenn der Kampf beginnt.",
+      "en": "Only you see this fight. Place the opponents and the heroes' starting squares, paint terrain; unlock it when the fight begins."
+   },
+   "Party fight": {
+      "de": "Gruppenkampf",
+      "en": "Party fight"
+   },
+   "Place your token on the board. The GM begins round 1 once everyone has the INI.": {
+      "de": "Stelle deine Spielfigur auf das Spielfeld. Die Spielleitung beginnt Kampfrunde 1, sobald alle ihre INI haben.",
+      "en": "Place your token on the board. The GM begins round 1 once everyone has the INI."
+   },
+   "Prepare": {
+      "de": "Vorbereiten",
+      "en": "Prepare"
+   },
+   "Prepare a fight": {
+      "de": "Kampf vorbereiten",
+      "en": "Prepare a fight"
+   },
+   "Prepare the fight": {
+      "de": "Kampf vorbereiten",
+      "en": "Prepare the fight"
+   },
+   "Prepared fights": {
+      "de": "Vorbereitete Kämpfe",
+      "en": "Prepared fights"
+   },
+   "Reported: the attacker rolls the damage.": {
+      "de": "Gemeldet: Der Angreifer würfelt den Schaden.",
+      "en": "Reported: the attacker rolls the damage."
+   },
+   "Send attack to {target}": {
+      "de": "Angriff an {target} senden",
+      "en": "Send attack to {target}"
+   },
+   "Sent: no defense, you roll the damage next.": {
+      "de": "Gesendet: keine Verteidigung, du würfelst gleich den Schaden.",
+      "en": "Sent: no defense, you roll the damage next."
+   },
+   "Sent: waiting for the defense. On a failure you roll the damage.": {
+      "de": "Gesendet: Warten auf die Verteidigung. Misslingt sie, würfelst du den Schaden.",
+      "en": "Sent: waiting for the defense. On a failure you roll the damage."
+   },
+   "Simulated fight": {
+      "de": "Simulierter Kampf",
+      "en": "Simulated fight"
+   },
+   "The defense failed.": {
+      "de": "Die Verteidigung ist misslungen.",
+      "en": "The defense failed."
+   },
+   "This hero is in a party fight": {
+      "de": "Dieser Held ist in einem Gruppenkampf",
+      "en": "This hero is in a party fight"
+   },
+   "Unlock for the players": {
+      "de": "Für die Spieler freigeben",
+      "en": "Unlock for the players"
+   },
+   "Waiting for the INI of: {names}": {
+      "de": "Warten auf die INI von: {names}",
+      "en": "Waiting for the INI of: {names}"
+   },
+   "{attacker} rolls the damage against {target}": {
+      "de": "{attacker} würfelt den Schaden gegen {target}",
+      "en": "{attacker} rolls the damage against {target}"
+   },
+   "{target} failed to defend.": {
+      "de": "{target} hat die Verteidigung nicht geschafft.",
+      "en": "{target} failed to defend."
+   },
+   "Every combatant needs an INI first: {names}.": {
+      "de": "Erst brauchen alle Kampfbeteiligten ihre INI: {names}.",
+      "en": "Every combatant needs an INI first: {names}."
+   },
+   "e.g. Ambush at the ford": {
+      "de": "z. B. Hinterhalt an der Furt",
+      "en": "e.g. Ambush at the ford"
+   },
+   "Fight not found": {
+      "de": "Kampf nicht gefunden",
+      "en": "Fight not found"
+   },
+   "A party can have at most 20 prepared fights.": {
+      "de": "Eine Gruppe kann höchstens 20 vorbereitete Kämpfe haben.",
+      "en": "A party can have at most 20 prepared fights."
+   },
+   "Opponents: {count}": {
+      "de": "Gegner: {count}",
+      "en": "Opponents: {count}"
+   },
+   "Schritt per square": {
+      "de": "Schritt pro Feld",
+      "en": "Schritt per square"
+   },
+   "1 square = {n} Schritt: moves cover GS ÷ {n} squares, ranged distances count squares × {n}.": {
+      "de": "1 Feld = {n} Schritt: Bewegungen reichen GS ÷ {n} Felder, Fernkampfdistanzen zählen Felder × {n}.",
+      "en": "1 square = {n} Schritt: moves cover GS ÷ {n} squares, ranged distances count squares × {n}."
+   },
+   "Release from the fight": {
+      "de": "Aus dem Kampf entlassen",
+      "en": "Release from the fight"
+   },
+   "Accept {tp} TP": {
+      "de": "{tp} TP annehmen",
+      "en": "Accept {tp} TP"
+   },
+   "Confirm the roll first.": {
+      "de": "Bestätige zuerst den Wurf.",
+      "en": "Confirm the roll first."
+   },
+   "Send to the fight": {
+      "de": "An den Kampf senden",
+      "en": "Send to the fight"
+   },
+   "Passierschlag against {target} (AT −4, no action, no defense)": {
+      "de": "Passierschlag gegen {target} (AT −4, keine Aktion, keine Verteidigung)",
+      "en": "Passierschlag against {target} (AT −4, no action, no defense)"
+   },
+   "Passierschlag possible": {
+      "de": "Passierschlag möglich",
+      "en": "Passierschlag possible"
+   },
+   "Your critical parry allows a Passierschlag against {target}.": {
+      "de": "Deine kritische Parade erlaubt einen Passierschlag gegen {target}.",
+      "en": "Your critical parry allows a Passierschlag against {target}."
+   },
+   "The GM allows a Passierschlag against {target}.": {
+      "de": "Die Spielleitung erlaubt einen Passierschlag gegen {target}.",
+      "en": "The GM allows a Passierschlag against {target}."
+   },
+   "No Passierschlag right now (S. 237).": {
+      "de": "Gerade ist kein Passierschlag möglich (S. 237).",
+      "en": "No Passierschlag right now (S. 237)."
+   },
+   "No Passierschlag against this opponent right now (S. 237).": {
+      "de": "Gegen diesen Gegner ist gerade kein Passierschlag möglich (S. 237).",
+      "en": "No Passierschlag against this opponent right now (S. 237)."
+   },
+   "Passierschlag against": {
+      "de": "Passierschlag gegen",
+      "en": "Passierschlag against"
+   },
+   "Allow Passierschlag": {
+      "de": "Passierschlag erlauben",
+      "en": "Allow Passierschlag"
+   },
+   "{name} may strike a Passierschlag.": {
+      "de": "{name} darf einen Passierschlag ausführen.",
+      "en": "{name} may strike a Passierschlag."
+   },
+   "{name} may strike a Passierschlag against {target} (critical parry)": {
+      "de": "{name} darf einen Passierschlag gegen {target} ausführen (kritische Parade)",
+      "en": "{name} may strike a Passierschlag against {target} (critical parry)"
+   },
+   "{name} may strike a Passierschlag against {target}": {
+      "de": "{name} darf einen Passierschlag gegen {target} ausführen",
+      "en": "{name} may strike a Passierschlag against {target}"
+   },
+   "Same as device": {
+      "de": "Wie das Gerät",
+      "en": "Same as device"
+   },
+   "Parchment": {
+      "de": "Pergament",
+      "en": "Parchment"
+   },
+   "Ember": {
+      "de": "Glut",
+      "en": "Ember"
+   },
+   "Theme: {current}": {
+      "de": "Farbschema: {current}",
+      "en": "Theme: {current}"
+   },
+   "Theme": {
+      "de": "Farbschema",
+      "en": "Theme"
+   },
+   "Light or Dark, as your device is set.": {
+      "de": "Hell oder Dunkel, wie dein Gerät eingestellt ist.",
+      "en": "Light or Dark, as your device is set."
+   },
+   "Light green, the default.": {
+      "de": "Helles Grün, die Voreinstellung.",
+      "en": "Light green, the default."
+   },
+   "Dark green.": {
+      "de": "Dunkles Grün.",
+      "en": "Dark green."
+   },
+   "Warm parchment with ink and deep red.": {
+      "de": "Warmes Pergament mit Tinte und tiefem Rot.",
+      "en": "Warm parchment with ink and deep red."
+   },
+   "Charcoal and dark wood with ember orange.": {
+      "de": "Kohle und dunkles Holz mit Glutorange.",
+      "en": "Charcoal and dark wood with ember orange."
+   },
+   "Fire": {
+      "de": "Feuer",
+      "en": "Fire"
    }
 }

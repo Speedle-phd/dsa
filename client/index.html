@@ -6,13 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DSA5 Hero Sheets</title>
     <script>
-      // Theme before the first paint (same key as src/theme/themeStore.ts), so dark mode doesn't flash light.
+      // Theme before the first paint (same key and themes as src/theme/themeStore.ts and themes.ts), so nothing flashes.
       try {
         var stored = JSON.parse(localStorage.getItem('dsa5.theme') || '{}')
         var theme = (stored.state && stored.state.theme) || 'system'
-        var dark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-        document.documentElement.classList.toggle('dark', dark)
-        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+        if (theme === 'system') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        var modes = { light: 'light', dark: 'dark', parchment: 'light', ember: 'dark' }
+        var mode = modes[theme] || 'light'
+        document.documentElement.classList.toggle('dark', mode === 'dark')
+        if (theme === 'parchment' || theme === 'ember') document.documentElement.classList.add('theme-' + theme)
+        document.documentElement.style.colorScheme = mode
       } catch (error) {}
     </script>
   </head>

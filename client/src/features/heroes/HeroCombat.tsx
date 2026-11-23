@@ -25,7 +25,7 @@ import { ConditionBadge } from './WeaponRepair'
 import { conditionTooltip, statusInfo, statusTooltip } from './conditionInfo'
 import { useFightStore } from './fightStore'
 import { soulPowerSources, useActiveEffects } from './activeEffectsApi'
-import { speedBaseBreakdown, speedBaseValue } from './energy'
+import { speciesSpeed, speedBaseBreakdown, speedBaseValue } from './energy'
 import { DieIcon } from '@/components/DieIcon'
 import { throwColoredDice } from '@/components/diceEngine'
 import { heroInitiative } from './fightHelpers'
@@ -153,14 +153,6 @@ function totalDamage(damage: string, bonus: number | null) {
    if (!match) return `${damage} + ${bonus}`
    const total = Number(match[2] ?? 0) + bonus
    return `${match[1]}${total > 0 ? '+' : ''}${total === 0 ? '' : total}`
-}
-
-// source: DSA5 Regelwerk, S. 40 (unknown/custom species require an explicit base)
-function speciesSpeed(species: string) {
-   const name = species.trim().toLowerCase()
-   if (['zwerg', 'zwerge', 'dwarf', 'dwarves'].includes(name)) return 6
-   if (['mensch', 'menschen', 'human', 'elf', 'elfen', 'halbelf', 'half-elf'].includes(name)) return 8
-   return null
 }
 
 export function HeroCombat({ hero }: { hero: Hero }) {

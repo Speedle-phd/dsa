@@ -1,6 +1,8 @@
 // Shared party fight (encounter): initiative order, turns, NPC damage and tokens. Pure functions, tested without a DB.
 
-export type EncounterSide = 'hero' | 'npc'
+export type EncounterSide = 'hero' | 'npc' | 'ally'
+// Heroes and their allies (companions, summons, Radau) fight together against the NPCs
+export const sideOf = (kind: EncounterSide) => kind === 'npc' ? 'foes' : 'party'
 export type RuleCombatant = {
    id: string
    kind: EncounterSide
@@ -72,9 +74,118 @@ export function tokenAssignment(existing: ReadonlyArray<{ kind: EncounterSide; g
 // The GM changes everything; a player moves the token and sets the INI of their own hero only (user decision, Nov 2026).
 export function canControlCombatant(role: 'gm' | 'member' | 'pending' | null, viewerId: string, combatant: Pick<RuleCombatant, 'kind' | 'userId'>) {
    if (role === 'gm') return true
-   return role === 'member' && combatant.kind === 'hero' && combatant.userId === viewerId
+   return role === 'member' && combatant.kind !== 'npc' && combatant.userId === viewerId
 }
 
 export function clampPosition(position: { x: number; y: number }, board: { width: number; height: number }) {
    return position.x >= 0 && position.y >= 0 && position.x < board.width && position.y < board.height
 }
+
+// NPC defense against a hero's attack (the GM rolls it). source: DSA5 Regelwerk, S. 232 (−3 per further defense in the KR),
+// S. 354 (VW of creatures is not lowered by several defenses), S. 243–244 (shot −4, thrown weapon −2),
+// S. 231 (a critical attack halves the defense, rounded up; the client's defenseTarget does the same)
+export type NpcDefenseKind = 'parry' | 'dodge' | 'defense'
+export type Incoming = 'melee' | 'shot' | 'thrown'
+export const incomingDefenseModifier: Record<Incoming, number> = { melee: 0, shot: -4, thrown: -2 }
+export function npcDefenseTarget({ value, kind, previousDefenses, attackerCritical, incoming }: {
+   value: number; kind: NpcDefenseKind; previousDefenses: number; attackerCritical: boolean; incoming: Incoming
+}) {
+   const penalty = kind === 'defense' ? 0 : 3 * previousDefenses
+   const reduced = value + incomingDefenseModifier[incoming] - penalty
+   return attackerCritical ? Math.ceil(reduced / 2) : reduced
+}
+// Defenses an NPC already made in this Kampfrunde (the counter resets with the round)
+export function previousDefenses(defenses: { round: number; count: number } | null | undefined, round: number) {
+   return defenses && defenses.round === round ? defenses.count : 0
+}
+
+// Melee on the board: only against a combatant on one of the 8 neighbouring squares (user decision, Nov 2026, house rule:
+// the core rules have no grid). Both tokens must be on the board.
+export function isAdjacent(a: { x: number; y: number } | null | undefined, b: { x: number; y: number } | null | undefined) {
+   if (!a || !b) return false
+   const distance = Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y))
+   return distance === 1
+}
+
+// ---- Turn flow (user decisions, Nov 2026): only the active combatant acts; 1 action + 1 free action per KR (S. 228)
+// dual: the first strike of a two-weapon attack is done, the second may follow (S. 238); bonus: squares granted by Flucht (S. 237)
+export type TurnState = { round: number; action: boolean; free: boolean; dual?: boolean; bonus?: number }
+// Unused actions this round (a stored state from an earlier round counts as fresh)
+export function actionsLeft(turn: TurnState | null | undefined, round: number) {
+   const current = turn && turn.round === round ? turn : null
+   return { action: !current?.action, free: !current?.free }
+}
+// A move up to GS uses the free action, a second one the action (sprint, S. 228–229); null when nothing is left
+export function moveCost(turn: TurnState | null | undefined, round: number): 'free' | 'action' | null {
+   const left = actionsLeft(turn, round)
+   return left.free ? 'free' : left.action ? 'action' : null
+}
+export function spend(turn: TurnState | null | undefined, round: number, kind: 'free' | 'action'): TurnState {
+   const left = actionsLeft(turn, round)
+   const current = turn && turn.round === round ? turn : null
+   return { dual: current?.dual ?? false, bonus: current?.bonus ?? 0, round, action: kind === 'action' ? true : !left.action, free: kind === 'free' ? true : !left.free }
+}
+// The turn is over once the action is used, unless a second strike or a Flucht move is still open
+export function turnDone(turn: TurnState | null | undefined, round: number) {
+   const current = turn && turn.round === round ? turn : null
+   return !actionsLeft(turn, round).action && !current?.dual && !(current?.bonus ?? 0)
+}
+
+// Terrain squares the GM paints on the board; tokens cannot enter them (user decision: movement only)
+export const obstacleKinds = ['wall', 'rock', 'tree', 'water', 'bush', 'fire'] as const
+export type ObstacleKind = (typeof obstacleKinds)[number]
+
+// Shortest path in squares around blocked squares (8 directions, a diagonal step = 1 Schritt, app choice).
+// Returns the number of steps, or null when the target cannot be reached within `limit`.
+export function pathLength(board: { width: number; height: number }, blocked: ReadonlySet<string>,
+   from: { x: number; y: number }, to: { x: number; y: number }, limit: number) {
+   const key = (x: number, y: number) => `${x}:${y}`
+   if (blocked.has(key(to.x, to.y))) return null
+   if (from.x === to.x && from.y === to.y) return 0
+   let frontier = [from]
+   const seen = new Set([key(from.x, from.y)])
+   for (let steps = 1; steps <= limit && frontier.length; steps++) {
+      const next: Array<{ x: number; y: number }> = []
+      for (const cell of frontier) {
+         for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+            const x = cell.x + dx, y = cell.y + dy
+            if ((!dx && !dy) || x < 0 || y < 0 || x >= board.width || y >= board.height) continue
+            const id = key(x, y)
+            if (seen.has(id) || blocked.has(id)) continue
+            if (x === to.x && y === to.y) return steps
+            seen.add(id)
+            next.push({ x, y })
+         }
+      }
+      frontier = next
+   }
+   return null
+}
+
+// Squares between two tokens, a diagonal step = 1 Schritt (app choice, as for movement)
+export function boardDistance(a: { x: number; y: number } | null | undefined, b: { x: number; y: number } | null | undefined) {
+   if (!a || !b) return null
+   return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y))
+}
+// Melee reach on the board: neighbouring squares; weapons with Reichweite lang also 2 squares away
+// (house rule, user decision Nov 2026; the core rules have no grid)
+export function inMeleeReach(a: { x: number; y: number } | null | undefined, b: { x: number; y: number } | null | undefined, reach: 'short' | 'medium' | 'long' = 'medium') {
+   const distance = boardDistance(a, b)
+   return distance !== null && distance >= 1 && distance <= (reach === 'long' ? 2 : 1)
+}
+// source: DSA5 Regelwerk, S. 241 (in melee = in Angriffsdistanz and exchanging attacks or defenses; such a fighter cannot shoot).
+// On the board: an opponent on a neighbouring square that attacked or was attacked by this combatant this or the last KR.
+export function engagedWith(id: string, round: number, combatants: ReadonlyArray<{ id: string; position: { x: number; y: number } | null }>,
+   attacks: ReadonlyArray<{ attackerId: string; targetId: string; round: number; status: string }>) {
+   const self = combatants.find((entry) => entry.id === id)
+   if (!self?.position) return []
+   const partners = new Set(attacks.filter((attack) => attack.status !== 'cancelled' && attack.round >= round - 1 && (attack.attackerId === id || attack.targetId === id))
+      .map((attack) => attack.attackerId === id ? attack.targetId : attack.attackerId))
+   return combatants.filter((entry) => partners.has(entry.id) && isAdjacent(self.position, entry.position)).map((entry) => entry.id)
+}
+
+// Board scale (user decision, Nov 2026): one square stands for `scale` Schritt (default 1). A move of GS Schritt covers
+// ⌊GS ÷ scale⌋ squares; distances in Schritt are squares × scale.
+export const defaultScale = 1
+export const squaresFor = (schritt: number, scale = defaultScale) => Math.floor(schritt / Math.max(1, scale))
+export const schrittFor = (squares: number, scale = defaultScale) => squares * Math.max(1, scale)

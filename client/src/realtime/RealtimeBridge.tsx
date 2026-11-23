@@ -25,6 +25,7 @@ export function RealtimeBridge() {
          resubscribeParties()
          void queryClient.invalidateQueries({ queryKey: ['parties'] })
          void queryClient.invalidateQueries({ queryKey: ['party-sheet'] })
+         void queryClient.invalidateQueries({ queryKey: ['encounter'] })
       }
       socket.on('notice', onNotice)
       socket.on('connect', onConnect)

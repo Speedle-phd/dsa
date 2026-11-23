@@ -46,6 +46,12 @@ export type Fight = {
    turn?: ActionUse
    // A spell being cast as a longer action (S. 228–229)
    casting?: Casting | null
+   // Set when this panel fights in a party fight (user decision, Nov 2026): a new or ended party fight resets the panel
+   party?: { partyId: string; encounterId: string }
+   // Hits of the party fight already taken into this panel (casting disturbance, log)
+   seenHits?: string[]
+   // A party-fight hit raised the Schmerz: Blutrausch is offered (S. 171), never set automatically
+   rageOffer?: string | null
 }
 
 type FightStore = {

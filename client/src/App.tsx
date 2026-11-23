@@ -11,6 +11,8 @@ import { ScrollToTopButton } from './components/ScrollToTopButton'
 import { Parties } from './pages/Parties'
 import { PartyPage } from './pages/PartyPage'
 import { PartySheet } from './pages/PartySheet'
+import { FightPage } from './pages/FightPage'
+import { PrepareFightPage } from './pages/PrepareFightPage'
 import { JoinParty } from './pages/JoinParty'
 import { Settings } from './pages/Settings'
 import { RealtimeBridge } from './realtime/RealtimeBridge'
@@ -73,6 +75,22 @@ function App() {
                element={
                   <ProtectedRoute>
                      <PartyPage />
+                  </ProtectedRoute>
+               }
+            />
+            <Route
+               path='/parties/:partyId/fight'
+               element={
+                  <ProtectedRoute>
+                     <FightPage />
+                  </ProtectedRoute>
+               }
+            />
+            <Route
+               path='/parties/:partyId/fight/prepare/:encounterId'
+               element={
+                  <ProtectedRoute>
+                     <PrepareFightPage />
                   </ProtectedRoute>
                }
             />

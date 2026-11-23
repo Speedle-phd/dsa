@@ -9,6 +9,7 @@ function translateDynamicServerError(message: string, language: 'de' | 'en') {
          'Remove dependent combat abilities first: {names}.',
       ],
       [/^Remove dependent entries first: (.+)\.$/, 'Remove dependent entries first: {names}.'],
+      [/^Every combatant needs an INI first: (.+)\.$/, 'Every combatant needs an INI first: {names}.'],
       [
          /^(.+?) current value cannot exceed its maximum value\.$/,
          '{name} current value cannot exceed its maximum value.',

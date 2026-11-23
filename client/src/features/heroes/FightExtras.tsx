@@ -1,5 +1,5 @@
 import { Dices, Flag, Footprints, HeartCrack, Info, ShieldHalf, Swords, Telescope } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { throwColoredDice } from '@/components/diceEngine'
 import { Tooltip } from '@/components/Tooltip'
 import { useLanguageStore } from '@/locales/languageStore'
@@ -13,6 +13,7 @@ import { ProbeStepper } from './ProbeDialog'
 import type { Stats } from './statsApi'
 import { talentCatalog } from './talentCatalog'
 import { TalentProbeDialog } from './TalentProbeDialog'
+import { useTurnGate } from './turnGate'
 
 const damageColor = '#b7791f'
 export type ApplyDamage = (sp: number, key: string, values: Record<string, string | number>) => void
@@ -170,10 +171,13 @@ export function PatzerResolver({ stats, heroId, fight, table, unarmed, dodge, we
 
 // source: DSA5 Regelwerk, S. 237 (Flucht: 1 action, Körperbeherrschung (Kampfmanöver) − enemies in reach; failure: GS/2 and a Passierschlag)
 // source: DSA5 Regelwerk, S. 237 (breaking away costs 1 action)
-export function FleeAction({ stats, heroId, speed, actionReason }: { stats: Stats; heroId: string; speed: number | null; actionReason: string | null }) {
+// In a party fight the Flucht is the action and grants the move on the board: GS, or GS/2 on a failure (S. 237)
+export function FleeAction({ stats, heroId, fight, speed }: { stats: Stats; heroId: string; fight: Fight; speed: number | null }) {
    const language = useLanguageStore((state) => state.language)
    const log = useFightStore((state) => state.log)
-   const spend = useFightStore((state) => state.spend)
+   const gate = useTurnGate(heroId, fight)
+   const actionReason = gate.reason('action')
+   const outcome = useRef<boolean | null>(null)
    const [open, setOpen] = useState(false)
    const [enemies, setEnemies] = useState(1)
    const [rolling, setRolling] = useState(false)
@@ -185,7 +189,7 @@ export function FleeAction({ stats, heroId, speed, actionReason }: { stats: Stat
             <span>{t('Enemies in reach', language)}</span>
             <ProbeStepper value={enemies} min={0} max={10} label={t('Enemies in reach', language)} lowerLabel={t('Less', language)} raiseLabel={t('More', language)} onChange={setEnemies} />
          </div>
-         <button className='primary-button' type='button' disabled={actionReason !== null} onClick={() => { spend(heroId, 'action'); setRolling(true) }}>{t('Körperbeherrschung (Kampfmanöver)', language)}</button>
+         <button className='primary-button' type='button' disabled={actionReason !== null} onClick={() => { outcome.current = null; setRolling(true) }}>{t('Körperbeherrschung (Kampfmanöver)', language)}</button>
          {actionReason && <small className='fight-note'>{t(actionReason, language)}</small>}
          <button className='quiet-button' type='button' onClick={() => setOpen(false)}>{t('Cancel', language)}</button>
       </>}
@@ -193,11 +197,20 @@ export function FleeAction({ stats, heroId, speed, actionReason }: { stats: Stat
          extraSources={enemies ? [{ label: 'Enemies in reach', value: -enemies }] : []}
          renderResult={({ result }) => {
             const gs = speed ?? 0
+            outcome.current = result.success
             return <p className={`fight-note${result.success ? '' : ' fight-danger'}`}>{result.success
                ? t('You break away and may move up to {gs} paces.', language).replace('{gs}', () => String(gs))
                : t('Only {gs} paces (GS/2), and one enemy in reach gets a Passierschlag.', language).replace('{gs}', () => String(Math.floor(gs / 2)))}</p>
          }}
-         onClose={() => { setRolling(false); setOpen(false); log(heroId, 'Flight attempt against {enemies} enemies', { enemies }) }} />}
+         onClose={() => {
+            setRolling(false)
+            setOpen(false)
+            if (outcome.current === null) return
+            const gs = speed ?? 0
+            const move = outcome.current ? gs : Math.floor(gs / 2)
+            void gate.spend('action', 'Flucht', outcome.current ? '' : 'GS/2', move > 0 ? move : undefined)
+            log(heroId, 'Flight attempt against {enemies} enemies', { enemies })
+         }} />}
    </div>
 }
 

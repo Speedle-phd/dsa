@@ -24,7 +24,7 @@
       /* Status colours for text and tinted pills: harder/error, easier/success, warning. */
       --danger: 4 77% 40%;
       --success: 158 90% 24%;
-      --warning: 36 71% 40%;
+      --warning: 36 75% 33%;
       color-scheme: light;
       --text-50: 150 20% 97%;
       --text-100: 148 14% 92%;
@@ -54,7 +54,7 @@
       --primary-300: 148 19% 70%;
       --primary-400: 154 21% 56%;
       --primary-500: 158 24% 45%;
-      --primary-600: 160 26% 39%;
+      --primary-600: 160 28% 36%;
       --primary-700: 161 28% 34%;
       --primary-800: 162 30% 26%;
       --primary-900: 163 32% 18%;
@@ -75,6 +75,8 @@
       --accent-200: 40 68% 78%;
       --accent-300: 39 66% 64%;
       --accent-400: 38 64% 50%;
+      /* lucide Sword (ISC), used as a mask for <summary> */
+      --summary-sword: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='14.5 17.5 3 6 3 3 6 3 17.5 14.5'/%3E%3Cline x1='13' x2='19' y1='19' y2='13'/%3E%3Cline x1='16' x2='20' y1='16' y2='20'/%3E%3Cline x1='19' x2='21' y1='21' y2='19'/%3E%3C/svg%3E");
       --accent-500: 37 70% 41%;
       --accent-600: 36 66% 33%;
       --accent-700: 35 59% 28%;
@@ -89,7 +91,7 @@
       --text-300: 150 11% 30%;
       --text-400: 144 8% 38%;
       --text-500: 145 8% 46%;
-      --text-600: 145 8% 58%;
+      --text-600: 145 8% 61%;
       --text-700: 145 9% 72%;
       --text-800: 146 11% 84%;
       --text-900: 148 14% 92%;
@@ -144,11 +146,169 @@
       --warning: 38 80% 64%;
       color-scheme: dark;
    }
+   /* Parchment (light, user decision Nov 2026): warm parchment, ink-brown text, deep red as the main colour, gold accents.
+      Values are an app choice; the contrast of the pairs the app renders is checked in src/theme/themes.test.ts. */
+   .theme-parchment {
+      --shadow-color: 28 35% 14%;
+      --danger: 4 78% 36%;
+      --success: 140 62% 24%;
+      --warning: 32 80% 32%;
+      color-scheme: light;
+      --text-50: 40 40% 97%;
+      --text-100: 38 28% 91%;
+      --text-200: 36 20% 83%;
+      --text-300: 34 14% 71%;
+      --text-400: 32 11% 57%;
+      --text-500: 30 12% 42%;
+      --text-600: 28 15% 34%;
+      --text-700: 26 20% 27%;
+      --text-800: 25 25% 21%;
+      --text-900: 24 32% 15%;
+      --text-950: 22 38% 9%;
+      --background-50: 42 52% 96%;
+      --background-100: 40 44% 90%;
+      --background-200: 38 34% 84%;
+      --background-300: 36 26% 76%;
+      --background-400: 34 18% 64%;
+      --background-500: 32 13% 50%;
+      --background-600: 30 14% 38%;
+      --background-700: 28 17% 28%;
+      --background-800: 26 21% 19%;
+      --background-900: 24 25% 12%;
+      --background-950: 22 30% 7%;
+      --primary-50: 0 55% 97%;
+      --primary-100: 358 50% 92%;
+      --primary-200: 356 44% 84%;
+      --primary-300: 354 40% 71%;
+      --primary-400: 352 42% 56%;
+      --primary-500: 352 50% 44%;
+      --primary-600: 352 58% 36%;
+      --primary-700: 352 62% 30%;
+      --primary-800: 352 64% 23%;
+      --primary-900: 352 66% 16%;
+      --primary-950: 352 68% 9%;
+      --secondary-50: 34 40% 96%;
+      --secondary-100: 32 34% 90%;
+      --secondary-200: 30 28% 81%;
+      --secondary-300: 28 24% 68%;
+      --secondary-400: 26 24% 54%;
+      --secondary-500: 25 28% 42%;
+      --secondary-600: 24 32% 33%;
+      --secondary-700: 23 36% 26%;
+      --secondary-800: 22 40% 19%;
+      --secondary-900: 21 42% 13%;
+      --secondary-950: 20 44% 8%;
+      --accent-50: 44 82% 95%;
+      --accent-100: 42 74% 87%;
+      --accent-200: 41 70% 77%;
+      --accent-300: 40 66% 63%;
+      --accent-400: 39 64% 49%;
+      --accent-500: 38 72% 38%;
+      --accent-600: 36 68% 31%;
+      --accent-700: 35 62% 26%;
+      --accent-800: 33 60% 20%;
+      --accent-900: 30 56% 13%;
+      --accent-950: 28 52% 8%;
+   }
+   /* Ember (dark, user decision Nov 2026): charcoal and dark wood with ember orange as the main colour. Dark themes keep
+      the class `dark` on <html> as well, so every dark-mode rule applies; this block only swaps the colours. */
+   .theme-ember {
+      --shadow-color: 0 0% 0%;
+      --danger: 2 88% 72%;
+      --success: 145 50% 62%;
+      --warning: 42 88% 64%;
+      color-scheme: dark;
+      --text-50: 18 22% 9%;
+      --text-100: 20 16% 15%;
+      --text-200: 22 13% 21%;
+      --text-300: 24 11% 28%;
+      --text-400: 26 9% 38%;
+      --text-500: 28 9% 50%;
+      --text-600: 30 11% 63%;
+      --text-700: 32 15% 74%;
+      --text-800: 34 20% 84%;
+      --text-900: 36 26% 91%;
+      --text-950: 38 34% 96%;
+      --background-50: 20 14% 13%;
+      --background-100: 18 17% 9%;
+      --background-200: 20 12% 18%;
+      --background-300: 22 10% 25%;
+      --background-400: 24 8% 35%;
+      --background-500: 25 7% 45%;
+      --background-600: 26 7% 57%;
+      --background-700: 28 9% 71%;
+      --background-800: 30 12% 83%;
+      --background-900: 32 16% 91%;
+      --background-950: 34 22% 97%;
+      --primary-50: 16 62% 9%;
+      --primary-100: 17 58% 15%;
+      --primary-200: 18 56% 22%;
+      --primary-300: 19 58% 30%;
+      --primary-400: 20 64% 40%;
+      --primary-500: 22 74% 50%;
+      --primary-600: 24 86% 58%;
+      --primary-700: 26 90% 65%;
+      --primary-800: 28 92% 76%;
+      --primary-900: 31 94% 87%;
+      --primary-950: 34 96% 95%;
+      --secondary-50: 22 30% 8%;
+      --secondary-100: 22 28% 13%;
+      --secondary-200: 23 26% 19%;
+      --secondary-300: 24 24% 26%;
+      --secondary-400: 25 22% 35%;
+      --secondary-500: 26 20% 45%;
+      --secondary-600: 27 22% 57%;
+      --secondary-700: 28 26% 70%;
+      --secondary-800: 29 30% 82%;
+      --secondary-900: 30 34% 90%;
+      --secondary-950: 31 40% 96%;
+      --accent-50: 28 52% 9%;
+      --accent-100: 30 55% 14%;
+      --accent-200: 33 58% 21%;
+      --accent-300: 35 59% 28%;
+      --accent-400: 36 66% 33%;
+      --accent-500: 37 70% 41%;
+      --accent-600: 38 64% 50%;
+      --accent-700: 39 66% 64%;
+      --accent-800: 40 68% 78%;
+      --accent-900: 40 70% 88%;
+      --accent-950: 42 80% 96%;
+   }
 }
 
 @layer base {
    * {
       box-sizing: border-box;
+   }
+   /* Fold-out sections: a small gold sword instead of the browser triangle; it swings down when open */
+   summary {
+      list-style: none;
+      cursor: pointer;
+   }
+   summary::-webkit-details-marker {
+      display: none;
+   }
+   summary::before {
+      content: '';
+      display: inline-block;
+      flex: none;
+      width: 1em;
+      height: 1em;
+      margin-right: 0.45em;
+      vertical-align: -0.14em;
+      background: hsl(var(--accent-500));
+      -webkit-mask: var(--summary-sword) center / contain no-repeat;
+      mask: var(--summary-sword) center / contain no-repeat;
+      rotate: 135deg;
+      transition: rotate 160ms ease;
+   }
+   details[open] > summary::before {
+      rotate: 225deg;
+   }
+   @media (prefers-reduced-motion: reduce) {
+      summary::before {
+         transition: none;
+      }
    }
    body {
       margin: 0;
@@ -396,7 +556,7 @@
    }
    .primary-button:disabled,
    .attribute-level-up-button:disabled {
-      cursor: wait;
+      cursor: not-allowed;
       opacity: 0.7;
    }
    .attribute-level-up-button {
@@ -459,7 +619,8 @@
       align-items: center;
       gap: 0.7rem;
       position: relative;
-      z-index: 2;
+      /* Above the sticky hero tab bar (20) so the theme menu opens over it; below the dice button (30) and dialogs (40) */
+      z-index: 25;
    }
    /* Header controls share the pill look of the main navigation: muted track, white active segment. */
    .language-toggle {
@@ -498,6 +659,85 @@
    .language-button:focus-visible {
       outline: 2px solid hsl(var(--primary-500));
       outline-offset: 1px;
+   }
+   /* Theme menu in the header */
+   .theme-menu-wrap {
+      position: relative;
+      display: inline-flex;
+   }
+   .theme-menu {
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      right: 0;
+      z-index: 80;
+      display: grid;
+      gap: 0.15rem;
+      min-width: 13rem;
+      padding: 0.35rem;
+      background: hsl(var(--background-50));
+      border: 1px solid hsl(var(--background-300));
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-raised);
+   }
+   .theme-menu-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 2.4rem;
+      padding: 0.35rem 0.55rem;
+      color: hsl(var(--text-900));
+      background: transparent;
+      border: 0;
+      border-radius: var(--radius-sm);
+      font: inherit;
+      font-size: var(--fs-sm);
+      text-align: left;
+      cursor: pointer;
+   }
+   .theme-menu-item:hover,
+   .theme-menu-item:focus-visible {
+      background: hsl(var(--primary-100));
+      outline: none;
+   }
+   .theme-menu-item:focus-visible {
+      box-shadow: inset 0 0 0 2px hsl(var(--primary-500));
+   }
+   .theme-menu-item[aria-checked='true'] {
+      font-weight: 700;
+   }
+   .theme-menu-check {
+      color: hsl(var(--primary-700));
+   }
+   /* Colour preview: page, card and main colour of the theme (fixed colours, outlined so they show on every theme) */
+   .theme-swatch {
+      display: inline-flex;
+      overflow: hidden;
+      width: 2.6rem;
+      height: 1.3rem;
+      border: 1px solid hsl(var(--text-400));
+      border-radius: 999px;
+   }
+   .theme-swatch > span {
+      flex: 1;
+   }
+   .settings-option .theme-swatch {
+      display: inline-flex;
+      gap: 0;
+   }
+   .settings-option .theme-swatch > span {
+      display: block;
+   }
+   .settings-theme-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+   }
+   .theme-swatch.is-device {
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--text-700));
+      background: hsl(var(--background-100));
    }
    .header-control {
       display: inline-grid;
@@ -1327,7 +1567,7 @@
       height: 2.15rem;
    }
    .equipment-row-actions .icon-button:disabled {
-      cursor: wait;
+      cursor: not-allowed;
       opacity: 0.55;
    }
    @media (max-width: 640px) {
@@ -6096,7 +6336,7 @@
       background: hsl(var(--primary-50));
    }
    .archetype-list button:disabled {
-      cursor: progress;
+      cursor: not-allowed;
       opacity: 0.6;
    }
    .archetype-list small {
@@ -7950,9 +8190,29 @@
       display: grid;
       gap: 0.75rem;
    }
-   .party-create {
+   /* A text field with its submit button in one row: same height, aligned at the bottom (label above the field) */
+   .party-create,
+   .inline-submit {
+      display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: end;
+      gap: 0.75rem;
+   }
+   .party-create input,
+   .inline-submit input,
+   .party-create > button,
+   .inline-submit > button {
+      height: 2.85rem;
+      min-height: 2.85rem;
+   }
+   .party-create + .party-muted {
+      margin: 0.6rem 0 0;
+   }
+   /* Cards stacked directly on a page (parties, party, settings, join) keep their distance */
+   .dashboard-content > .overview-section + .overview-section,
+   .dashboard-content > .overview-section + .state-panel,
+   .dashboard-content > .state-panel + .overview-section {
+      margin-top: 1rem;
    }
    .party-list {
       display: grid;
@@ -8095,8 +8355,746 @@
       color: hsl(var(--text-600));
    }
    @media (max-width: 640px) {
-      .party-create {
+      .party-create,
+      .inline-submit {
          grid-template-columns: minmax(0, 1fr);
       }
+   }
+
+   /* ---- Party fight: battle board, tokens, initiative tracker ---- */
+   /* The board needs room: the fight page uses the full width up to a large screen */
+   .dashboard-content.fight-content {
+      max-width: 110rem;
+      padding-inline: clamp(1rem, 3vw, 2.5rem);
+   }
+   .fight-page-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 1.25rem;
+      margin-bottom: 0.75rem;
+   }
+   .fight-page-head .back-link {
+      margin: 0;
+   }
+   .fight-page-head h1 {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+      font-size: var(--fs-lg, 1.25rem);
+   }
+   /* The board takes the view; tracker, GM tools and log scroll beside it (user feedback: less scrolling, board less dominant) */
+   .fight-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
+      gap: 1rem;
+      align-items: start;
+   }
+   .fight-side {
+      position: sticky;
+      top: 5rem;
+      display: grid;
+      gap: 0.9rem;
+      max-height: calc(100dvh - 6rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+   }
+   .fight-side > .overview-section {
+      margin: 0;
+   }
+   .fight-gm-tools > summary {
+      cursor: pointer;
+      font-weight: 700;
+   }
+   .fight-gm-tools[open] > summary {
+      margin-bottom: 0.75rem;
+   }
+   .fight-terrain {
+      display: grid;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      border: 0;
+   }
+   .fight-terrain legend {
+      margin-bottom: 0.35rem;
+      font-weight: 700;
+      font-size: var(--fs-sm);
+   }
+   .fight-terrain .probe-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+   }
+   .terrain-swatch {
+      width: 0.9rem;
+      height: 0.9rem;
+      border-radius: 0.2rem;
+   }
+   .fight-board-section,
+   .fight-tracker-section {
+      display: grid;
+      gap: 0.9rem;
+      min-width: 0;
+   }
+   .fight-toolbar {
+      display: grid;
+      gap: 0.75rem;
+   }
+   .fight-toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+   }
+   .fight-board-size {
+      font-size: var(--fs-sm);
+      color: hsl(var(--text-700));
+   }
+   .fight-board-size label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+   }
+   .fight-board-size input {
+      width: 4.25rem;
+      min-height: 2.25rem;
+      padding: 0 0.5rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+      color: hsl(var(--text-900));
+      font: inherit;
+   }
+   .battle-board-wrap {
+      display: grid;
+      gap: 0.6rem;
+      min-width: 0;
+   }
+   /* The dock with the current actions sits on top of the board */
+   /* The fight window floats over the board (user decision, Nov 2026): drag, minimize; on narrow screens it follows the board */
+   .battle-stage {
+      position: relative;
+      min-width: 0;
+   }
+   /* The board fits the view height; large boards scroll inside their frame, the page never scrolls sideways */
+   .battle-board-scroll {
+      overflow: auto;
+      max-height: calc(100dvh - 10rem);
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+   }
+   .battle-board {
+      display: grid;
+      width: max(min(100%, calc((100dvh - 10.5rem) * var(--board-columns) / var(--board-rows))), calc(var(--board-columns) * 1.75rem));
+      margin-inline: auto;
+      background-color: hsl(var(--background-100));
+      background-image:
+         linear-gradient(to right, hsl(var(--primary-200)) 1px, transparent 1px),
+         linear-gradient(to bottom, hsl(var(--primary-200)) 1px, transparent 1px);
+      background-size: calc(100% / var(--board-columns)) calc(100% / var(--board-rows));
+      cursor: crosshair;
+      touch-action: manipulation;
+   }
+   .battle-token {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 86%;
+      aspect-ratio: 1;
+      margin: auto;
+      padding: 0;
+      border: 2px solid hsl(0 0% 100% / 0.85);
+      border-radius: 999px;
+      color: #fff;
+      font-size: clamp(0.55rem, 1.3vw, 0.8rem);
+      font-weight: 800;
+      line-height: 1;
+      box-shadow: 0 2px 6px hsl(var(--shadow-color) / 0.35);
+      cursor: default;
+      user-select: none;
+      touch-action: none;
+   }
+   .battle-token.is-movable {
+      cursor: grab;
+   }
+   .battle-token.is-dragging {
+      opacity: 0.35;
+      cursor: grabbing;
+   }
+   .battle-token.is-ghost {
+      opacity: 0.75;
+      pointer-events: none;
+      outline: 2px dashed hsl(var(--text-900));
+      outline-offset: 2px;
+   }
+   .battle-token:focus-visible,
+   .battle-token.is-selected {
+      outline: 3px solid hsl(var(--primary-400));
+      outline-offset: 2px;
+   }
+   .battle-token.is-active {
+      box-shadow: 0 0 0 3px hsl(45 95% 55%), 0 2px 6px hsl(var(--shadow-color) / 0.35);
+   }
+   .battle-token.is-targeted {
+      box-shadow: 0 0 0 3px hsl(0 72% 50%), 0 0 0 6px hsl(0 72% 50% / 0.35);
+   }
+   .battle-board.is-painting {
+      cursor: cell;
+      touch-action: none;
+   }
+   .battle-board.is-painting .battle-token {
+      pointer-events: none;
+   }
+   /* Terrain (blocks movement); pattern + color, the name is in the label and tooltip */
+   /* Square tiles with an icon, so terrain never looks like a (round) token */
+   .battle-obstacle {
+      display: grid;
+      place-items: center;
+      margin: 1px;
+      border-radius: 0.15rem;
+      color: hsl(0 0% 100% / 0.9);
+      pointer-events: none;
+   }
+   .battle-obstacle svg {
+      width: 62%;
+      height: 62%;
+      max-width: 1.4rem;
+      max-height: 1.4rem;
+   }
+   .obstacle-wall {
+      background: repeating-linear-gradient(135deg, hsl(220 8% 42%) 0 4px, hsl(220 8% 32%) 4px 8px);
+   }
+   .obstacle-rock {
+      background: hsl(30 10% 45%);
+   }
+   .obstacle-tree {
+      background: hsl(130 40% 30%);
+   }
+   .obstacle-water {
+      background: repeating-linear-gradient(0deg, hsl(205 75% 45%) 0 5px, hsl(205 70% 55%) 5px 8px);
+   }
+   .obstacle-bush {
+      background: hsl(95 38% 40%);
+   }
+   /* Fire: blocks movement only (user decision); fire damage is not modelled */
+   .obstacle-fire {
+      color: hsl(8 85% 18%);
+      background: radial-gradient(circle at 50% 70%, hsl(45 95% 58%) 0 22%, hsl(28 95% 52%) 50%, hsl(8 80% 40%) 100%);
+   }
+   .battle-obstacle.is-preview {
+      opacity: 0.6;
+   }
+   .battle-obstacle.is-erasing {
+      background: hsl(0 72% 50% / 0.3);
+   }
+   /* Squares the own hero can reach this move (free action) or by sprinting (action) */
+   .battle-reach {
+      margin: 1px;
+      border-radius: 0.15rem;
+      background: hsl(150 60% 42% / 0.22);
+      pointer-events: none;
+   }
+   .battle-reach.is-sprint {
+      background: hsl(38 90% 50% / 0.25);
+   }
+   .battle-dock {
+      --dock-w: min(25rem, calc(100% - 1rem));
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 5;
+      display: grid;
+      align-content: start;
+      gap: 0.5rem;
+      width: var(--dock-w);
+      max-height: calc(100dvh - 8rem);
+      overflow-y: auto;
+      padding: 0.75rem 0.85rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-left-width: 5px;
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+      box-shadow: 0 10px 28px hsl(var(--shadow-color) / 0.28);
+      scrollbar-width: thin;
+   }
+   .battle-dock.is-turn {
+      border-left-color: hsl(45 90% 48%);
+   }
+   .battle-dock.is-defend {
+      border-left-color: hsl(0 66% 45%);
+   }
+   .battle-dock.is-placed {
+      top: var(--dock-y);
+      right: auto;
+      left: clamp(0px, var(--dock-x), calc(100% - var(--dock-w)));
+   }
+   /* Wide: two columns; fullscreen: the whole view, up to three columns (current action | panel | log) */
+   .battle-dock.is-wide {
+      --dock-w: min(52rem, calc(100% - 1rem));
+   }
+   .battle-dock.is-full {
+      position: fixed;
+      inset: 1rem;
+      z-index: 60;
+      width: auto;
+      max-height: none;
+      box-shadow: 0 24px 60px hsl(var(--shadow-color) / 0.45);
+   }
+   .battle-dock.is-full .battle-dock-head {
+      cursor: default;
+   }
+   .battle-dock.is-full .battle-dock-grip {
+      display: none;
+   }
+   .prepared-fights {
+      display: grid;
+      gap: 0.5rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed hsl(var(--primary-200));
+      text-align: left;
+   }
+   .prepared-fights h3 {
+      margin: 0;
+      font-size: var(--fs-md);
+   }
+   .prepared-fights ul {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .prepared-fights li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.5rem 0.65rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+   }
+   .prepared-fight-name {
+      display: grid;
+      min-width: 0;
+   }
+   .prepared-fight-name small {
+      color: hsl(var(--text-600));
+   }
+   .prepared-fight-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+   }
+   .prepared-fight-new {
+      flex: 1 1 14rem;
+   }
+   .fight-none {
+      display: grid;
+      gap: 0.9rem;
+      justify-items: start;
+   }
+   .battle-dock-tools {
+      display: flex;
+      gap: 0.25rem;
+   }
+   .battle-dock-body {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 23rem), 1fr));
+      align-items: start;
+      gap: 0.75rem 1.1rem;
+   }
+   .battle-dock-column {
+      display: grid;
+      align-content: start;
+      gap: 0.6rem;
+      min-width: 0;
+   }
+   .battle-dock-column > p {
+      margin: 0;
+   }
+   /* Minimized: as wide as its title needs (up to the board), the title on one line */
+   .battle-dock.is-minimized {
+      --dock-w: min(28rem, calc(100% - 1rem));
+      width: max-content;
+      max-width: calc(100% - 1rem);
+      padding-block: 0.4rem;
+   }
+   .battle-dock.is-minimized .battle-dock-head > div {
+      white-space: nowrap;
+   }
+   .battle-dock.is-dragging {
+      user-select: none;
+      box-shadow: 0 16px 36px hsl(var(--shadow-color) / 0.38);
+   }
+   .battle-dock-head {
+      display: grid;
+      grid-template-columns: auto auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: grab;
+      touch-action: none;
+   }
+   .battle-dock.is-dragging .battle-dock-head {
+      cursor: grabbing;
+   }
+   .battle-dock-grip {
+      cursor: grab;
+   }
+   .battle-dock-head .eyebrow {
+      margin: 0;
+   }
+   .battle-dock-head h2 {
+      margin: 0;
+      font-size: var(--fs-md, 1.05rem);
+      overflow-wrap: anywhere;
+   }
+   .battle-dock-body {
+      display: grid;
+      gap: 0.6rem;
+   }
+   .battle-dock-body[hidden] {
+      display: none;
+   }
+   .battle-dock-more {
+      padding-top: 0.5rem;
+      border-top: 1px dashed hsl(var(--primary-200));
+   }
+   .battle-dock-more > summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: var(--fs-sm);
+   }
+   .battle-dock-more[open] > summary {
+      margin-bottom: 0.5rem;
+   }
+   .battle-token.is-hero.is-ally,
+   .battle-token.is-hero.is-ally.is-mine {
+      border-style: dashed;
+   }
+   .fight-dock-tabs {
+      margin-bottom: 0.25rem;
+   }
+   .battle-dock .fight-panel,
+   .battle-dock .fight-card {
+      margin: 0;
+   }
+   .fight-dock-panel {
+      display: grid;
+      gap: 0.6rem;
+   }
+   .battle-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0;
+      font-size: var(--fs-xs);
+   }
+   .battle-actions span {
+      padding: 0.15rem 0.55rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: 999px;
+   }
+   .battle-actions .is-open {
+      border-color: hsl(150 50% 38%);
+      font-weight: 700;
+   }
+   .battle-actions .is-used {
+      color: hsl(var(--text-600));
+      text-decoration: line-through;
+   }
+   /* Heroes: light token with a dark ring; your own hero with a double ring */
+   .battle-token.is-hero {
+      border: 3px solid hsl(var(--primary-700));
+      background: hsl(var(--background-50));
+      color: hsl(var(--text-900));
+   }
+   .battle-token.is-hero.is-mine {
+      border-style: double;
+      border-width: 4px;
+   }
+   .battle-token.is-hidden {
+      border-style: dashed;
+      opacity: 0.6;
+   }
+   .battle-token.is-down {
+      filter: grayscale(1);
+      opacity: 0.55;
+   }
+   .battle-token.is-down::after {
+      position: absolute;
+      inset: 45% 5% auto;
+      height: 2px;
+      background: currentColor;
+      transform: rotate(-35deg);
+      content: "";
+   }
+   /* NPC types: eight distinct colors (white initials stay readable in both themes) */
+   .token-color-0 { background: hsl(0 66% 38%); }
+   .token-color-1 { background: hsl(215 72% 38%); }
+   .token-color-2 { background: hsl(145 62% 26%); }
+   .token-color-3 { background: hsl(275 48% 40%); }
+   .token-color-4 { background: hsl(25 85% 33%); }
+   .token-color-5 { background: hsl(185 75% 25%); }
+   .token-color-6 { background: hsl(325 60% 38%); }
+   .token-color-7 { background: hsl(220 18% 32%); }
+   .token-number {
+      position: absolute;
+      right: -0.3rem;
+      bottom: -0.3rem;
+      min-width: 1.05rem;
+      padding: 0.1rem 0.2rem;
+      border: 1px solid hsl(var(--text-900));
+      border-radius: 999px;
+      background: hsl(var(--background-50));
+      color: hsl(var(--text-900));
+      font-size: 0.62rem;
+      text-align: center;
+   }
+   .battle-token.is-badge {
+      width: 2rem;
+      height: 2rem;
+      flex: none;
+      margin: 0;
+      font-size: 0.7rem;
+   }
+   .battle-tray {
+      display: grid;
+      gap: 0.4rem;
+   }
+   .battle-tray-label {
+      font-size: var(--fs-sm);
+      font-weight: 700;
+   }
+   .battle-tray ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .battle-tray li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: var(--fs-sm);
+   }
+   .battle-tray .battle-token {
+      width: 2.4rem;
+      margin: 0;
+   }
+   .battle-hint {
+      margin: 0;
+      color: hsl(var(--text-600));
+      font-size: var(--fs-xs);
+   }
+   .battle-unplace {
+      min-height: 2rem;
+      margin-left: 0.4rem;
+      padding: 0.2rem 0.6rem;
+      font-size: var(--fs-xs);
+   }
+   .initiative-list {
+      display: grid;
+      gap: 0.4rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .initiative-row {
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+   }
+   .initiative-row.is-active {
+      border-color: hsl(45 85% 45%);
+      box-shadow: inset 4px 0 0 hsl(45 90% 50%);
+   }
+   .initiative-row-main {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.5rem 0.65rem;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+   }
+   .initiative-name {
+      display: grid;
+      flex: 1;
+      min-width: 0;
+   }
+   .initiative-name strong {
+      overflow-wrap: anywhere;
+   }
+   .initiative-name small {
+      color: hsl(var(--text-600));
+   }
+   .initiative-value {
+      min-width: 2rem;
+      font-size: var(--fs-lg);
+      font-weight: 800;
+      text-align: right;
+   }
+   .initiative-controls {
+      display: grid;
+      gap: 0.6rem;
+      padding: 0.6rem 0.65rem 0.75rem;
+      border-top: 1px solid hsl(var(--primary-200));
+   }
+   .initiative-own,
+   .initiative-gm {
+      display: grid;
+      gap: 0.55rem;
+   }
+   .initiative-manual {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: var(--fs-sm);
+   }
+   .initiative-check {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: var(--fs-sm);
+   }
+   .initiative-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.9rem;
+      margin: 0;
+      font-size: var(--fs-sm);
+   }
+   .initiative-stats div {
+      display: flex;
+      gap: 0.3rem;
+   }
+   .initiative-stats dt {
+      color: hsl(var(--text-600));
+      font-weight: 700;
+   }
+   .initiative-stats dd {
+      margin: 0;
+   }
+   .npc-form {
+      display: grid;
+      gap: 0.75rem;
+      padding: 0.9rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-100));
+   }
+   .npc-form-sources,
+   .npc-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 7.5rem), 1fr));
+      gap: 0.6rem;
+   }
+   .npc-form-sources {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+   }
+   .npc-form-name {
+      grid-column: span 2;
+   }
+   @media (max-width: 1100px) {
+      .fight-layout {
+         grid-template-columns: minmax(0, 1fr);
+      }
+      .fight-side {
+         position: static;
+         max-height: none;
+         overflow: visible;
+      }
+   }
+   /* Narrow screens: the actions follow the board */
+   @media (max-width: 860px) {
+      .battle-dock,
+      .battle-dock.is-placed,
+      .battle-dock.is-wide {
+         position: static;
+         width: auto;
+         max-height: none;
+         margin-top: 0.6rem;
+      }
+      .battle-dock.is-full {
+         position: fixed;
+         inset: 0.5rem;
+         margin: 0;
+      }
+      .battle-dock-width {
+         display: none;
+      }
+      .battle-dock-head {
+         cursor: default;
+         touch-action: auto;
+      }
+      .battle-dock-grip {
+         display: none;
+      }
+   }
+   @media (max-width: 640px) {
+      .npc-form-name {
+         grid-column: 1 / -1;
+      }
+   }
+
+   /* ---- Party fight: attacks between heroes and opponents ---- */
+   .fight-card.is-incoming {
+      border-color: hsl(0 66% 45%);
+      box-shadow: inset 4px 0 0 hsl(0 66% 45%);
+   }
+   .fight-incoming {
+      display: grid;
+      gap: 0.35rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid hsl(0 66% 45% / 0.45);
+      border-radius: var(--radius-md);
+      background: hsl(0 66% 45% / 0.08);
+      font-size: var(--fs-sm);
+   }
+   .fight-incoming .quiet-button {
+      justify-self: start;
+   }
+   .pending-attack {
+      display: grid;
+      gap: 0.4rem;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+   }
+   .pending-attack > small {
+      color: hsl(var(--text-600));
+   }
+   .npc-attack {
+      display: grid;
+      gap: 0.55rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed hsl(var(--primary-200));
+   }
+   .npc-attack .field-group {
+      min-width: 9rem;
+   }
+   .dashboard-content.fight-content .fight-log {
+      margin: 0;
+   }
+   /* An action that cannot be taken right now says so (user feedback, Nov 2026); the busy cursor only while something
+      really loads (aria-busy). Last in the components layer so it wins over the buttons' own pointer cursor. */
+   :is(button, select, input, textarea):disabled {
+      cursor: not-allowed;
+   }
+   :is(button, select, input, textarea):disabled[aria-busy='true'] {
+      cursor: wait;
    }
 }

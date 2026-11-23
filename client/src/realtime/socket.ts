@@ -6,6 +6,7 @@ export type RealtimeNotice =
    | { topic: 'hero'; charId: string }
    | { topic: 'party'; partyId: string }
    | { topic: 'parties' }
+   | { topic: 'encounter'; partyId: string }
 type CommandAck = { ok: true } | { ok: false; error: string }
 type ServerToClientEvents = { notice: (notice: RealtimeNotice) => void }
 type ClientToServerEvents = {

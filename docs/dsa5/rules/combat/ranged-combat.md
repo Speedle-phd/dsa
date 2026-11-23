@@ -32,6 +32,13 @@ source: DSA5 Regelwerk, S. 241–246, 249
 
 Load times (S. 245, 249): after the last load action the weapon is ready. 0 actions = 1 free action. A load time above 1 is a longer action, and a defense interrupts it (S. 228–229). Loaded crossbows only need a free action to be readied. Schnellladen: Bögen and Wurfwaffen −1 action, Armbrüste half.
 
+## Party fight on the board (user decisions, Nov 2026)
+
+- Distance band from the board distance in squares × the board's Schritt per square (diagonal 1, app choice) and the weapon range; beyond the maximum the app blocks the shot, because shots up to 1.5× the maximum are only unaimed area shots (S. 241) — the GM rules those by hand.
+- Target movement = squares in its last own turn, shooter movement = squares this turn (S. 242, "in letzter Handlung"); into melee = target next to one of the shooter's side.
+- "Im Nahkampf" (S. 241) = next to an opponent it attacked or was attacked by in this or the last KR; such a fighter cannot shoot (server-checked).
+- Aiming in a party fight is one action per step (+2, max +4) and counts for the next shot only.
+
 ## Edge cases
 
 - Geron example (S. 241) uses −1 for sight 1; the ranged sight table (S. 242) gives −2 (−1 is the melee value, S. 239). The table is right (user decision, Nov 2026).
