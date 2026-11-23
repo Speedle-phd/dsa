@@ -5,6 +5,7 @@
 #
 # Development (Vite + tsx watch, hot reload) adds compose.dev.yml:
 #   docker compose -f compose.yml -f compose.dev.yml up -d --build
+# The production server adds compose.server.yml (its host networks) via COMPOSE_FILE in its .env, see that file.
 
 services:
   client:
@@ -13,13 +14,11 @@ services:
       context: ./client
       dockerfile: Dockerfile
     restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
     depends_on:
       server:
         condition: service_healthy
-    networks:
-      rmgserver:
-        ipv4_address: 192.168.102.23
-      docker-default:
 
   server:
     image: dsa-server:prod
@@ -41,8 +40,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    networks:
-        - docker-default
     depends_on:
       mongo:
         condition: service_healthy
@@ -56,8 +53,6 @@ services:
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-dsa}
     volumes:
       - mongo_data:/data/db
-    networks:
-        - docker-default
     healthcheck:
       test:
         - CMD
@@ -79,11 +74,3 @@ volumes:
   client_node_modules:
   server_node_modules:
   mongo_data:
-
-networks:
-    docker-default:
-      external: true
-      name: docker-default
-    rmgserver:
-      external: true
-      name: vlan102_macvlan

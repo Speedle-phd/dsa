@@ -1,0 +1,28 @@
+# Production server only: the host's own Docker networks (they don't exist on other machines).
+# On the server, put this in its .env so a plain `docker compose up -d --build` loads both files:
+#   COMPOSE_FILE=compose.yml:compose.server.yml
+# The client gets a fixed address on the VLAN (macvlan) instead of a published port.
+
+services:
+  client:
+    ports: !reset []
+    networks:
+      rmgserver:
+        ipv4_address: 192.168.102.23
+      docker-default:
+
+  server:
+    networks:
+      - docker-default
+
+  mongo:
+    networks:
+      - docker-default
+
+networks:
+  docker-default:
+    external: true
+    name: docker-default
+  rmgserver:
+    external: true
+    name: vlan102_macvlan

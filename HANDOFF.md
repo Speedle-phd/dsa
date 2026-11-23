@@ -20,6 +20,7 @@ Both setups need the root `.env` (copy `.env.example`, set the MongoDB user/pass
 | MongoDB port | not published | `127.0.0.1:27017` for Compass/mongosh |
 
 - `compose.yml` is the production stack; `compose.dev.yml` is an overlay that swaps in the dev images, bind mounts and ports (`!override`). Without `-f … compose.dev.yml` you always get production.
+- `compose.server.yml` holds what only exists on the production server: its external networks `docker-default` and `vlan102_macvlan` (client at 192.168.102.23, no published port). The server's `.env` sets `COMPOSE_FILE=compose.yml:compose.server.yml`, so plain `docker compose up -d --build` loads it there. Keep host-specific settings out of `compose.yml`, or development breaks ("network … declared as external, but could not be found").
 - Both use the same compose project and the same `mongo_data` volume, so heroes and accounts are shared. Run one at a time: starting the other one recreates the `client`/`server` containers. Images are tagged separately (`dsa-*:prod` / `dsa-*:dev`), so switching doesn't rebuild.
 - The production server image runs `tsc --noEmit` during the build: a type error fails `docker compose up --build`.
 - Behind nginx the server sets `trust proxy` from `TRUST_PROXY` (1 in production, 0 in development) so the rate limit counts per user, not per proxy.
