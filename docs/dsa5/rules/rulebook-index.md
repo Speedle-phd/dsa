@@ -34,6 +34,7 @@ Check here first. Add new docs with the `/summarize-dsa-rule` prompt.
 | Götterwirken: Liturgien, Zeremonien, Segnungen, KaP-Kosten, Liturgieprobe | [karma/liturgies.md](karma/liturgies.md) | 154–159, 305–336 |
 | Begleiter, Tiere, Vertrautentiere und Vertrautentricks                       | [creatures/companions.md](creatures/companions.md)                               | 34, 278–280, 354–362 |
 | Bestiarium: Wesen, Dämonen/Elementare, Beschwörung, Spezialmanöver               | [creatures/bestiary.md](creatures/bestiary.md)                                   | 262–265, 353–362 |
+| NSC: Werteblock-Import, Generator, NSC-Manöver, Schmerz und Aktionen im Kampf     | [creatures/npcs.md](creatures/npcs.md)                                           | 34, 36, 247–250, 354 |
 | Schicksalspunkte (Schips), Eigenschaftsprobe                                 | [character/fate-points.md](character/fate-points.md)                             | 20–21, 29–31, 220–222 |
 
 Not yet covered: Waffen/Rüstungstabellen, Reiterkampf, Illusions-/Verwandlungsregeln (S. 258–259, nur Text), Brauen von Giften/Kräutern, Krankheiten/Gifte als Ablauf, Mirakel, Heilung (Stabilisieren, Heilmagie).

@@ -3816,6 +3816,39 @@
       outline: 3px solid hsl(var(--primary-300));
       outline-offset: 3px;
    }
+   /* Live connection lost for a moment: a pill at the bottom centre, between the corner buttons (dice launcher right),
+      so it never covers the header navigation; above the page but below dialogs */
+   .connection-banner {
+      position: fixed;
+      bottom: max(1.4rem, env(safe-area-inset-bottom));
+      left: 50%;
+      z-index: 45;
+      translate: -50% 0;
+      width: max-content;
+      max-width: min(28rem, calc(100% - 10rem));
+      pointer-events: none;
+   }
+   .connection-banner span {
+      display: inline-flex;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid hsl(var(--warning));
+      /* not a full pill: the text wraps on phones */
+      border-radius: 1.25rem;
+      background: hsl(var(--background-50));
+      color: hsl(var(--warning));
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      box-shadow: 0 8px 22px hsl(var(--shadow-color) / 0.2);
+      animation: scroll-top-in 160ms ease-out;
+   }
+   @media (prefers-reduced-motion: reduce) {
+      .connection-banner span {
+         animation: none;
+      }
+   }
    /* Party fight quicklink on the hero page: right-aligned directly above the dice launcher; back to top moves above it. */
    .fight-quicklink {
       position: fixed;
@@ -6211,6 +6244,29 @@
       flex-wrap: wrap;
       gap: 0.5rem;
    }
+   /* Anführer (S. 215): the allies the leader chooses in the Überreden result */
+   .fight-lead-targets {
+      display: grid;
+      gap: 0.5rem;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+   }
+   .fight-lead-targets legend {
+      margin-bottom: 0.5rem;
+      padding: 0;
+      font-weight: 700;
+   }
+   .fight-lead-targets .probe-chip {
+      max-width: 100%;
+      padding: 0.4rem 0.9rem;
+   }
+   .fight-lead-targets .fight-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+   }
    .fight-leader {
       display: flex;
       flex-wrap: wrap;
@@ -8453,6 +8509,558 @@
    }
    .fight-side > .overview-section {
       margin: 0;
+   }
+   /* Live presence: filled = connected, ring only = not connected (shape differs, not only colour) */
+   .online-dot {
+      display: inline-block;
+      flex: none;
+      width: 0.6rem;
+      height: 0.6rem;
+      margin-right: 0.4rem;
+      border: 2px solid hsl(var(--text-500));
+      border-radius: 999px;
+      vertical-align: 0.1em;
+   }
+   .online-dot.is-online {
+      border-color: hsl(var(--success));
+      background: hsl(var(--success));
+   }
+   .party-presence {
+      display: flex;
+      align-items: center;
+      margin: 0 0 1rem;
+      color: hsl(var(--text-600));
+      font-size: var(--fs-sm);
+   }
+   /* Board ping: a ring pulsing on the square for 2 s, with the name of who marked it */
+   .battle-ping {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      place-items: start center;
+      border: 3px solid hsl(var(--accent-500));
+      border-radius: var(--radius-sm);
+      box-shadow: 0 0 0 4px hsl(var(--accent-500) / 0.35);
+      pointer-events: none;
+      animation: battle-ping 0.7s ease-out 3;
+   }
+   .battle-ping small {
+      translate: 0 -120%;
+      padding: 0.05rem 0.35rem;
+      border-radius: 999px;
+      background: hsl(var(--accent-500));
+      color: hsl(var(--background-50));
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      white-space: nowrap;
+   }
+   @keyframes battle-ping {
+      from { box-shadow: 0 0 0 0 hsl(var(--accent-500) / 0.6); }
+      to { box-shadow: 0 0 0 12px hsl(var(--accent-500) / 0); }
+   }
+   @media (prefers-reduced-motion: reduce) {
+      .battle-ping {
+         animation: none;
+      }
+   }
+   /* GM check requests: the player's prompt cards stack at the bottom left (the dice launcher is bottom right) */
+   .check-prompts {
+      position: fixed;
+      left: max(1rem, env(safe-area-inset-left));
+      bottom: max(4.5rem, env(safe-area-inset-bottom));
+      z-index: 35;
+      display: grid;
+      gap: 0.6rem;
+      width: min(22rem, calc(100% - 6.5rem));
+   }
+   .check-prompts:empty {
+      display: none;
+   }
+   .check-prompt {
+      display: grid;
+      gap: 0.4rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid hsl(var(--accent-500));
+      border-left-width: 4px;
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+      box-shadow: 0 10px 28px hsl(var(--shadow-color) / 0.25);
+      animation: scroll-top-in 160ms ease-out;
+   }
+   .check-prompt h3 {
+      margin: 0;
+      font-size: var(--fs-md);
+   }
+   .check-prompt .eyebrow,
+   .check-prompt p {
+      margin: 0;
+   }
+   .check-prompt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+   }
+   @media (prefers-reduced-motion: reduce) {
+      .check-prompt {
+         animation: none;
+      }
+   }
+   .check-request-form {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+   }
+   .check-request-form > .primary-button {
+      justify-self: start;
+   }
+   .check-request-heroes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
+      margin: 0;
+      padding: 0;
+      border: 0;
+   }
+   .check-request-heroes legend {
+      margin-bottom: 0.35rem;
+      font-size: var(--fs-sm);
+      font-weight: 700;
+   }
+   .check-request-list {
+      display: grid;
+      gap: 0.6rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .check-request {
+      display: grid;
+      gap: 0.35rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid hsl(var(--background-200));
+      border-radius: var(--radius-md);
+   }
+   .check-request-head {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+   }
+   .check-request-head .icon-button {
+      margin-left: auto;
+   }
+   .check-request-head .party-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+   }
+   .check-request-results {
+      display: grid;
+      gap: 0.2rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: var(--fs-sm);
+   }
+   .check-request-results li {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+   }
+   .check-request-results li span:last-child {
+      font-weight: 600;
+      text-align: right;
+   }
+   .check-request-results li.is-open span:last-child,
+   .check-request-results li.is-declined span:last-child {
+      color: hsl(var(--text-600));
+      font-weight: 400;
+   }
+   .check-request-results li.is-failed span:last-child {
+      color: hsl(var(--danger));
+   }
+   .check-request-closed {
+      margin-top: 0.75rem;
+   }
+   .check-request-panel > summary {
+      font-weight: 700;
+   }
+   .check-request-panel[open] > summary {
+      margin-bottom: 0.75rem;
+   }
+   /* ---- NPC library, editor, import and generator (Nov 2026) ---- */
+   .npc-library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .npc-card {
+      display: grid;
+      align-content: start;
+      gap: 0.6rem;
+      min-width: 0;
+      padding: 1rem 1.1rem;
+      border: 1px solid hsl(var(--primary-200));
+      border-radius: var(--radius-md);
+      background: hsl(var(--background-50));
+   }
+   .npc-card header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 0.5rem;
+   }
+   .npc-card h2 {
+      margin: 0;
+      font-size: var(--fs-md);
+      overflow-wrap: anywhere;
+   }
+   .npc-card-weapons {
+      margin: 0;
+      color: hsl(var(--text-700));
+      font-size: var(--fs-sm);
+   }
+   .npc-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: auto;
+   }
+   .npc-card-actions .quiet-button {
+      margin-right: auto;
+   }
+   .npc-library-search {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 24rem;
+      margin: 0 0 1rem;
+      color: hsl(var(--text-600));
+   }
+   .npc-library-search input {
+      flex: 1;
+   }
+   .npc-library-bestiary select {
+      min-height: 2.5rem;
+   }
+   .npc-editor {
+      display: grid;
+      gap: 1rem;
+   }
+   .npc-editor-section {
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+   }
+   .npc-editor-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+   }
+   .npc-editor-add {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+   }
+   .npc-editor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+      gap: 0.75rem;
+   }
+   .npc-editor-grid .field-group.is-wide {
+      grid-column: span 2;
+   }
+   .npc-editor-section > .field-group.is-wide {
+      grid-column: auto;
+   }
+   .npc-editor-numbers {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 6rem), 1fr));
+   }
+   .npc-editor-attributes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+      gap: 0.6rem;
+      align-items: end;
+   }
+   .npc-editor-attributes .regen-toggle {
+      grid-column: 1 / -1;
+   }
+   .npc-weapon-list,
+   .npc-talent-list {
+      display: grid;
+      gap: 0.6rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   /* One weapon per row: name wide, numbers narrow, remove at the end; wraps on narrow screens */
+   .npc-weapon {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: end;
+      padding: 0.75rem;
+      border: 1px solid hsl(var(--background-200));
+      border-radius: var(--radius-md);
+   }
+   .npc-weapon > .field-group {
+      flex: 1 1 5.5rem;
+      min-width: 0;
+   }
+   .npc-weapon > .field-group.is-wide {
+      flex: 3 1 12rem;
+   }
+   .npc-weapon > .field-group:has(select) {
+      flex: 1.5 1 10.5rem;
+   }
+   .npc-weapon-remove {
+      align-self: end;
+      margin-bottom: 0.35rem;
+   }
+   /* The shared .icon-button is placed for the password field (grid column 2): undo that in the NPC lists */
+   .npc-weapon .icon-button,
+   .npc-talent-list .icon-button,
+   .npc-generator-weapons .icon-button {
+      grid-column: auto;
+      grid-row: auto;
+      margin-right: 0;
+   }
+   /* Inputs outside a .field-group get the same look as the form fields */
+   .npc-talent-list input,
+   .npc-ability-add input,
+   .npc-ability-add select,
+   .npc-pain-values input,
+   .npc-library-search input {
+      padding: 0.6rem 0.75rem;
+      color: hsl(var(--text-900));
+      background: hsl(var(--background-50));
+      border: 1px solid hsl(var(--background-300));
+      border-radius: var(--radius-sm);
+      outline: none;
+   }
+   .npc-talent-list input:focus,
+   .npc-ability-add input:focus,
+   .npc-ability-add select:focus,
+   .npc-pain-values input:focus,
+   .npc-library-search input:focus {
+      border-color: hsl(var(--primary-600));
+      box-shadow: 0 0 0 3px hsl(var(--primary-300) / 0.35);
+   }
+   .npc-talent-list li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 5rem auto;
+      gap: 0.5rem;
+      align-items: center;
+   }
+   .npc-abilities {
+      display: grid;
+      gap: 0.6rem;
+   }
+   .npc-abilities .party-chips li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+   }
+   .npc-chip-remove {
+      display: grid;
+      place-items: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: hsl(var(--text-600));
+      cursor: pointer;
+   }
+   .npc-chip-remove:hover {
+      background: hsl(var(--primary-100));
+   }
+   .npc-ability-add {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+   }
+   .npc-ability-add input,
+   .npc-ability-add select {
+      flex: 1 1 12rem;
+      min-height: 2.5rem;
+   }
+   .npc-pain {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      border: 0;
+   }
+   .npc-pain legend {
+      margin-bottom: 0.35rem;
+      font-weight: 700;
+      font-size: var(--fs-sm);
+   }
+   .npc-pain-values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+   }
+   .npc-pain-values input {
+      width: 5rem;
+   }
+   .npc-editor-warnings {
+      border-color: hsl(var(--warning));
+   }
+   .npc-editor-warnings h2 {
+      margin: 0;
+      color: hsl(var(--warning));
+      font-size: var(--fs-md);
+   }
+   .npc-editor-warnings code,
+   .npc-import-warnings code {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+   }
+   .npc-editor-actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      padding: 0.75rem 0;
+      background: hsl(var(--background-100));
+   }
+   .npc-import,
+   .npc-generator {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+   }
+   /* Both columns are cards of the same shape, so their tops and headings line up */
+   .npc-import-input {
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+   }
+   .npc-import .section-heading {
+      margin: 0;
+   }
+   .npc-import textarea {
+      min-height: 22rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--fs-sm);
+   }
+   .npc-import-preview,
+   .npc-generator-result {
+      position: sticky;
+      top: 5rem;
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+   }
+   .npc-import-preview p {
+      margin: 0;
+   }
+   .npc-import-counts {
+      display: grid;
+      gap: 0.2rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: var(--fs-sm);
+   }
+   .npc-import-warnings {
+      display: grid;
+      gap: 0.4rem;
+      color: hsl(var(--warning));
+      font-size: var(--fs-sm);
+   }
+   .npc-import-warnings p {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+   }
+   .npc-import-warnings ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: hsl(var(--text-800));
+   }
+   .npc-generator-inputs {
+      display: grid;
+      gap: 1rem;
+   }
+   .npc-generator-inputs .overview-section {
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+   }
+   .npc-generator-sub {
+      margin: 0;
+      font-size: var(--fs-sm);
+   }
+   .npc-generator-attributes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+      gap: 0.6rem;
+   }
+   .npc-generator-weapons {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .npc-generator-weapons li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 0.6rem;
+      align-items: center;
+   }
+   .npc-generator-weapons li > span {
+      display: grid;
+   }
+   .npc-generator-weapons small {
+      color: hsl(var(--text-600));
+      font-size: var(--fs-xs);
+   }
+   .npc-generator-values {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0;
+   }
+   .npc-generator-values dt {
+      font-weight: 700;
+   }
+   .npc-generator-values dd {
+      margin: 0;
+      color: hsl(var(--text-600));
+      font-size: var(--fs-xs);
+   }
+   .npc-form-preview {
+      margin: 0;
+      font-size: var(--fs-sm);
+   }
+   .npc-form-count {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: var(--fs-sm);
+      font-weight: 700;
+   }
+   .npc-form-library {
+      justify-self: start;
+   }
+   @media (max-width: 860px) {
+      .npc-import,
+      .npc-generator {
+         grid-template-columns: minmax(0, 1fr);
+      }
+      .npc-import-preview,
+      .npc-generator-result {
+         position: static;
+      }
    }
    /* GM overview of the heroes in the fight: one collapsible card per hero, key values in the summary line */
    .gm-hero-list {

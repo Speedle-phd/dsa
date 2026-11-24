@@ -4,7 +4,10 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { DashboardHeader } from '@/components/DashboardHeader'
 import { PageHeading } from '@/components/PageHeading'
+import { CheckRequestPanel } from '@/features/parties/CheckRequestPanel'
+import { OnlineDot } from '@/features/parties/OnlineDot'
 import { PartyMemberCard } from '@/features/parties/PartyMemberCard'
+import { usePresence } from '@/realtime/presence'
 import { partiesKey, rotateInviteCode, updateParty, useParty, type Party } from '@/features/parties/partyApi'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
@@ -36,6 +39,7 @@ function PartyContent({ party }: { party: Party }) {
    const pending = party.members.filter((member) => member.state === 'pending')
    const accepted = party.members.filter((member) => member.state === 'accepted')
    const ownPending = !isGm ? pending.filter((member) => member.isSelf) : []
+   const presence = usePresence(party.role === 'pending' ? '' : party._id)
 
    return <>
       <PageHeading Icon={UsersRound} title={party.name}
@@ -44,8 +48,11 @@ function PartyContent({ party }: { party: Party }) {
             <Link className='primary-button' to={`/parties/${party._id}/fight`}><Swords size={16} aria-hidden='true' />{t('Fight & battle board', language)}</Link>
          </div>}
       </PageHeading>
+      {!isGm && party.role === 'member' && presence && <p className='party-presence'>
+         <OnlineDot online={presence.gmOnline} />{t(presence.gmOnline ? 'The game master is online.' : 'The game master is offline.', language)}</p>}
       {party.status === 'archived' && <p className='state-panel'>{t('This party is archived.', language)}</p>}
       {isGm && <GmPanel party={party} />}
+      {party.role !== 'pending' && party.status === 'active' && <CheckRequestPanel party={party} />}
       {isGm && pending.length > 0 && <section className='overview-section'>
          <header className='section-heading'><h2>{t('Join requests', language)}</h2></header>
          <ul className='party-grid'>{pending.map((member) => <PartyMemberCard key={member.charId} party={party} member={member} />)}</ul>

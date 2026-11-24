@@ -1,20 +1,18 @@
-import { useQuery } from '@tanstack/react-query'
 import { Shield, Swords } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useScrollingDown } from '@/components/scrollHooks'
-import { getParties, partiesKey } from '@/features/parties/partyApi'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { useEncounter } from './encounterApi'
 import { fightCallout, type FightCallout } from './fightCallout'
+import { useMyPartyHeroes } from './myPartyFights'
 
 const labels: Record<FightCallout, string> = { defend: 'Defend!', initiative: 'Roll your initiative', turn: 'Your turn', fight: 'Party fight' }
 
 // Floating link above the dice launcher while the hero fights in its party (a hero is in at most one active party)
 export function FightQuicklink({ heroId }: { heroId: string }) {
-   const parties = useQuery({ queryKey: partiesKey, queryFn: getParties })
-   const party = parties.data?.find((entry) => entry.status === 'active' && entry.myHero?.charId === heroId && entry.myHero.state === 'accepted')
-   return party ? <PartyFightLink partyId={party._id} heroId={heroId} /> : null
+   const party = useMyPartyHeroes().find((entry) => entry.charId === heroId)
+   return party ? <PartyFightLink partyId={party.partyId} heroId={heroId} /> : null
 }
 
 function PartyFightLink({ partyId, heroId }: { partyId: string; heroId: string }) {

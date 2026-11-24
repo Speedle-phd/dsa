@@ -65,6 +65,7 @@ Traditions (S. 53–54), AP: Elfen 125, Gildenmagier 155, Hexen 135; Boron 130, 
 - User decisions, Nov 2026: server-side draft; all species, cultures and professions in phases (own profession from the start); a liturgy catalog for priests; culture bonuses and profession values add up (archetype Allacaya: Fährtensuchen 7 + 1 = 8), every value stays editable and lowering refunds (S. 45), EG caps apply to the total.
 - App choices, not user decisions:
    - FW cap during creation = the lower of the EG maximum and highest check attribute + 2 (S. 39); the same for spells (spell maximum) and combat techniques (Leiteigenschaft + 2).
+   - The EG limit "Zauber bzw. Liturgien" (S. 39) counts Zaubersprüche and Rituale only. Hexenflüche and Elfenlieder do not count, like Zaubertricks. The profession packages list them under Sonderfertigkeiten, not under Zauber ("Flüche für insgesamt N AP", S. 148–149; Freundschaftslied, S. 145). User decision, Nov 2026: S. 281 ("in allen Belangen wie Spruchzauber") could also be read the other way.
    - GM approvals (unusual culture, entries with an approval note, skipped "dringend empfohlen" species entries) are checkboxes; an unchecked one blocks "Finish".
    - The 80 AP advantage limit is enforced only during creation (S. 39, 46), not on purchases afterwards.
    - Finish without a database transaction (the app runs without a replica set): if the stats cannot be saved, the new character is deleted again.

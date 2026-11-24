@@ -27,7 +27,7 @@ import {
 import { rollD20 } from './d20'
 import { useFatePoint } from './fate'
 import { ConfirmationReroll, FateD20Actions, FateDamageReroll, FateRoundActions, type D20FateUse } from './FateActions'
-import { AmbushAction, FleeAction, LeaderBonus, PatzerResolver, StanceActions, type ApplyDamage } from './FightExtras'
+import { AmbushAction, FleeAction, LeaderAction, LeaderBonus, PatzerResolver, StanceActions, type ApplyDamage } from './FightExtras'
 import { actionBlocked, actionUse } from './fightActions'
 import { FightAllySection } from './FightAllySection'
 import { readPatzerTables, rollDamage, useSettings, useSummonFightOver, writePatzerTables } from './fightHelpers'
@@ -44,6 +44,7 @@ import type { Stats, TargetRule } from './statsApi'
 const attackColor = '#c0392b'
 const defenseColor = '#2563eb'
 const damageColor = '#b7791f'
+const tabLabels = { attack: 'Attack', magic: 'Magic', move: 'Flee', lead: 'Anführer' } as const
 
 type CombatRoll = D20Roll
 
@@ -147,9 +148,30 @@ function useAttack(stats: Stats, fight: Fight, option: AttackOption, { passing =
       value: option.base + check.total + sourceTotal(sources), rule: strongerRule(check.targetRule, mods.rule), tp: rangedMods?.tp ?? 0 }
 }
 
-function OptionChip({ stats, fight, option, active, onSelect }: { stats: Stats; fight: Fight; option: AttackOption; active: boolean; onSelect: () => void }) {
+// The opponent an attack goes to and the player's changes to the board's ranged situation; kept per weapon in the panel so the
+// weapon chip and the attack card show the same value
+type TargetChoice = { targetId: string; override: Partial<RangedSituation> }
+const noChoice: TargetChoice = { targetId: '', override: {} }
+
+// Melee only against opponents in reach on the board (neighbours; Reichweite lang 2 squares, house rule); ranged at any opponent.
+// The board suggests distance, movement and "into melee" (S. 241–242); the player may change them for this attack.
+function useAttackTarget(option: AttackOption, choice: TargetChoice, passing: boolean) {
+   const link = useEncounterLink()
+   const ranged = option.kind === 'ranged'
+   const reachable = link ? link.targets.filter((entry) => (!passing || link.passingTargets.includes(entry.id)) &&
+      (ranged ? entry.distance !== null : entry.distance !== null && entry.distance >= 1 && entry.distance <= (option.reach === 'long' ? 2 : 1))) : []
+   const encounterTarget = reachable.find((entry) => entry.id === choice.targetId) ?? reachable[0] ?? null
+   const suggested = link && ranged && encounterTarget ? boardRanged(encounterTarget, link.self, option.range) : undefined
+   const board = suggested ? { ...suggested, ...choice.override } : undefined
+   return { link, reachable, encounterTarget, suggested, board }
+}
+
+function OptionChip({ stats, fight, option, choice, passing, active, onSelect }: {
+   stats: Stats; fight: Fight; option: AttackOption; choice: TargetChoice; passing: boolean; active: boolean; onSelect: () => void
+}) {
    const language = useLanguageStore((state) => state.language)
-   const attack = useAttack(stats, fight, option)
+   const { board } = useAttackTarget(option, choice, passing)
+   const attack = useAttack(stats, fight, option, { passing, board })
    return <button type='button' aria-pressed={active} className={`probe-chip fight-option${active ? ' is-active' : ''}`} onClick={onSelect}
       title={attack.blocked.length ? attack.blocked.map((reason) => t(reason, language)).join(' · ') : undefined}>
       <strong>{attack.blocked.length ? '—' : applyTargetRule(attack.value, attack.rule)}</strong>
@@ -157,9 +179,9 @@ function OptionChip({ stats, fight, option, active, onSelect }: { stats: Stats; 
    </button>
 }
 
-function AttackCard({ stats, heroId, fight, option, offHand = false, dual = false, speed, applyDamage, pending, forcePassing = false }: {
+function AttackCard({ stats, heroId, fight, option, offHand = false, dual = false, speed, applyDamage, pending, forcePassing = false, choice, onChoice }: {
    stats: Stats; heroId: string; fight: Fight; option: AttackOption; offHand?: boolean; dual?: boolean; speed: number | null
-   applyDamage: ApplyDamage; pending: boolean; forcePassing?: boolean
+   applyDamage: ApplyDamage; pending: boolean; forcePassing?: boolean; choice: TargetChoice; onChoice: (choice: TargetChoice) => void
 }) {
    const language = useLanguageStore((state) => state.language)
    const queryClient = useQueryClient()
@@ -168,17 +190,10 @@ function AttackCard({ stats, heroId, fight, option, offHand = false, dual = fals
    const [chosenPassing, setPassing] = useState(forcePassing)
    const passing = forcePassing || chosenPassing
    // Shared party fight: the opponent this attack goes to; each roll can be sent once
-   const link = useEncounterLink()
-   const [targetId, setTargetId] = useState('')
    const ranged = option.kind === 'ranged'
-   // Melee only against opponents in reach on the board (neighbours; Reichweite lang 2 squares, house rule); ranged at any opponent
-   const reachable = link ? link.targets.filter((entry) => (!passing || link.passingTargets.includes(entry.id)) &&
-      (ranged ? entry.distance !== null : entry.distance !== null && entry.distance >= 1 && entry.distance <= (option.reach === 'long' ? 2 : 1))) : []
-   const encounterTarget = reachable.find((entry) => entry.id === targetId) ?? reachable[0] ?? null
-   // The board suggests distance, movement and "into melee" (S. 241–242); the player may change them for this attack
-   const [override, setOverride] = useState<Partial<RangedSituation>>({})
-   const suggested = link && ranged && encounterTarget ? boardRanged(encounterTarget, link.self, option.range) : undefined
-   const board = suggested ? { ...suggested, ...override } : undefined
+   const { link, reachable, encounterTarget, suggested, board } = useAttackTarget(option, choice, passing)
+   const override = choice.override
+   const setOverride = (next: Partial<RangedSituation>) => onChoice({ ...choice, override: next })
    const attack = useAttack(stats, fight, option, { passing, offHand, dual, board })
    const [modifier, setModifier] = useState(0)
    const [rolling, setRolling] = useState(false)
@@ -361,7 +376,7 @@ function AttackCard({ stats, heroId, fight, option, offHand = false, dual = fals
       </div>}
       {link && <label className='field-group fight-situation-field'>
          <span>{t('Target', language)}</span>
-         {reachable.length ? <select value={encounterTarget?.id ?? ''} onChange={(event) => { setTargetId(event.target.value); setOverride({}) }}>
+         {reachable.length ? <select value={encounterTarget?.id ?? ''} onChange={(event) => onChoice({ targetId: event.target.value, override: {} })}>
             {reachable.map((entry) => <option key={entry.id} value={entry.id}>{entry.name}{entry.paces !== null && ` · ${entry.paces} ${t('paces', language)}`}</option>)}
          </select> : <small>{t(link.targets.length ? 'No opponent in reach.' : 'No opponent on the field.', language)}</small>}
       </label>}
@@ -397,7 +412,8 @@ function AttackCard({ stats, heroId, fight, option, offHand = false, dual = fals
          {damage && damage.dice.sides === 6 && !link && <FateDamageReroll stats={stats} rolls={damage.rolls} sides={6} used={damageRerolled} onReroll={rerollDamageDie} />}
       </div>}
       {link && result && !rolling && encounterTarget && <EncounterAttackSend key={rollCount} link={link} target={encounterTarget} weapon={option.label}
-         incoming={incomingOf(option)} reach={option.reach} passing={passing} dual={passing ? null : strike} result={result} dice={dice} sent={sent} onSent={afterSend} />}
+         incoming={incomingOf(option)} reach={option.reach} passing={passing} dual={passing ? null : strike} result={result} dice={dice} sent={sent} onSent={afterSend}
+         defenseModifier={finte && !passing ? -2 * finte.value : 0} />}
       {result?.outcome === 'botch' && !rolling && <PatzerResolver stats={stats} heroId={heroId} fight={fight} table={ranged ? 'ranged' : 'melee'}
          unarmed={option.unarmed} dodge={false} weaponKey={option.unarmed ? null : option.key} slot={option.slot} weaponDamage={option.damage} applyDamage={applyDamage} disabled={pending} />}
    </div>
@@ -433,6 +449,9 @@ function useDefense(stats: Stats, fight: Fight, option: DefenseOption, context: 
    const damaged = weaponStatePenalty(option.condition ?? weapon?.state, false)
    if (damaged) sources.push({ label: 'Damaged weapon', value: damaged, page: 234 })
    if (fight.nextActionPenalty) sources.push({ label: 'Stumbled (Patzer)', value: fight.nextActionPenalty, page: 231 })
+   // source: DSA5 Regelwerk, S. 247 (the attacker's Finte: defense −2 per level), from the party fight
+   const feint = useEncounterLink()?.incoming?.defenseModifier ?? 0
+   if (feint) sources.push({ label: 'Finte', value: feint, page: 247 })
    const oneHanded = option.oneHanded && !check.activeEffects.some((effect) => effect.label === 'Einhändiger Kampf')
    if (oneHanded) sources.push({ label: 'Einhändiger Kampf', value: 1, page: 247 })
    if (option.gripAllowed && fight.grip?.key === option.key) sources.push({ label: 'Two-handed grip', value: twoHandedGripValues.parry, page: 366 })
@@ -634,7 +653,13 @@ const incomingChoices: Array<{ value: Incoming; label: string }> = [
 export function FightPanel({ stats, heroId, speed, onRollInitiative, view = 'full' }: {
    stats: Stats; heroId: string; speed: number | null; onRollInitiative: () => void; view?: 'full' | 'attack' | 'defense' | 'extras' | 'passing'
 }) {
-   const [tab, setTab] = useState<'attack' | 'magic' | 'move'>('attack')
+   const [tab, setTab] = useState<keyof typeof tabLabels>('attack')
+   // The opponent and ranged situation chosen per weapon (shared by the weapon chip and the attack card)
+   const [choices, setChoices] = useState<Record<string, TargetChoice>>({})
+   const choiceOf = (key: string) => choices[key] ?? noChoice
+   const choose = (key: string) => (choice: TargetChoice) => setChoices((current) => ({ ...current, [key]: choice }))
+   // Anführer (S. 215) is an action of its own in the party fight's turn
+   const leads = stats.generalSpecialAbilities.includes('Anführer')
    const language = useLanguageStore((state) => state.language)
    const queryClient = useQueryClient()
    const fight = useFightStore((state) => state.fights[heroId])
@@ -709,7 +734,7 @@ export function FightPanel({ stats, heroId, speed, onRollInitiative, view = 'ful
    const weaponChoice = <fieldset className='probe-difficulty'>
       <legend>{t('Weapon', language)}</legend>
       <div className='fight-options'>
-         {attack.map((option) => <OptionChip key={option.key} stats={stats} fight={fight} option={option}
+         {attack.map((option) => <OptionChip key={option.key} stats={stats} fight={fight} option={option} choice={choiceOf(option.key)} passing={view === 'passing'}
             active={option.key === attackOption.key} onSelect={() => update(heroId, { attackWeapon: option.key, offHand: null })} />)}
       </div>
       {partners.length > 0 && view !== 'passing' && <label className='field-group fight-situation-field'>
@@ -723,8 +748,10 @@ export function FightPanel({ stats, heroId, speed, onRollInitiative, view = 'ful
    const dualOption = view === 'passing' ? null : offHandOption
    const attackCards = <>
       <AttackCard key={`${attackOption.key}-${dualOption?.key ?? ''}`} stats={stats} heroId={heroId} fight={fight} option={attackOption}
+         choice={choiceOf(attackOption.key)} onChoice={choose(attackOption.key)}
          dual={dualOption !== null} speed={effectiveSpeed} applyDamage={applyDamage} pending={pending} />
       {dualOption && <AttackCard key={`off-${dualOption.key}`} stats={stats} heroId={heroId} fight={fight} option={dualOption}
+         choice={choiceOf(dualOption.key)} onChoice={choose(dualOption.key)}
          dual offHand speed={effectiveSpeed} applyDamage={applyDamage} pending={pending} />}
    </>
    const defenseChoice = <fieldset className='probe-difficulty'>
@@ -745,16 +772,18 @@ export function FightPanel({ stats, heroId, speed, onRollInitiative, view = 'ful
    // The own turn in the party fight: attack, magic, or another action (Flucht); every one counts on the shared turn
    if (view === 'attack') return <div className='fight-dock-panel'>
       <div className='probe-segmented fight-dock-tabs' role='group' aria-label={t('Action', language)}>
-         {(['attack', 'magic', 'move'] as const).map((key) => <button key={key} type='button' aria-pressed={tab === key}
-            className={tab === key ? 'is-active' : ''} onClick={() => setTab(key)}>{t(key === 'attack' ? 'Attack' : key === 'magic' ? 'Magic' : 'Flee', language)}</button>)}
+         {(['attack', 'magic', 'move', ...(leads ? ['lead' as const] : [])] as const).map((key) => <button key={key} type='button' aria-pressed={tab === key}
+            className={tab === key ? 'is-active' : ''} onClick={() => setTab(key)}>{t(tabLabels[key], language)}</button>)}
       </div>
       {tab === 'attack' && <>{weaponChoice}{attackCards}</>}
       {tab === 'magic' && (hasMagic(stats) ? <CastingCard stats={stats} heroId={heroId} fight={fight} /> : <p className='fight-note'>{t('No spells to cast in a fight.', language)}</p>)}
       {tab === 'move' && <FleeAction stats={stats} heroId={heroId} fight={fight} speed={effectiveSpeed} />}
+      {tab === 'lead' && <LeaderAction stats={stats} heroId={heroId} fight={fight} />}
    </div>
    // Passierschlag outside the own turn (S. 237)
    if (view === 'passing') return <div className='fight-dock-panel'>{weaponChoice}
       <AttackCard key={`passing-${attackOption.key}`} stats={stats} heroId={heroId} fight={fight} option={attackOption} speed={effectiveSpeed}
+         choice={choiceOf(attackOption.key)} onChoice={choose(attackOption.key)}
          applyDamage={applyDamage} pending={pending} forcePassing /></div>
    if (view === 'defense') return <div className='fight-dock-panel'>{defenseChoice}{defenseCard}</div>
    const extras = view === 'extras'
@@ -812,6 +841,7 @@ export function FightPanel({ stats, heroId, speed, onRollInitiative, view = 'ful
             {attackCards}
             <CastingCard stats={stats} heroId={heroId} fight={fight} />
             <FleeAction stats={stats} heroId={heroId} fight={fight} speed={effectiveSpeed} />
+            <LeaderAction stats={stats} heroId={heroId} fight={fight} />
          </div>
          <div className='fight-column'>
             {defenseChoice}
@@ -838,15 +868,16 @@ export function FightPanel({ stats, heroId, speed, onRollInitiative, view = 'ful
 const incomingOf = (option: AttackOption): Incoming => option.kind !== 'ranged' ? 'melee' : option.technique === 'Wurfwaffen' ? 'thrown' : 'shot'
 
 // The rolled attack waits for the player's confirmation (user decision, Nov 2026); Schips and Waffenbegabung come first.
-function EncounterAttackSend({ link, target, weapon, incoming, reach, passing, dual, result, dice, sent, onSent }: {
+// defenseModifier: the own Finte lowers the opponent's defense, applied by the GM's defense roll (S. 247)
+function EncounterAttackSend({ link, target, weapon, incoming, reach, passing, dual, result, dice, sent, onSent, defenseModifier }: {
    link: EncounterLink; target: { id: string; name: string }; weapon: string; incoming: Incoming; reach: Reach | null
    passing: boolean; dual: 'first' | 'second' | null; result: CombatRoll; dice: DamageDice | null
-   sent: boolean; onSent: () => void
+   sent: boolean; onSent: () => void; defenseModifier: number
 }) {
    const language = useLanguageStore((state) => state.language)
    if (sent) return <p className='fight-note'>{t(!result.success ? 'Reported to the fight.' : passing ? 'Sent: no defense, you roll the damage next.'
       : 'Sent: waiting for the defense. On a failure you roll the damage.', language)}</p>
-   const send = async () => { if (await link.sendAttack({ targetId: target.id, incoming, weapon, roll: result, dice, reach, passing, dual })) onSent() }
+   const send = async () => { if (await link.sendAttack({ targetId: target.id, incoming, weapon, roll: result, dice, reach, passing, dual, defenseModifier: result.success ? defenseModifier : 0 })) onSent() }
    return <div className='fight-followup'>
       <button className={result.success ? 'primary-button' : 'quiet-button'} type='button' disabled={link.busy} onClick={() => void send()}>
          {result.success ? <><Crosshair size={16} />{t('Send attack to {target}', language).replace('{target}', target.name)}</> : t('Accept the miss', language)}</button>
@@ -859,6 +890,7 @@ function IncomingAttackBanner({ link, attack, stats }: { link: EncounterLink; at
    return <div className='fight-incoming' role='alert'>
       <strong>{t('{attacker} attacks you with {weapon}.', language).replace('{attacker}', attack.attackerName).replace('{weapon}', attack.weapon)}</strong>
       {attack.critical && <small>{t('Critical attack: your defense is halved.', language)}</small>}
+      {attack.defenseModifier < 0 && <small>{t('Finte: your defense {value} (S. 247).', language).replace('{value}', String(attack.defenseModifier))}</small>}
       <small>{t('If the defense fails, the attacker rolls the damage; you take TP − RS {rs} automatically.', language).replace('{rs}', String(armorProtection(stats)))}</small>
       <button className='quiet-button' type='button' disabled={link.busy} onClick={() => void link.sendDefense(attack.id, null)}>
          <HeartCrack size={16} />{t('Cannot defend', language)}</button>

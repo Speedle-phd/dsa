@@ -1,4 +1,5 @@
 import mongoose, { Schema, type Document } from 'mongoose'
+import type { NpcSheet } from '@/utils/npcRules'
 
 // NPC values the GM enters (or takes from a template/the bestiary). Heroes keep their values in their own stats.
 export type NpcValues = {
@@ -14,6 +15,9 @@ export type NpcValues = {
    damage: string
    speed: number | null
    notes: string
+   // The full stat block (weapons, abilities, Schmerz thresholds …; npcRules.ts). Absent for NPCs from before Nov 2026:
+   // their AT/PA/TP above count as one weapon (npcWeapons)
+   sheet?: NpcSheet | null
 }
 
 export type Combatant = {
@@ -44,9 +48,28 @@ export type Combatant = {
    // Defenses made in a Kampfrunde (S. 232: −3 per further PA/AW)
    defenses?: { round: number; count: number } | null
    // Actions used in a Kampfrunde (1 action + 1 free action, S. 228)
-   turn?: { round: number; action: boolean; free: boolean; dual?: boolean; bonus?: number } | null
+   turn?: { round: number; action: boolean; free: boolean; dual?: boolean; bonus?: number; attacks?: number; weapons?: string[] } | null
    // Schritt moved in the combatant's latest own turn (ranged modifiers for shooter and target, S. 242)
    lastTurn?: { round: number; squares: number } | null
+   // Anführer (S. 215): the KR in which this combatant gets AT, defense and FK +1 from a leader (not cumulative)
+   leaderRound?: number | null
+   // Heroes: a copy of the player's fight panel for this round (user request, Nov 2026), written only by its player
+   panel?: HeroPanel | null
+}
+// Round-bound state the player's panel decides (stance S. 250, Schips S. 30, defense penalty S. 232, Patzer effects
+// S. 231–244, loading S. 245, casting S. 228); the GM overview applies it
+export type HeroPanel = {
+   round: number
+   stance: 'Vorstoß' | 'Verteidigungshaltung' | null
+   leader: boolean
+   tempPain: boolean
+   ignoreConditions: boolean
+   fateDefense: boolean
+   defensePenalty: number
+   nextActionPenalty: number
+   noDefense: boolean
+   casting: { spell: string; done: number; total: number } | null
+   weapons: Array<{ key: string; loaded: boolean | null; state: 'destroyed' | 'broken' | 'damaged' | 'lost' | 'stuck' | 'jammed' | null }>
 }
 export type Obstacle = { x: number; y: number; kind: string }
 
@@ -61,6 +84,8 @@ export type EncounterAttack = {
    critical: boolean
    // Passierschlag: no defense possible (S. 237)
    passing?: boolean
+   // Modifier on the target's defense, e.g. Finte −2 per level (S. 247); 0 or less
+   defenseModifier?: number
    tp: number
    // pending: waits for the defense; damage: the defense failed, the attacker rolls TP (user decision, Nov 2026)
    status: 'pending' | 'damage' | 'defended' | 'hit' | 'cancelled'
@@ -109,6 +134,8 @@ const npcSchema = new Schema<NpcValues>({
    damage: { type: String, default: '' },
    speed: { type: Number, default: null },
    notes: { type: String, default: '' },
+   // Validated by npcSheetSchema (encounterValidation) before every write
+   sheet: { type: Schema.Types.Mixed, default: null },
 }, { _id: false })
 
 // A shared party fight with its battle board (user decisions, Nov 2026). Several people write at once:
@@ -154,8 +181,12 @@ const encounterSchema = new Schema<IEncounterDocument>(
             hidden: { type: Boolean, default: false },
             npc: { type: npcSchema, default: null },
             defenses: { type: { round: Number, count: Number }, default: null, _id: false },
-            turn: { type: { round: Number, action: Boolean, free: Boolean, dual: Boolean, bonus: Number }, default: null, _id: false },
+            // attacks/weapons: NPCs with several actions per KR (S. 354) count their attacks and the attacks used
+            turn: { type: { round: Number, action: Boolean, free: Boolean, dual: Boolean, bonus: Number, attacks: Number, weapons: [String] }, default: null, _id: false },
             lastTurn: { type: { round: Number, squares: Number }, default: null, _id: false },
+            leaderRound: { type: Number, default: null },
+            // Validated by panelSchema (encounterValidation) before every write
+            panel: { type: Schema.Types.Mixed, default: null },
          }],
          default: [],
       },
@@ -171,6 +202,7 @@ const encounterSchema = new Schema<IEncounterDocument>(
             status: { type: String, enum: ['pending', 'damage', 'defended', 'hit', 'cancelled'], default: 'pending' },
             dice: { type: { count: Number, sides: Number, bonus: Number }, default: null, _id: false },
             halved: { type: Boolean, default: false },
+            defenseModifier: { type: Number, default: 0 },
             rs: { type: Number, default: null },
             painRaised: { type: Boolean, default: false },
             defense: { type: Schema.Types.Mixed, default: null },

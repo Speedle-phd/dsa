@@ -14,8 +14,15 @@ import { PartySheet } from './pages/PartySheet'
 import { FightPage } from './pages/FightPage'
 import { PrepareFightPage } from './pages/PrepareFightPage'
 import { JoinParty } from './pages/JoinParty'
+import { NpcLibrary } from './pages/NpcLibrary'
+import { NpcEditPage } from './pages/NpcEditPage'
+import { NpcImport } from './pages/NpcImport'
+import { NpcGenerator } from './pages/NpcGenerator'
 import { Settings } from './pages/Settings'
 import { RealtimeBridge } from './realtime/RealtimeBridge'
+import { ConnectionBanner } from './realtime/ConnectionBanner'
+import { FightAlerts } from './features/encounter/FightAlerts'
+import { CheckRequestPrompts } from './features/parties/CheckRequestPrompts'
 
 function App() {
    return (
@@ -102,6 +109,11 @@ function App() {
                   </ProtectedRoute>
                }
             />
+            <Route path='/npcs' element={<ProtectedRoute><NpcLibrary /></ProtectedRoute>} />
+            <Route path='/npcs/new' element={<ProtectedRoute><NpcEditPage /></ProtectedRoute>} />
+            <Route path='/npcs/import' element={<ProtectedRoute><NpcImport /></ProtectedRoute>} />
+            <Route path='/npcs/generate' element={<ProtectedRoute><NpcGenerator /></ProtectedRoute>} />
+            <Route path='/npcs/:templateId' element={<ProtectedRoute><NpcEditPage /></ProtectedRoute>} />
             <Route
                path='/join/:code'
                element={
@@ -121,6 +133,9 @@ function App() {
             <Route path='*' element={<Navigate to='/dashboard' replace />} />
          </Routes>
          <RealtimeBridge />
+         <ConnectionBanner />
+         <FightAlerts />
+         <CheckRequestPrompts />
          <ScrollToTopButton />
          <DiceRoller />
       </>

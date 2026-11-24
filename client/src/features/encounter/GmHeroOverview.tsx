@@ -18,18 +18,19 @@ export function GmHeroOverview({ encounter, partyId }: { encounter: Encounter; p
    if (!heroes.length) return null
    return <section className='overview-section gm-hero-overview'>
       <header className='section-heading'><h2>{t('Heroes in the fight', language)}</h2></header>
-      <p className='party-muted'>{t('Values with Schmerz, Zustände and Belastung; without the player\'s stance, Schips, situation and active effects.', language)}</p>
+      <p className='party-muted'>{t('Values with Schmerz, Zustände, Belastung and the player\'s choices this round; without active effects.', language)}</p>
       <ul className='gm-hero-list'>
-         {heroes.map((hero) => <GmHeroCard key={hero.id} hero={hero} partyId={partyId} active={hero.id === encounter.activeId} />)}
+         {heroes.map((hero) => <GmHeroCard key={hero.id} hero={hero} partyId={partyId} round={encounter.round} active={hero.id === encounter.activeId} />)}
       </ul>
    </section>
 }
 
-function GmHeroCard({ hero, partyId, active }: { hero: HeroCombatant; partyId: string; active: boolean }) {
+function GmHeroCard({ hero, partyId, round, active }: { hero: HeroCombatant; partyId: string; round: number; active: boolean }) {
    const language = useLanguageStore((state) => state.language)
    const sheet = useQuery({ queryKey: partySheetKey(partyId, hero.charId), queryFn: () => getPartySheet(partyId, hero.charId), retry: false })
    const stats = sheet.data?.stats
-   const overview = stats && sheet.data ? heroOverview(stats, sheet.data.char.species) : null
+   // The player's panel copy counts only in its own KR (stance, Schips, defense penalty …)
+   const overview = stats && sheet.data ? heroOverview(stats, sheet.data.char.species, hero.panel ?? null, round) : null
    const signedLevel = (label: string, level: number) => `${t(label, language)} ${levelsLabel(level)}`
 
    return <li className={active ? 'gm-hero is-active' : 'gm-hero'}>
@@ -53,16 +54,26 @@ function GmHeroCard({ hero, partyId, active }: { hero: HeroCombatant; partyId: s
                <div><dt>{t('Pain', language)}</dt><dd>{levelsLabel(overview.pain)}</dd></div>
                <div><dt>{t('Fate points', language)}</dt><dd>{overview.fate.current} / {overview.fate.max}</dd></div>
                <div><dt>{t('INI', language)}</dt><dd>{hero.initiative ?? '—'} <small>({t('Base', language)} {heroInitiative(stats).base})</small></dd></div>
-               <div><dt>{t('AW', language)}</dt><dd>{overview.dodge}</dd></div>
+               <div><dt>{t('AW', language)}</dt><dd>{overview.dodge ?? '—'}</dd></div>
                <div><dt>{t('RS', language)}</dt><dd>{overview.armor}</dd></div>
                <div><dt>{t('BE', language)}</dt><dd>{overview.burden}</dd></div>
                <div><dt>{t('GS', language)}</dt><dd>{overview.speed ?? '—'}</dd></div>
             </dl>
+            {overview.round && <ul className='party-chips' aria-label={t('This combat round', language)}>
+               {overview.round.stance && <li lang='de'>{overview.round.stance}</li>}
+               {overview.round.fateDefense && <li>{t('Schip: defenses +4', language)}</li>}
+               {overview.round.ignoreConditions && <li>{t('Schip: conditions ignored', language)}</li>}
+               {overview.round.defensePenalty > 0 && <li>{t('Defenses this round', language)} −{overview.round.defensePenalty}</li>}
+               {overview.round.nextActionPenalty < 0 && <li>{t('Next action', language)} {overview.round.nextActionPenalty}</li>}
+               {overview.round.casting && <li>{t('Casting', language)}: <span lang='de'>{overview.round.casting.spell}</span> {overview.round.casting.done}/{overview.round.casting.total}</li>}
+            </ul>}
             {overview.blocked.length > 0 && <ul className='field-error probe-blocked'>{overview.blocked.map((reason) => <li key={reason}>{t(reason, language)}</li>)}</ul>}
             <table className='gm-hero-weapons'>
                <thead><tr><th scope='col'>{t('Weapon', language)}</th><th scope='col'>{t('AT', language)}</th><th scope='col'>{t('PA', language)}</th><th scope='col'>{t('TP', language)}</th></tr></thead>
                <tbody>{overview.weapons.map((weapon) => <tr key={weapon.key}>
-                  <th scope='row'>{t(weapon.label, language)}{weapon.notes.length > 0 && <small>{weapon.notes.map((note) => t(note, language)).join(' · ')}</small>}</th>
+                  <th scope='row'>{t(weapon.label, language)}{(weapon.notes.length > 0 || weapon.loaded !== null) && <small>{[
+                     ...(weapon.loaded === null ? [] : [t(weapon.loaded ? 'Loaded' : 'Not loaded', language)]), ...weapon.notes.map((note) => t(note, language)),
+                  ].join(' · ')}</small>}</th>
                   <td>{weapon.at ?? '—'}</td><td>{weapon.pa ?? '—'}</td><td>{weapon.tp ?? '—'}</td>
                </tr>)}</tbody>
             </table>

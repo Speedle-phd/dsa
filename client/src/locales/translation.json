@@ -11703,10 +11703,6 @@
       "de": "Helden im Kampf",
       "en": "Heroes in the fight"
    },
-   "Values with Schmerz, Zustände and Belastung; without the player's stance, Schips, situation and active effects.": {
-      "de": "Werte mit Schmerz, Zuständen und Belastung; ohne Kampfhaltung, Schips, Situation und aktive Effekte des Spielers.",
-      "en": "Values with Schmerz, Zustände and Belastung; without the player's stance, Schips, situation and active effects."
-   },
    "Attack or defense blocked": {
       "de": "Angriff oder Verteidigung gesperrt",
       "en": "Attack or defense blocked"
@@ -12470,5 +12466,593 @@
    "LE": {
       "de": "LE",
       "en": "LP"
+   },
+   "Live updates paused – reconnecting…": {
+      "de": "Live-Updates unterbrochen – verbinde neu …",
+      "en": "Live updates paused – reconnecting…"
+   },
+   "online": {
+      "de": "online",
+      "en": "online"
+   },
+   "offline": {
+      "de": "offline",
+      "en": "offline"
+   },
+   "The game master is online.": {
+      "de": "Der Meister ist online.",
+      "en": "The game master is online."
+   },
+   "The game master is offline.": {
+      "de": "Der Meister ist offline.",
+      "en": "The game master is offline."
+   },
+   "The mark could not be sent.": {
+      "de": "Die Markierung konnte nicht gesendet werden.",
+      "en": "The mark could not be sent."
+   },
+   "{name} marks column {x}, row {y}.": {
+      "de": "{name} markiert Spalte {x}, Reihe {y}.",
+      "en": "{name} marks column {x}, row {y}."
+   },
+   "Alt-click or long-press a square to mark it for everyone (P on a focused token).": {
+      "de": "Alt-Klick oder langes Drücken markiert ein Feld für alle (P auf einer fokussierten Spielfigur).",
+      "en": "Alt-click or long-press a square to mark it for everyone (P on a focused token)."
+   },
+   "Check requests are not available.": {
+      "de": "Probenanforderungen sind nicht verfügbar.",
+      "en": "Check requests are not available."
+   },
+   "Closed check requests": {
+      "de": "Abgeschlossene Probenanforderungen",
+      "en": "Closed check requests"
+   },
+   "Check requested.": {
+      "de": "Probe angefordert.",
+      "en": "Check requested."
+   },
+   "Modifier (+ easier, − harder)": {
+      "de": "Modifikator (+ erleichtert, − erschwert)",
+      "en": "Modifier (+ easier, − harder)"
+   },
+   "Hidden": {
+      "de": "Verdeckt",
+      "en": "Hidden"
+   },
+   "Only you see all results; each player sees their own.": {
+      "de": "Nur du siehst alle Ergebnisse; jeder Spieler sieht sein eigenes.",
+      "en": "Only you see all results; each player sees their own."
+   },
+   "Note (optional)": {
+      "de": "Anmerkung (optional)",
+      "en": "Note (optional)"
+   },
+   "Request the check": {
+      "de": "Probe anfordern",
+      "en": "Request the check"
+   },
+   "Choose at least one hero.": {
+      "de": "Mindestens einen Helden wählen.",
+      "en": "Choose at least one hero."
+   },
+   "Close the check request": {
+      "de": "Probenanforderung schließen",
+      "en": "Close the check request"
+   },
+   "waiting…": {
+      "de": "wartet …",
+      "en": "waiting…"
+   },
+   "declined": {
+      "de": "abgelehnt",
+      "en": "declined"
+   },
+   "rolled (hidden)": {
+      "de": "gewürfelt (verdeckt)",
+      "en": "rolled (hidden)"
+   },
+   "The game master asks for a check.": {
+      "de": "Der Meister verlangt eine Probe.",
+      "en": "The game master asks for a check."
+   },
+   "Result sent to the game master.": {
+      "de": "Ergebnis an den Meister gesendet.",
+      "en": "Result sent to the game master."
+   },
+   "Send the result to the game master": {
+      "de": "Ergebnis an den Meister senden",
+      "en": "Send the result to the game master"
+   },
+   "Check request": {
+      "de": "Probenanforderung",
+      "en": "Check request"
+   },
+   "Decline": {
+      "de": "Ablehnen",
+      "en": "Decline"
+   },
+   "Roll the check": {
+      "de": "Würfeln",
+      "en": "Roll the check"
+   },
+   "Request a check": {
+      "de": "Probe anfordern",
+      "en": "Request a check"
+   },
+   "Check requests": {
+      "de": "Probenanforderungen",
+      "en": "Check requests"
+   },
+   "GM request": {
+      "de": "Vorgabe des Meisters",
+      "en": "GM request"
+   },
+   "Choose heroes of this party.": {
+      "de": "Helden dieser Gruppe wählen.",
+      "en": "Choose heroes of this party."
+   },
+   "Close older check requests first (at most 20 open).": {
+      "de": "Zuerst ältere Probenanforderungen schließen (höchstens 20 offen).",
+      "en": "Close older check requests first (at most 20 open)."
+   },
+   "Check request not found": {
+      "de": "Probenanforderung nicht gefunden.",
+      "en": "Check request not found"
+   },
+   "This check request is no longer open.": {
+      "de": "Diese Probenanforderung ist nicht mehr offen.",
+      "en": "This check request is no longer open."
+   },
+   "Unknown check.": {
+      "de": "Unbekannte Probe.",
+      "en": "Unknown check."
+   },
+   "Values with Schmerz, Zustände, Belastung and the player's choices this round; without active effects.": {
+      "de": "Werte mit Schmerz, Zuständen, Belastung und den Entscheidungen des Spielers in dieser Kampfrunde; ohne aktive Effekte.",
+      "en": "Values with Schmerz, Zustände, Belastung and the player's choices this round; without active effects."
+   },
+   "This combat round": {
+      "de": "Diese Kampfrunde",
+      "en": "This combat round"
+   },
+   "Schip: defenses +4": {
+      "de": "Schip: Verteidigung +4",
+      "en": "Schip: defenses +4"
+   },
+   "Schip: conditions ignored": {
+      "de": "Schip: Zustände ignoriert",
+      "en": "Schip: conditions ignored"
+   },
+   "Next action": {
+      "de": "Nächste Aktion",
+      "en": "Next action"
+   },
+   "Not loaded": {
+      "de": "Nicht geladen",
+      "en": "Not loaded"
+   },
+   "No defense this round (Riposte or Patzer).": {
+      "de": "Keine Verteidigung in dieser Runde (Riposte oder Patzer).",
+      "en": "No defense this round (Riposte or Patzer)."
+   },
+   "(no name found)": {
+      "de": "(kein Name gefunden)",
+      "en": "(no name found)"
+   },
+   "A stat block as printed in adventures (S. 354). Only name and LeP are required.": {
+      "de": "Ein Werteblock wie in Abenteuern abgedruckt (S. 354). Nur Name und LeP sind Pflicht.",
+      "en": "A stat block as printed in adventures (S. 354). Only name and LeP are required."
+   },
+   "AT/PA include the combat technique, the attribute bonus, the weapon and Belastung; TP the damage bonus.": {
+      "de": "AT/PA enthalten Kampftechnik, Eigenschaftsbonus, Waffe und Belastung; TP den Schadensbonus.",
+      "en": "AT/PA include the combat technique, the attribute bonus, the weapon and Belastung; TP the damage bonus."
+   },
+   "Actions per combat round (creatures, S. 354)": {
+      "de": "Aktionen pro Kampfrunde (Wesen, S. 354)",
+      "en": "Actions per combat round (creatures, S. 354)"
+   },
+   "Add a weapon": {
+      "de": "Waffe hinzufügen",
+      "en": "Add a weapon"
+   },
+   "Add special ability": {
+      "de": "Sonderfertigkeit hinzufügen",
+      "en": "Add special ability"
+   },
+   "Also save in the NPC library": {
+      "de": "Auch in der NSC-Bibliothek speichern",
+      "en": "Also save in the NPC library"
+   },
+   "Animal cleverness (t)": {
+      "de": "Tierische Klugheit (t)",
+      "en": "Animal cleverness (t)"
+   },
+   "Basics": {
+      "de": "Grunddaten",
+      "en": "Basics"
+   },
+   "Behaviour, flight and Schmerz": {
+      "de": "Verhalten, Flucht und Schmerz",
+      "en": "Behaviour, flight and Schmerz"
+   },
+   "Blank NPC": {
+      "de": "Leerer NSC",
+      "en": "Blank NPC"
+   },
+   "By the rule": {
+      "de": "Nach Regel",
+      "en": "By the rule"
+   },
+   "Check and save": {
+      "de": "Prüfen und speichern",
+      "en": "Check and save"
+   },
+   "Copy one stat block from an adventure (from the name line to \"Schmerz +1 bei\") and paste it here. German and English labels are read.": {
+      "de": "Kopiere einen Werteblock aus einem Abenteuer (von der Namenszeile bis „Schmerz +1 bei“) und füge ihn hier ein. Deutsche und englische Bezeichnungen werden gelesen.",
+      "en": "Copy one stat block from an adventure (from the name line to \"Schmerz +1 bei\") and paste it here. German and English labels are read."
+   },
+   "Creature": {
+      "de": "Wesen",
+      "en": "Creature"
+   },
+   "Defense of non-humanoid creatures (S. 354)": {
+      "de": "Verteidigung nichthumanoider Wesen (S. 354)",
+      "en": "Defense of non-humanoid creatures (S. 354)"
+   },
+   "Delete this NPC from your library?": {
+      "de": "Diesen NSC aus deiner Bibliothek löschen?",
+      "en": "Delete this NPC from your library?"
+   },
+   "Duplicate": {
+      "de": "Duplizieren",
+      "en": "Duplicate"
+   },
+   "Enter the values as printed: armour, Belastung and Schmerz are not deducted again.": {
+      "de": "Werte wie abgedruckt eintragen: Rüstung, Belastung und Schmerz werden nicht nochmals abgezogen.",
+      "en": "Enter the values as printed: armour, Belastung and Schmerz are not deducted again."
+   },
+   "Flees at LeP": {
+      "de": "Flieht bei LeP",
+      "en": "Flees at LeP"
+   },
+   "Generate": {
+      "de": "Generieren",
+      "en": "Generate"
+   },
+   "Generate an NPC": {
+      "de": "NSC generieren",
+      "en": "Generate an NPC"
+   },
+   "LZ": {
+      "de": "LZ",
+      "en": "LZ"
+   },
+   "Max. per round": {
+      "de": "Max. pro KR",
+      "en": "Max. per round"
+   },
+   "NPC": {
+      "de": "NSC",
+      "en": "NPC"
+   },
+   "NPC library": {
+      "de": "NSC-Bibliothek",
+      "en": "NPC library"
+   },
+   "NPC saved: {name}": {
+      "de": "NSC gespeichert: {name}",
+      "en": "NPC saved: {name}"
+   },
+   "Needed for checks of the NPC; the fight uses the values below.": {
+      "de": "Für Proben des NSC; der Kampf nutzt die Werte darunter.",
+      "en": "Needed for checks of the NPC; the fight uses the values below."
+   },
+   "New NPC": {
+      "de": "Neuer NSC",
+      "en": "New NPC"
+   },
+   "No NPC matches the search.": {
+      "de": "Kein NSC passt zur Suche.",
+      "en": "No NPC matches the search."
+   },
+   "No NPCs yet. Paste a stat block or generate one to begin.": {
+      "de": "Noch keine NSC. Füge einen Werteblock ein oder generiere einen.",
+      "en": "No NPCs yet. Paste a stat block or generate one to begin."
+   },
+   "No weapons yet. Without a weapon the NPC cannot attack.": {
+      "de": "Noch keine Waffen. Ohne Waffe kann der NSC nicht angreifen.",
+      "en": "No weapons yet. Without a weapon the NPC cannot attack."
+   },
+   "Not read ({count}) — shown again in the editor:": {
+      "de": "Nicht gelesen ({count}) – wird im Editor erneut angezeigt:",
+      "en": "Not read ({count}) — shown again in the editor:"
+   },
+   "Open the NPC library": {
+      "de": "NSC-Bibliothek öffnen",
+      "en": "Open the NPC library"
+   },
+   "Paste a stat block": {
+      "de": "Werteblock einfügen",
+      "en": "Paste a stat block"
+   },
+   "Please check these lines": {
+      "de": "Bitte diese Zeilen prüfen",
+      "en": "Please check these lines"
+   },
+   "Recognised": {
+      "de": "Erkannt",
+      "en": "Recognised"
+   },
+   "Record attributes": {
+      "de": "Eigenschaften erfassen",
+      "en": "Record attributes"
+   },
+   "Reload time in actions (S. 245)": {
+      "de": "Ladezeit in Aktionen (S. 245)",
+      "en": "Reload time in actions (S. 245)"
+   },
+   "Role": {
+      "de": "Rolle",
+      "en": "Role"
+   },
+   "Role and experience are suggestions (the core rules have no NPC tables); all values are computed with the hero rules.": {
+      "de": "Rolle und Erfahrung sind Vorschläge (das Regelwerk enthält keine NSC-Tabellen); alle Werte werden mit den Heldenregeln berechnet.",
+      "en": "Role and experience are suggestions (the core rules have no NPC tables); all values are computed with the hero rules."
+   },
+   "Save NPC": {
+      "de": "NSC speichern",
+      "en": "Save NPC"
+   },
+   "Schmerz +1 at": {
+      "de": "Schmerz +1 bei",
+      "en": "Schmerz +1 at"
+   },
+   "Search by name or tag": {
+      "de": "Nach Name oder Stichwort suchen",
+      "en": "Search by name or tag"
+   },
+   "Size category": {
+      "de": "Größenkategorie",
+      "en": "Size category"
+   },
+   "Source": {
+      "de": "Quelle",
+      "en": "Source"
+   },
+   "Spells and liturgies": {
+      "de": "Zauber und Liturgien",
+      "en": "Spells and liturgies"
+   },
+   "Stat block": {
+      "de": "Werteblock",
+      "en": "Stat block"
+   },
+   "Tags (comma-separated)": {
+      "de": "Stichwörter (durch Kommas getrennt)",
+      "en": "Tags (comma-separated)"
+   },
+   "The NPC library is not available.": {
+      "de": "Die NSC-Bibliothek ist nicht verfügbar.",
+      "en": "The NPC library is not available."
+   },
+   "The preview appears once you paste a stat block.": {
+      "de": "Die Vorschau erscheint, sobald du einen Werteblock einfügst.",
+      "en": "The preview appears once you paste a stat block."
+   },
+   "They could not be read automatically and were not taken over:": {
+      "de": "Sie konnten nicht automatisch gelesen werden und wurden nicht übernommen:",
+      "en": "They could not be read automatically and were not taken over:"
+   },
+   "This NPC was not found.": {
+      "de": "Dieser NSC wurde nicht gefunden.",
+      "en": "This NPC was not found."
+   },
+   "Type": {
+      "de": "Typus",
+      "en": "Type"
+   },
+   "Weapons and attacks": {
+      "de": "Waffen und Angriffe",
+      "en": "Weapons and attacks"
+   },
+   "Weapons and combat techniques": {
+      "de": "Waffen und Kampftechniken",
+      "en": "Weapons and combat techniques"
+   },
+   "Your library is empty.": {
+      "de": "Deine Bibliothek ist leer.",
+      "en": "Your library is empty."
+   },
+   "Your opponents and NPCs for every party: paste a stat block from an adventure, generate one, or take a creature from the bestiary.": {
+      "de": "Deine Gegner und NSC für jede Gruppe: Werteblock aus einem Abenteuer einfügen, generieren oder ein Wesen aus dem Bestiarium übernehmen.",
+      "en": "Your opponents and NPCs for every party: paste a stat block from an adventure, generate one, or take a creature from the bestiary."
+   },
+   "e.g. Finte I": {
+      "de": "z. B. Finte I",
+      "en": "e.g. Finte I"
+   },
+   "e.g. Kulturschaffender": {
+      "de": "z. B. Kulturschaffender",
+      "en": "e.g. Kulturschaffender"
+   },
+   "e.g. after losing 50 % of LeP": {
+      "de": "z. B. bei Verlust von 50 % der LeP",
+      "en": "e.g. after losing 50 % of LeP"
+   },
+   "e.g. heroes + 1": {
+      "de": "z. B. Heldenzahl + 1",
+      "en": "e.g. heroes + 1"
+   },
+   "e.g. robbers, chapter 2": {
+      "de": "z. B. Räuber, Kapitel 2",
+      "en": "e.g. robbers, chapter 2"
+   },
+   "Commoner": {
+      "de": "Bürger",
+      "en": "Commoner"
+   },
+   "Fighter": {
+      "de": "Kämpfer",
+      "en": "Fighter"
+   },
+   "Guard": {
+      "de": "Wache",
+      "en": "Guard"
+   },
+   "Archer": {
+      "de": "Schütze",
+      "en": "Archer"
+   },
+   "Rogue": {
+      "de": "Schurke",
+      "en": "Rogue"
+   },
+   "Spellcaster": {
+      "de": "Zauberkundige",
+      "en": "Spellcaster"
+   },
+   "Weak": {
+      "de": "Schwach",
+      "en": "Weak"
+   },
+   "Average": {
+      "de": "Durchschnittlich",
+      "en": "Average"
+   },
+   "Experienced": {
+      "de": "Erfahren",
+      "en": "Experienced"
+   },
+   "Dangerous": {
+      "de": "Gefährlich",
+      "en": "Dangerous"
+   },
+   "Melee weapon": {
+      "de": "Nahkampfwaffe",
+      "en": "Melee weapon"
+   },
+   "Ranged weapon": {
+      "de": "Fernkampfwaffe",
+      "en": "Ranged weapon"
+   },
+   "Natural attack": {
+      "de": "Natürlicher Angriff",
+      "en": "Natural attack"
+   },
+   "Manual": {
+      "de": "Von Hand",
+      "en": "Manual"
+   },
+   "Imported": {
+      "de": "Importiert",
+      "en": "Imported"
+   },
+   "Generated": {
+      "de": "Generiert",
+      "en": "Generated"
+   },
+   "Quick entry": {
+      "de": "Schnelleingabe",
+      "en": "Quick entry"
+   },
+   "As printed": {
+      "de": "Wie abgedruckt",
+      "en": "As printed"
+   },
+   "No Schmerz": {
+      "de": "Kein Schmerz",
+      "en": "No Schmerz"
+   },
+   "LeP at or below which the NPC gains one level each:": {
+      "de": "LeP, bei denen der NSC jeweils eine Stufe erhält (oder weniger):",
+      "en": "LeP at or below which the NPC gains one level each:"
+   },
+   "Demons and elementals feel no Schmerz (S. 355, 358).": {
+      "de": "Dämonen und Elementare spüren keinen Schmerz (S. 355, 358).",
+      "en": "Demons and elementals feel no Schmerz (S. 355, 358)."
+   },
+   "This opponent has no weapon or attack. Add one in the NPC library or enter an AT value.": {
+      "de": "Dieser Gegner hat keine Waffe und keinen Angriff. Füge einen in der NSC-Bibliothek hinzu oder trage einen AT-Wert ein.",
+      "en": "This opponent has no weapon or attack. Add one in the NPC library or enter an AT value."
+   },
+   "All attacks of this opponent are used up this round (S. 354).": {
+      "de": "Alle Angriffe dieses Gegners sind in dieser Runde verbraucht (S. 354).",
+      "en": "All attacks of this opponent are used up this round (S. 354)."
+   },
+   "Schmerz IV: this opponent cannot act (S. 34).": {
+      "de": "Schmerz IV: Dieser Gegner ist handlungsunfähig (S. 34).",
+      "en": "Schmerz IV: this opponent cannot act (S. 34)."
+   },
+   "Schmerz {level}: AT, PA and AW −{value} (S. 34)": {
+      "de": "Schmerz {level}: AT, PA und AW −{value} (S. 34)",
+      "en": "Schmerz {level}: AT, PA and AW −{value} (S. 34)"
+   },
+   "Attack {count} of {max} this round (S. 354)": {
+      "de": "Angriff {count} von {max} in dieser Runde (S. 354)",
+      "en": "Attack {count} of {max} this round (S. 354)"
+   },
+   "Maneuver": {
+      "de": "Manöver",
+      "en": "Maneuver"
+   },
+   "Schmerz IV: this opponent cannot defend (S. 34).": {
+      "de": "Schmerz IV: Dieser Gegner kann sich nicht verteidigen (S. 34).",
+      "en": "Schmerz IV: this opponent cannot defend (S. 34)."
+   },
+   "Feels no Schmerz.": {
+      "de": "Spürt keinen Schmerz.",
+      "en": "Feels no Schmerz."
+   },
+   "Flight threshold reached: this opponent tries to flee.": {
+      "de": "Fluchtschwelle erreicht: Dieser Gegner versucht zu fliehen.",
+      "en": "Flight threshold reached: this opponent tries to flee."
+   },
+   "Finte: your defense {value} (S. 247).": {
+      "de": "Finte: deine Verteidigung {value} (S. 247).",
+      "en": "Finte: your defense {value} (S. 247)."
+   },
+   "Out of range: no attack possible (S. 241).": {
+      "de": "Außer Reichweite: kein Angriff möglich (S. 241).",
+      "en": "Out of range: no attack possible (S. 241)."
+   },
+   "1 action and an Überreden check (Aufschwatzen, Manipulieren or Schmeicheln): up to QS + 1 allies get AT, defense and FK +1 in the next combat round (S. 215).": {
+      "de": "1 Aktion und eine Probe auf Überreden (Aufschwatzen, Manipulieren oder Schmeicheln): bis zu QS + 1 Verbündete erhalten in der nächsten KR AT, Verteidigung und FK +1 (S. 215).",
+      "en": "1 action and an Überreden check (Aufschwatzen, Manipulieren or Schmeicheln): up to QS + 1 allies get AT, defense and FK +1 in the next combat round (S. 215)."
+   },
+   "Lead allies (Überreden)": {
+      "de": "Verbündete anführen (Überreden)",
+      "en": "Lead allies (Überreden)"
+   },
+   "No allies in this fight.": {
+      "de": "Keine Verbündeten in diesem Kampf.",
+      "en": "No allies in this fight."
+   },
+   "Allies ({count} of up to {max})": {
+      "de": "Verbündete ({count} von bis zu {max})",
+      "en": "Allies ({count} of up to {max})"
+   },
+   "Anführer (Überreden failed)": {
+      "de": "Anführer (Überreden misslungen)",
+      "en": "Anführer (Überreden failed)"
+   },
+   "Anführer reaches at most QS + 1 allies.": {
+      "de": "Anführer erreicht höchstens QS + 1 Verbündete.",
+      "en": "Anführer reaches at most QS + 1 allies."
+   },
+   "Anführer supports only own allies.": {
+      "de": "Anführer unterstützt nur eigene Verbündete.",
+      "en": "Anführer supports only own allies."
+   },
+   "This ally cannot act.": {
+      "de": "Dieser Verbündete ist nicht handlungsfähig.",
+      "en": "This ally cannot act."
+   },
+   "Anführer costs an action.": {
+      "de": "Anführer kostet eine Aktion.",
+      "en": "Anführer costs an action."
+   },
+   "\"Done\" spends the action; the chosen allies get AT, defense and FK +1 in the next combat round.": {
+      "de": "„Fertig“ verbraucht die Aktion; die gewählten Verbündeten erhalten in der nächsten KR AT, Verteidigung und FK +1.",
+      "en": "\"Done\" spends the action; the chosen allies get AT, defense and FK +1 in the next combat round."
    }
 }

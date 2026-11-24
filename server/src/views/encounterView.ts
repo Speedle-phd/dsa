@@ -1,5 +1,5 @@
 import type { IEncounterDocument } from '@/models/encounter.model'
-import { actionsLeft, canControlCombatant, engagedWith, initiativeOrder, npcState, previousDefenses } from '@/utils/encounterRules'
+import { actionsLeft, canControlCombatant, engagedWith, initiativeOrder, npcState, panelView, previousDefenses } from '@/utils/encounterRules'
 import type { PartyRole } from '@/utils/partyRules'
 
 // GM: everything. Players: no hidden NPCs, NPCs only with name, token and rough state (user decision, Nov 2026).
@@ -39,6 +39,8 @@ export function encounterView(encounter: IEncounterDocument, viewerId: string, r
             // Schritt moved in the latest own turn; opponents in melee with it (ranged rules, S. 241–242)
             moved: source.lastTurn?.squares ?? 0,
             engagedWith: engagedWith(id, encounter.round, positions, attackRecords).filter((other) => visibleIds.has(other)),
+            // Anführer (S. 215): the KR with AT, defense and FK +1 (this or the next one; older rounds are dropped)
+            leaderRound: source.leaderRound != null && source.leaderRound >= encounter.round ? source.leaderRound : null,
          }
          if (source.kind === 'ally') {
             return { ...base, name: source.name, ownerId: String(source.ownerId), allyKey: source.allyKey ?? '', mine: String(source.userId) === viewerId,
@@ -46,17 +48,21 @@ export function encounterView(encounter: IEncounterDocument, viewerId: string, r
          }
          if (source.kind === 'hero') {
             const charId = String(source.charId)
-            return { ...base, name: heroNames.get(charId) ?? source.name, charId, mine: String(source.userId) === viewerId,
-               initiative: source.initiative ?? null, initiativeBase: source.initiativeBase }
+            const mine = String(source.userId) === viewerId
+            return { ...base, name: heroNames.get(charId) ?? source.name, charId, mine,
+               initiative: source.initiative ?? null, initiativeBase: source.initiativeBase, panel: panelView(source.panel, isGm, mine) }
          }
          const npc = source.npc
          const state = npc ? npcState(npc.health, npc.maxHealth) : 'unhurt'
          if (!isGm) return { ...base, name: source.name, state, initiative: null }
          return { ...base, name: source.name, state, hidden: source.hidden, initiative: source.initiative ?? null,
-            initiativeBase: source.initiativeBase, defensesThisRound: previousDefenses(source.defenses, encounter.round), npc: npc ? {
+            initiativeBase: source.initiativeBase, defensesThisRound: previousDefenses(source.defenses, encounter.round),
+            // Attacks this KR and the weapons used, for "Aktionen: 2 (max. 1 × Biss)" (S. 354)
+            attacksThisRound: source.turn?.round === encounter.round ? { count: source.turn.attacks ?? 0, weapons: source.turn.weapons ?? [] } : { count: 0, weapons: [] },
+            npc: npc ? {
                health: npc.health, maxHealth: npc.maxHealth, armor: npc.armor, initiativeBase: npc.initiativeBase,
                attack: npc.attack ?? null, parry: npc.parry ?? null, defense: npc.defense ?? null, dodge: npc.dodge ?? null,
-               damage: npc.damage, speed: npc.speed ?? null, notes: npc.notes,
+               damage: npc.damage, speed: npc.speed ?? null, notes: npc.notes, sheet: npc.sheet ?? null,
             } : null }
       }),
       attacks: attacksView(encounter, viewerId, isGm, visible.map((entry) => entry.id)),
@@ -96,6 +102,8 @@ function attacksView(encounter: IEncounterDocument, viewerId: string, isGm: bool
          sp: attack.sp ?? null,
          attackOutcome: attack.attack?.outcome ?? 'success',
          weapon: attack.attack?.label ?? '',
+         // Finte: the defense of the target −2 per level (S. 247)
+         defenseModifier: attack.defenseModifier ?? 0,
          defenseOutcome: attack.defense?.outcome ?? null,
          mine: ownHeroes.has(String(attack.targetId)),
          byMe: ownHeroes.has(String(attack.attackerId)),

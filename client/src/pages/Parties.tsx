@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Crown, Plus, UsersRound } from 'lucide-react'
+import { Crown, Plus, Skull, UsersRound } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -36,7 +36,11 @@ export function Parties() {
       <DashboardHeader />
       <section className='dashboard-content'>
          <PageHeading Icon={UsersRound} title={t('Parties', language)}
-            description={t('Play together: a game master leads the party and sees the heroes live.', language)} />
+            description={t('Play together: a game master leads the party and sees the heroes live.', language)}>
+            <div className='add-hero-actions'>
+               <Link className='quiet-button' to='/npcs'><Skull size={16} aria-hidden='true' />{t('NPC library', language)}</Link>
+            </div>
+         </PageHeading>
          <section className='overview-section'>
             <header className='section-heading'><h2>{t('Lead a new party', language)}</h2></header>
             <form className='party-create' onSubmit={submit}>

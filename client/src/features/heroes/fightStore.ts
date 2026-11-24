@@ -50,6 +50,8 @@ export type Fight = {
    party?: { partyId: string; encounterId: string }
    // Hits of the party fight already taken into this panel (casting disturbance, log)
    seenHits?: string[]
+   // The party fight whose server copy this device has adopted or writes (usePanelMirror); before that it never writes
+   panelSynced?: string
    // A party-fight hit raised the Schmerz: Blutrausch is offered (S. 171), never set automatically
    rageOffer?: string | null
 }

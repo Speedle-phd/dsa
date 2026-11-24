@@ -3,12 +3,16 @@ import { useEffect } from 'react'
 import { axiosInstance } from '@/axios/axios'
 import { subscribeParty } from '@/realtime/socket'
 import type { PartyRole } from '@/features/parties/partyApi'
+import type { HeroPanel } from './heroPanel'
+import type { NpcSheet } from '@/features/npcs/npcSheet'
 
 export type NpcState = 'unhurt' | 'wounded' | 'badlyWounded' | 'down'
 export type NpcValues = {
    health: number; maxHealth: number; armor: number; initiativeBase: number
    attack: number | null; parry: number | null; defense: number | null; dodge: number | null
    damage: string; speed: number | null; notes: string
+   // The full stat block (weapons, abilities, Schmerz thresholds …); null for NPCs from before Nov 2026
+   sheet?: NpcSheet | null
 }
 export type NpcInput = Omit<NpcValues, 'health'>
 export type Position = { x: number; y: number }
@@ -21,9 +25,14 @@ type CombatantBase = {
    id: string; initials: string; color: number | null; number: number; position: Position | null; canControl: boolean; name: string; initiative: number | null; actions: Actions
    // Schritt moved in the latest own turn; opponents in melee with it (ranged rules, S. 241–242)
    moved: number; engagedWith: string[]
+   // Anführer (S. 215): the KR in which a leader's bonus applies (AT, defense, FK +1)
+   leaderRound: number | null
 }
-export type HeroCombatant = CombatantBase & { kind: 'hero'; charId: string; mine: boolean; initiativeBase: number }
-export type NpcCombatant = CombatantBase & { kind: 'npc'; state: NpcState; hidden?: boolean; initiativeBase?: number; defensesThisRound?: number; npc?: NpcValues | null }
+// `panel`: the player's fight panel for the KR (GM and the own player only, otherwise null)
+export type HeroCombatant = CombatantBase & { kind: 'hero'; charId: string; mine: boolean; initiativeBase: number; panel?: HeroPanel | null }
+// attacksThisRound (GM only): attacks and weapons used this KR, for creatures with several actions (S. 354)
+export type NpcCombatant = CombatantBase & { kind: 'npc'; state: NpcState; hidden?: boolean; initiativeBase?: number; defensesThisRound?: number
+   attacksThisRound?: { count: number; weapons: string[] }; npc?: NpcValues | null }
 // Companions, summons and Radau of a hero, with their own INI and token (user decision, Nov 2026)
 export type AllyCombatant = CombatantBase & { kind: 'ally'; ownerId: string; allyKey: string; mine: boolean; speed: number | null; initiativeBase: number }
 export type Combatant = HeroCombatant | NpcCombatant | AllyCombatant
@@ -59,11 +68,12 @@ export type EncounterAttack = {
    // RS used for the hit (S. 374); the hit raised the own hero's Schmerz (Blutrausch, S. 171)
    rs: number | null; painRaised: boolean
    attackOutcome: CombatOutcome; weapon: string; defenseOutcome: CombatOutcome | null
+   // Finte: the target's defense −2 per level (S. 247)
+   defenseModifier: number
    // The attack targets the viewer's own hero
    mine: boolean
 }
 export type EncounterLogEntry = { round: number; key: string; values: Record<string, string | number> }
-export type NpcTemplate = { _id: string; name: string; values: NpcInput }
 
 // A scope is a party id (the running fight) or "partyId:encounterId" (a prepared fight the GM edits)
 export const encounterKey = (scope: string) => ['encounter', scope] as const
@@ -94,11 +104,16 @@ export async function addAlly(partyId: string, input: { heroId: string; key: str
 export async function removeAlly(partyId: string, combatantId: string) {
    return (await axiosInstance.delete<Reply>(`${base(partyId)}/allies/${combatantId}`)).data.encounter
 }
-export async function spendAction(partyId: string, combatantId: string, input: { kind: 'action' | 'free'; label: string; detail?: string; move?: number }) {
+export async function spendAction(partyId: string, combatantId: string, input: { kind: 'action' | 'free'; label: string; detail?: string; move?: number
+   leader?: { quality: number; targetIds: string[] } }) {
    return (await axiosInstance.post<Reply>(`${base(partyId)}/combatants/${combatantId}/actions`, input)).data.encounter
 }
 export async function grantPassing(partyId: string, combatantId: string, targetId: string) {
    return (await axiosInstance.post<Reply>(`${base(partyId)}/passing`, { combatantId, targetId })).data.encounter
+}
+// Own hero only; no response body (the `encounter` notice refreshes the views)
+export async function savePanel(partyId: string, combatantId: string, panel: HeroPanel) {
+   await axiosInstance.put(`${base(partyId)}/combatants/${combatantId}/panel`, panel)
 }
 export async function endTurn(partyId: string) {
    return (await axiosInstance.post<Reply>(`${base(partyId)}/end-turn`)).data.encounter
@@ -129,12 +144,6 @@ export async function removeCombatant(partyId: string, combatantId: string) {
    return (await axiosInstance.delete<Reply>(`${base(partyId)}/combatants/${combatantId}`)).data.encounter
 }
 
-export async function getNpcTemplates() {
-   return (await axiosInstance.get<{ templates: NpcTemplate[] }>('/api/npc-templates')).data.templates
-}
-export async function deleteNpcTemplate(templateId: string) {
-   await axiosInstance.delete(`/api/npc-templates/${templateId}`)
-}
 
 // The party fight, kept live through the party room
 export function useEncounter(scope: string) {
@@ -164,7 +173,9 @@ export async function rollAttackDamage(partyId: string, attackId: string, tp: nu
 
 export type Reach = 'short' | 'medium' | 'long'
 export async function submitAttack(partyId: string, input: { attackerId: string; targetId: string; incoming: Incoming; attack: RollRecord; reach?: Reach
-   dice: { count: number; sides: number; bonus: number } | null; passing?: boolean; dual?: 'first' | 'second' | null }) {
+   dice: { count: number; sides: number; bonus: number } | null; passing?: boolean; dual?: 'first' | 'second' | null
+   // Finte (S. 247); the NPC's weapon for its per-round limit (S. 354)
+   defenseModifier?: number; weapon?: string | null }) {
    return (await axiosInstance.post<Reply>(`${base(partyId)}/attacks`, input)).data.encounter
 }
 export async function resolveDefense(partyId: string, attackId: string, input: { defense: RollRecord | null; halved?: boolean }) {

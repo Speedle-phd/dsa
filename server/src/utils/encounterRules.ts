@@ -1,4 +1,5 @@
 // Shared party fight (encounter): initiative order, turns, NPC damage and tokens. Pure functions, tested without a DB.
+import type { HeroPanel } from '@/models/encounter.model'
 
 export type EncounterSide = 'hero' | 'npc' | 'ally'
 // Heroes and their allies (companions, summons, Radau) fight together against the NPCs
@@ -115,6 +116,19 @@ export function actionsLeft(turn: TurnState | null | undefined, round: number) {
    const current = turn && turn.round === round ? turn : null
    return { action: !current?.action, free: !current?.free }
 }
+// source: DSA5 Regelwerk, S. 215 (Anführer: 1 action and an Überreden check; up to QS + 1 other persons of the leader's choice
+// get AT, defense and FK +1 in the next KR). Allies only: the leader's own side, not the leader, not down. Returns the ids.
+export function leaderTargets(leader: { id: string; kind: EncounterSide }, candidates: Array<{ id: string; kind: EncounterSide; down: boolean }>,
+   targetIds: string[], quality: number): { ids: string[] } | { error: string } {
+   const ids = [...new Set(targetIds)]
+   if (ids.length > quality + 1) return { error: 'Anführer reaches at most QS + 1 allies.' }
+   for (const id of ids) {
+      const target = candidates.find((entry) => entry.id === id)
+      if (!target || id === leader.id || sideOf(target.kind) !== sideOf(leader.kind)) return { error: 'Anführer supports only own allies.' }
+      if (target.down) return { error: 'This ally cannot act.' }
+   }
+   return { ids }
+}
 // A move up to GS uses the free action, a second one the action (sprint, S. 228–229); null when nothing is left
 export function moveCost(turn: TurnState | null | undefined, round: number): 'free' | 'action' | null {
    const left = actionsLeft(turn, round)
@@ -189,3 +203,8 @@ export function engagedWith(id: string, round: number, combatants: ReadonlyArray
 export const defaultScale = 1
 export const squaresFor = (schritt: number, scale = defaultScale) => Math.floor(schritt / Math.max(1, scale))
 export const schrittFor = (squares: number, scale = defaultScale) => squares * Math.max(1, scale)
+
+// A hero's panel copy goes only to the GM and the hero's own player (user request, Nov 2026)
+export function panelView(panel: HeroPanel | null | undefined, isGm: boolean, mine: boolean) {
+   return isGm || mine ? panel ?? null : null
+}

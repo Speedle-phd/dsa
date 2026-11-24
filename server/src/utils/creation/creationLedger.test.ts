@@ -315,7 +315,8 @@ describe('Zaubererprofessionen (S. 145–153)', () => {
       expect(ledger.spells.Freundschaftslied).toMatchObject({ base: 4, value: 4, cost: 0 })
       expect(ledger.spells.Armatrutz).toMatchObject({ base: 6, value: 4 })
       expect(ledger.spells.Armatrutz.cost).toBeLessThan(0)
-      expect(ledger.usage.spells).toBe(7)
+      // 6 Zauber; Freundschaftslied is listed under Sonderfertigkeiten (S. 145) and does not count (S. 39)
+      expect(ledger.usage.spells).toBe(6)
    })
    it('the package Zaubertrick is free, others cost 1 AP; the choice is required', () => {
       expect(issues(elf({ profession: pkg('Wildnisläufer') }))).toContain('trick-choice')
@@ -343,6 +344,16 @@ describe('Zaubererprofessionen (S. 145–153)', () => {
       const ledger = creationLedger(witch)
       expect(ledger.profession).toMatchObject({ curseBudget: 12, curseUsed: ledger.spells.Hexenschuss.cost })
       expect(ledger.granted.generalSpecialAbilities).toEqual(expect.arrayContaining(['Flugsalbe', 'Vertrautenbindung']))
+   })
+   it('curses do not count toward the spell limit of the Erfahrungsgrad (S. 39; user decision, Nov 2026)', () => {
+      // Krötenhexe: 7 package spells; Unerfahren allows 8 spells
+      const witch: CreationDraftData = { ...emptyDraft(), level: 'Unerfahren', species: 'Mensch', culture: 'Mittelreich', language: 'Garethi',
+         entries: [entry('advantages', 'Zauberer'), entry('generalSpecialAbilities', 'Tradition (Hexe)')],
+         profession: pkg('Krötenhexe', ['Handwärmer']), spells: { Hexenschuss: 0, 'Beiß auf Granit!': 0, Hagelschlag: 0 } }
+      const ledger = creationLedger(witch)
+      expect(ledger.usage.spells).toBe(7)
+      expect(issues(witch)).not.toContain('spell-count')
+      expect(issues({ ...witch, spells: { ...witch.spells, 'Odem Arcanum': 0, Fulminictus: 0 } })).toContain('spell-count')
    })
    it('Finish: package tricks and spells are not recorded as paid', () => {
       const data = elf({ name: 'Sarah', profession: pkg('Wildnisläufer', ['Lockruf']), tricks: ['Lockruf', 'Duft'] })

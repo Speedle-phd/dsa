@@ -35,4 +35,14 @@ export const socketAccess = {
       const party = await Party.findById(partyId)
       return party ? canViewParty(toRuleShape(party), userId) : false
    },
+   // Presence by hero: accepted members whose player is connected, and the GM; no user ids leave the server
+   async onlineMembers(partyId: string, userIds: string[]) {
+      const party = await Party.findById(partyId).select('gmUserId members')
+      if (!party) return { charIds: [], gmOnline: false }
+      const online = new Set(userIds)
+      return {
+         charIds: party.members.filter((member) => member.state === 'accepted' && online.has(String(member.userId))).map((member) => String(member.charId)),
+         gmOnline: online.has(String(party.gmUserId)),
+      }
+   },
 }

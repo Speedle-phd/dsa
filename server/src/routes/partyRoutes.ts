@@ -18,12 +18,15 @@ import { createPartySchema, joinPartySchema, memberVisibilitySchema, updateParty
 import {
    addNpcs, changeTurn, damageCombatant, endEncounter, getEncounter, moveCombatant, removeCombatant, resizeBoard,
    rollNpcInitiative, startEncounter, updateCombatant, submitAttack, resolveDefense, cancelAttack,
-   endTurn, setObstacles, addAlly, removeAlly, spendAction, rollAttackDamage, grantPassing, getPreparedEncounter, listPrepared, createPrepared, deletePrepared, activatePrepared,
+   endTurn, setObstacles, addAlly, removeAlly, spendAction, updatePanel, rollAttackDamage, grantPassing, getPreparedEncounter, listPrepared, createPrepared, deletePrepared, activatePrepared,
 } from '@/controllers/encounterController'
 import {
    addNpcsSchema, attackSchema, boardSchema, damageSchema, defenseSchema, npcInitiativeSchema, positionSchema, startEncounterSchema, turnSchema, updateCombatantSchema,
-   obstaclesSchema, allySchema, actionSchema, damageRollSchema, preparedSchema, passingGrantSchema,
+   obstaclesSchema, allySchema, actionSchema, panelSchema, damageRollSchema, preparedSchema, passingGrantSchema,
 } from '@/validations/encounterValidation'
+
+import { answerCheckRequest, closeCheckRequest, createCheckRequest, declineCheckRequest, listCheckRequests } from '@/controllers/checkRequestController'
+import { checkAnswerSchema, checkResultSchema, createCheckRequestSchema } from '@/validations/checkRequestValidation'
 
 const router = Router()
 
@@ -42,6 +45,13 @@ router.patch('/:id/members/:charId', validateRequest(memberVisibilitySchema), se
 router.delete('/:id/members/:charId', removeMember)
 router.get('/:id/heroes/:charId/sheet', getPartySheet)
 // Shared fight and battle board
+// GM check requests (user request, Nov 2026)
+router.get('/:id/check-requests', listCheckRequests)
+router.post('/:id/check-requests', validateRequest(createCheckRequestSchema), createCheckRequest)
+router.post('/:id/check-requests/:requestId/result', validateRequest(checkResultSchema), answerCheckRequest)
+router.post('/:id/check-requests/:requestId/decline', validateRequest(checkAnswerSchema), declineCheckRequest)
+router.post('/:id/check-requests/:requestId/close', closeCheckRequest)
+
 router.get('/:id/encounter', getEncounter)
 router.post('/:id/encounter', validateRequest(startEncounterSchema), startEncounter)
 router.post('/:id/encounter/end', endEncounter)
@@ -50,6 +60,7 @@ router.post('/:id/encounter/end-turn', endTurn)
 router.post('/:id/encounter/allies', validateRequest(allySchema), addAlly)
 router.delete('/:id/encounter/allies/:combatantId', removeAlly)
 router.post('/:id/encounter/combatants/:combatantId/actions', validateRequest(actionSchema), spendAction)
+router.put('/:id/encounter/combatants/:combatantId/panel', validateRequest(panelSchema), updatePanel)
 router.put('/:id/encounter/obstacles', validateRequest(obstaclesSchema), setObstacles)
 router.put('/:id/encounter/board', validateRequest(boardSchema), resizeBoard)
 router.post('/:id/encounter/npcs', validateRequest(addNpcsSchema), addNpcs)

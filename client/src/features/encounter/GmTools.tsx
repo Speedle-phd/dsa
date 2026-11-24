@@ -61,7 +61,7 @@ export function GmTools({ encounter, scope, terrain, onTerrain, mode = 'fight' }
                <Dices size={16} aria-hidden='true' />{t('Roll NPC INI', language)}{missingIni > 0 && ` (${missingIni})`}</button>
          </div>
          {iniHint && <small id='npc-ini-hint' className='party-muted'>{t(iniHint, language)}</small>}
-         {adding && <NpcForm partyId={scope} onDone={() => setAdding(false)} />}
+         {adding && <NpcForm partyId={scope} heroes={encounter.combatants.filter((entry) => entry.kind === 'hero').length} onDone={() => setAdding(false)} />}
          <fieldset className='fight-terrain'>
             <legend>{t('Terrain', language)}</legend>
             <div className='fight-toolbar-row'>

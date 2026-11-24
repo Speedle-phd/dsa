@@ -36,6 +36,16 @@ export function HeroFightSection({ encounter, partyId, combatant, view }: {
       while (current() && current()!.round < encounter.round) useFightStore.getState().nextRound(heroId)
    }, [encounter.round, fight, heroId])
 
+   // A leader's bonus for this KR comes from the party fight (Anführer, S. 215): the panel switches it on by itself
+   const leaderRound = combatant.leaderRound
+   useEffect(() => {
+      const current = useFightStore.getState().fights[heroId]
+      if (current && leaderRound !== null && leaderRound === current.round && current.leaderRound !== leaderRound) {
+         useFightStore.getState().update(heroId, { leaderRound })
+         useFightStore.getState().log(heroId, 'Anführer bonus this round')
+      }
+   }, [leaderRound, fight, heroId])
+
    // A panel left from another (simulated or former party) fight starts fresh: no data carries over (user decision, Nov 2026)
    const encounterId = encounter._id
    useEffect(() => {
@@ -85,10 +95,12 @@ export function HeroFightSection({ encounter, partyId, combatant, view }: {
             spend: (cost, label, detail = '', move) => run(() => spendAction(partyId, combatant.id, { kind: cost, label, detail, ...(move ? { move } : {}) })),
          },
          incoming: incoming ? { id: incoming.id, attackerName: names.get(incoming.attackerId) ?? '?', weapon: incoming.weapon,
-            critical: incoming.critical, incoming: incoming.incoming, passing: incoming.passing } : null,
+            critical: incoming.critical, incoming: incoming.incoming, passing: incoming.passing, defenseModifier: incoming.defenseModifier ?? 0 } : null,
+         allies: encounter.combatants.filter((entry) => entry.kind !== 'npc' && entry.id !== combatant.id).map((entry) => ({ id: entry.id, name: entry.name })),
+         lead: (quality, targetIds, names) => run(() => spendAction(partyId, combatant.id, { kind: 'action', label: 'Anführer', detail: names, leader: { quality, targetIds } })),
          busy: mutation.isPending,
-         sendAttack: ({ targetId, incoming: kind, weapon, roll, dice, reach, passing = false, dual = null }) => run(() => submitAttack(partyId, {
-            attackerId: combatant.id, targetId, incoming: kind, attack: rollRecord(weapon, roll), dice, reach: reach ?? 'medium', passing, dual })),
+         sendAttack: ({ targetId, incoming: kind, weapon, roll, dice, reach, passing = false, dual = null, defenseModifier = 0 }) => run(() => submitAttack(partyId, {
+            attackerId: combatant.id, targetId, incoming: kind, attack: rollRecord(weapon, roll), dice, reach: reach ?? 'medium', passing, dual, defenseModifier })),
          sendDefense: (attackId, defense) => run(() => resolveDefense(partyId, attackId, { defense: defense ? rollRecord(defense.label, defense.roll) : null })),
       }
    }, [encounter, combatant, partyId, mutation])

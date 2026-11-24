@@ -4,13 +4,12 @@ import mongoose from 'mongoose'
 import { Char } from '@/models/char.model'
 import { Companion } from '@/models/companion.model'
 import { Summon } from '@/models/summon.model'
-import { Encounter, type CombatRollRecord, type IEncounterDocument, type NpcValues } from '@/models/encounter.model'
+import { Encounter, type CombatRollRecord, type HeroPanel, type IEncounterDocument, type NpcValues } from '@/models/encounter.model'
 import { NpcTemplate } from '@/models/npcTemplate.model'
-import { Party, type IPartyDocument } from '@/models/party.model'
 import { Stats } from '@/models/stats.model'
 import { realtime } from '@/socket/realtime'
-import { BadRequestError, ConflictError, ForbiddenError, NotFoundError, UnauthorizedError } from '@/utils/appError'
-import { actionsLeft, schrittFor, sideOf, squaresFor, turnDone, boardDistance, canControlCombatant, clampPosition, damagePoints, engagedWith, initialsFor, inMeleeReach, moveCost, npcGroupName, pathLength, previousDefenses, spend, stepTurn, tokenAssignment } from '@/utils/encounterRules'
+import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '@/utils/appError'
+import { actionsLeft, leaderTargets, schrittFor, sideOf, squaresFor, turnDone, boardDistance, canControlCombatant, clampPosition, damagePoints, engagedWith, initialsFor, inMeleeReach, moveCost, npcGroupName, pathLength, previousDefenses, spend, stepTurn, tokenAssignment } from '@/utils/encounterRules'
 import { bestiary } from '@/utils/bestiaryCatalog'
 import { armorProtection } from '@/utils/armorEquipment'
 import { adjustHealth } from '@/utils/combatRules'
@@ -18,34 +17,13 @@ import { heroSpeedFromStats } from '@/utils/heroSpeed'
 import { publishHeroChange, saveStats } from '@/utils/statsPersistence'
 import { fightOver, improvedCreature, vanishes } from '@/utils/summonRules'
 import { buildStatResponse } from '@/views/statsView'
-import { toRuleShape } from '@/utils/partyAccess'
-import { canViewParty, partyRole, type PartyRole } from '@/utils/partyRules'
-import { objectId } from '@/validations/partyValidation'
+import { legacyFromWeapons, npcAttackTurn, npcPain, npcWeapons } from '@/utils/npcRules'
+import { idParam, partyContext, requireGm, userOf, type PartyContext } from '@/utils/partyRequest'
 import { encounterView } from '@/views/encounterView'
 
 const tiebreak = () => randomInt(1_000_000_000)
 
-function userOf(req: Request) {
-   if (!req.user) throw new UnauthorizedError('User not authenticated')
-   return req.user._id
-}
-function idParam(req: Request, key: string, message = 'Not found') {
-   const parsed = objectId.safeParse(req.params[key])
-   if (!parsed.success) throw new NotFoundError(message)
-   return parsed.data
-}
-
-type Context = { party: IPartyDocument; viewerId: string; role: PartyRole }
-// GM and accepted members of an active party; 404 for everyone else (no existence leak)
-async function partyContext(req: Request): Promise<Context> {
-   const viewerId = userOf(req)
-   const party = await Party.findById(idParam(req, 'id', 'Party not found'))
-   if (!party || !canViewParty(toRuleShape(party), viewerId)) throw new NotFoundError('Party not found')
-   return { party, viewerId, role: partyRole(toRuleShape(party), viewerId) }
-}
-function requireGm(context: Context) {
-   if (context.role !== 'gm') throw new ForbiddenError('Only the game master can do this.')
-}
+type Context = PartyContext
 async function activeEncounter(partyId: unknown) {
    return Encounter.findOne({ partyId, status: 'active' })
 }
@@ -110,6 +88,9 @@ function heroCombatant(member: { userId: unknown; charId: unknown; statsId: unkn
 
 type CombatantDoc = IEncounterDocument['combatants'][number]
 const isDown = (entry: CombatantDoc) => entry.kind === 'npc' && !!entry.npc && entry.npc.health <= 0
+// source: DSA5 Regelwerk, S. 34 (Schmerz IV: unable to act) — such an NPC's turn is skipped like a downed one
+const cannotAct = (entry: CombatantDoc) => isDown(entry) ||
+   (entry.kind === 'npc' && !!entry.npc && npcPain(entry.npc.health, entry.npc.maxHealth, entry.npc.sheet?.painThresholds) >= 4)
 const controls = (context: Context, entry: CombatantDoc) =>
    canControlCombatant(context.role, context.viewerId, { kind: entry.kind, userId: entry.userId ? String(entry.userId) : null })
 const isActive = (encounter: IEncounterDocument, entry: CombatantDoc) => !!encounter.activeId && String(encounter.activeId) === String(entry._id)
@@ -127,7 +108,7 @@ function requireTurn(encounter: IEncounterDocument, entry: CombatantDoc) {
 // Next combatant in INI order; downed opponents are skipped
 function step(encounter: IEncounterDocument, direction: 'next' | 'previous') {
    const fighters = encounter.combatants.map((entry) => ({ id: String(entry._id), kind: entry.kind, name: entry.name,
-      initiative: entry.initiative ?? null, initiativeBase: entry.initiativeBase, tiebreak: entry.tiebreak, down: isDown(entry) }))
+      initiative: entry.initiative ?? null, initiativeBase: entry.initiativeBase, tiebreak: entry.tiebreak, down: cannotAct(entry) }))
    let next = { activeId: encounter.activeId ? String(encounter.activeId) : null, round: encounter.round }
    for (let guard = 0; guard <= fighters.length; guard++) {
       next = stepTurn(fighters, next.activeId, next.round, direction)
@@ -214,7 +195,10 @@ export async function addNpcs(req: Request, res: Response) {
    const context = await partyContext(req)
    requireGm(context)
    const encounter = await requireEncounter(context, req)
-   const { name, count, values, saveTemplate, hidden } = req.body as { name: string; count: number; values: Omit<NpcValues, 'health'>; saveTemplate: boolean; hidden: boolean }
+   const body = req.body as { name: string; count: number; values: Omit<NpcValues, 'health'>; saveTemplate: boolean; hidden: boolean }
+   const { name, count, saveTemplate, hidden } = body
+   // A full stat block also fills the flat AT/PA/TP the older screens read (first melee weapon)
+   const values = body.values.sheet?.weapons.length ? { ...body.values, ...legacyFromWeapons(body.values.sheet.weapons) } : body.values
    const group = npcGroupName(name) || name
    const { color, nextNumber } = tokenAssignment(encounter.combatants.map((entry) => ({ kind: entry.kind, group: entry.group, color: entry.color ?? null, number: entry.number })), group)
    if (encounter.combatants.length + count > 60) throw new BadRequestError('A fight can have at most 60 combatants.')
@@ -226,7 +210,7 @@ export async function addNpcs(req: Request, res: Response) {
    }
    await saveEncounter(encounter)
    if (saveTemplate) {
-      await NpcTemplate.findOneAndUpdate({ userId: context.viewerId, name: group }, { $set: { values } }, { upsert: true })
+      await NpcTemplate.findOneAndUpdate({ userId: context.viewerId, name: group }, { $set: { values }, $setOnInsert: { source: 'manual', tags: [] } }, { upsert: true })
    }
    await respond(res, encounter, context, 201)
 }
@@ -492,10 +476,23 @@ export async function spendAction(req: Request, res: Response) {
    if (!controls(context, combatant)) throw new NotFoundError('Combatant not found')
    requireTurn(encounter, combatant)
    requireNoOpenAttack(encounter)
-   const { kind, label, detail, move } = req.body as { kind: 'action' | 'free'; label: string; detail: string; move?: number }
+   const { kind, label, detail, move, leader } = req.body as { kind: 'action' | 'free'; label: string; detail: string; move?: number
+      leader?: { quality: number; targetIds: string[] } }
    const left = actionsLeft(combatant.turn, encounter.round)
    // source: DSA5 Regelwerk, S. 228 (1 action + 1 free action per KR)
    if (!left[kind]) throw new BadRequestError(kind === 'action' ? 'The action of this round is already used.' : 'The free action of this round is already used.')
+   // Anführer (S. 215): the action and the bonus for the chosen allies in the next KR go in one write
+   if (leader) {
+      if (kind !== 'action') throw new BadRequestError('Anführer costs an action.')
+      const visible = encounter.combatants.filter((entry) => context.role === 'gm' || !entry.hidden)
+      const granted = leaderTargets({ id: String(combatant._id), kind: combatant.kind }, visible.map((entry) => ({ id: String(entry._id), kind: entry.kind, down: cannotAct(entry) })),
+         leader.targetIds, leader.quality)
+      if ('error' in granted) throw new BadRequestError(granted.error)
+      for (const id of granted.ids) {
+         const target = encounter.combatants.id(id)
+         if (target) target.leaderRound = encounter.round + 1
+      }
+   }
    combatant.turn = { ...spend(combatant.turn, encounter.round, kind), ...(move ? { bonus: move } : {}) }
    addLog(encounter, '{name}: {action}{detail}', { name: combatant.name, action: label, detail: detail ? ` · ${detail}` : '' })
    finishIfDone(encounter, combatant)
@@ -503,20 +500,19 @@ export async function spendAction(req: Request, res: Response) {
    await respond(res, encounter, context)
 }
 
-// NPC templates of the signed-in GM
-export async function listNpcTemplates(req: Request, res: Response) {
-   const templates = await NpcTemplate.find({ userId: userOf(req) }).sort({ name: 1 })
-   res.json({ templates: templates.map((template) => ({ _id: String(template._id), name: template.name, values: template.values })) })
+// The player's panel copy for the GM overview (user request, Nov 2026): own hero only, an atomic write that does not
+// touch the fight's version (no 409 for the GM's parallel changes)
+export async function updatePanel(req: Request, res: Response) {
+   const context = await partyContext(req)
+   const encounter = await activeEncounter(context.party._id)
+   if (!encounter) throw new NotFoundError('No fight is running.')
+   const combatant = combatantOf(encounter, req)
+   if (combatant.kind !== 'hero' || String(combatant.userId) !== context.viewerId) throw new NotFoundError('Combatant not found')
+   await Encounter.updateOne({ _id: encounter._id, 'combatants._id': combatant._id }, { $set: { 'combatants.$.panel': req.body as HeroPanel } })
+   publish(encounter.partyId)
+   res.status(204).end()
 }
-export async function saveNpcTemplate(req: Request, res: Response) {
-   const template = await NpcTemplate.findOneAndUpdate({ userId: userOf(req), name: req.body.name }, { $set: { values: req.body.values } }, { upsert: true, new: true })
-   res.status(201).json({ template: { _id: String(template._id), name: template.name, values: template.values } })
-}
-export async function deleteNpcTemplate(req: Request, res: Response) {
-   const result = await NpcTemplate.deleteOne({ _id: idParam(req, 'templateId'), userId: userOf(req) })
-   if (!result.deletedCount) throw new NotFoundError('Template not found')
-   res.json({ ok: true })
-}
+
 
 // An attack between the sides (user decisions, Nov 2026): the attacker rolls AT/FK; a success waits for the defender's roll
 // (PA/AW/VW through the GM for NPCs, through the owner for heroes and allies); only after a failed defense the attacker
@@ -524,8 +520,9 @@ export async function deleteNpcTemplate(req: Request, res: Response) {
 export async function submitAttack(req: Request, res: Response) {
    const context = await partyContext(req)
    const encounter = await requireEncounter(context, req)
-   const { attackerId, targetId, incoming, attack, reach, passing, dual, dice } = req.body as { attackerId: string; targetId: string; incoming: 'melee' | 'shot' | 'thrown'
-      attack: CombatRollRecord; reach: 'short' | 'medium' | 'long'; passing: boolean; dual: 'first' | 'second' | null; dice: { count: number; sides: number; bonus: number } | null }
+   const { attackerId, targetId, incoming, attack, reach, passing, dual, dice, defenseModifier, weapon: weaponName } = req.body as { attackerId: string; targetId: string; incoming: 'melee' | 'shot' | 'thrown'
+      attack: CombatRollRecord; reach: 'short' | 'medium' | 'long'; passing: boolean; dual: 'first' | 'second' | null; dice: { count: number; sides: number; bonus: number } | null
+      defenseModifier: number; weapon: string | null }
    const attacker = encounter.combatants.id(attackerId)
    const target = encounter.combatants.id(targetId)
    if (!attacker || !controls(context, attacker)) throw new NotFoundError('Combatant not found')
@@ -545,7 +542,13 @@ export async function submitAttack(req: Request, res: Response) {
    } else {
       requireTurn(encounter, attacker)
       const current = attacker.turn && attacker.turn.round === encounter.round ? attacker.turn : null
-      if (dual === 'second') {
+      // source: DSA5 Regelwerk, S. 354 (creatures: "Aktionen: 2", per-attack limits such as "max. 1 × Biss")
+      const maxActions = attacker.kind === 'npc' ? Math.max(1, attacker.npc?.sheet?.actions ?? 1) : 1
+      if (maxActions > 1 && dual !== 'second') {
+         const next = npcAttackTurn(current, encounter.round, maxActions, attacker.npc ? npcWeapons(attacker.npc) : [], weaponName)
+         if ('error' in next) throw new BadRequestError(next.error)
+         attacker.turn = next.turn
+      } else if (dual === 'second') {
          // source: DSA5 Regelwerk, S. 238 (both strikes of a two-weapon attack share one action)
          if (!current?.dual) throw new BadRequestError('There is no open second strike.')
          attacker.turn = { ...current, dual: false }
@@ -571,7 +574,7 @@ export async function submitAttack(req: Request, res: Response) {
    addLog(encounter, '{attacker} attacks {target} ({weapon}): {outcome}', { attacker: attacker.name, target: target.name, weapon, outcome: attack.outcome },
       { key: '{attacker} attacks {target} ({weapon}): W20 {roll} vs {value} → {outcome}', values: { attacker: attacker.name, target: target.name, weapon, roll: rollText(attack), value: attack.target, outcome: attack.outcome } })
    if (success) {
-      encounter.attacks.push({ attackerId: attacker._id, targetId: target._id, incoming, attack, critical, passing, tp: 0, dice, halved: false,
+      encounter.attacks.push({ attackerId: attacker._id, targetId: target._id, incoming, attack, critical, passing, tp: 0, dice, halved: false, defenseModifier,
          status: passing ? 'damage' : 'pending', defense: null, sp: null, round: encounter.round, createdAt: new Date() })
    }
    finishIfDone(encounter, attacker)

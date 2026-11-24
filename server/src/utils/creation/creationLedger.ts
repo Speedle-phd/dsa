@@ -388,10 +388,15 @@ export function creationLedger(draft: CreationDraftData): CreationLedger {
       costs.skills += 1
    }
    granted.tricks = packageTricks
-   const spellCount = Object.keys(spells).length
+   // source: DSA5 Regelwerk, S. 39 ("Zauber bzw. Liturgien" per EG). Hexenflüche and Elfenlieder do not count: the witch packages
+   // list curses under Sonderfertigkeiten, not under Zauber (S. 148–149); user decision, Nov 2026
+   const spellCount = Object.keys(spells).filter((key) => {
+      const kind = magicSpells.find((entry) => entry.key === key)?.kind
+      return kind !== 'Hexenfluch' && kind !== 'Elfenlied'
+   }).length
    if (spellCount > caps.spells) violations.push({ section: 'skills', key: 'spell-count', message: 'At most {max} spells at this Erfahrungsgrad (S. 39).', values: { max: caps.spells } })
    if (foreignSpells > caps.foreignSpells) violations.push({ section: 'skills', key: 'foreign-spells', message: 'At most {max} spells of another tradition at this Erfahrungsgrad (S. 39).', values: { max: caps.foreignSpells } })
-   if ((spellCount > 0 || draft.tricks.length > 0 || packageTricks.length > 0) && !caster) violations.push({ section: 'skills', key: 'spell-caster', message: 'Spells and Zaubertricks need the advantage Zauberer (S. 38).' })
+   if ((Object.keys(spells).length > 0 || draft.tricks.length > 0 || packageTricks.length > 0) && !caster) violations.push({ section: 'skills', key: 'spell-caster', message: 'Spells and Zaubertricks need the advantage Zauberer (S. 38).' })
    // source: DSA5 Regelwerk, S. 147–149 ("Flüche für insgesamt N AP" are part of the witch package price)
    const curseUsed = Math.min(profession?.curseBudget ?? 0, curseAp)
    costs.profession -= curseUsed

@@ -1,10 +1,11 @@
 import { Dices, Flag, Footprints, HeartCrack, Info, ShieldHalf, Swords, Telescope } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { throwColoredDice } from '@/components/diceEngine'
 import { Tooltip } from '@/components/Tooltip'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { armorProtection } from './combatGear'
+import { useEncounterLink } from './encounterLink'
 import { botchDamage, hitPoints, type DamageDice } from './combatRoll'
 import { readPatzerTables, roundStarted, rollDamage, useSettings, useWeaponCondition } from './fightHelpers'
 import { useFightStore, type Fight, type Stance } from './fightStore'
@@ -62,6 +63,71 @@ export function LeaderBonus({ heroId, fight }: { heroId: string; fight: Fight })
          {t(active ? 'AT, defense and FK +1 this round' : 'Bonus received this round', language)}
       </button>
    </div>
+}
+
+// source: DSA5 Regelwerk, S. 215 (Anführer: 1 action, then Überreden (Aufschwatzen, Manipulieren, Schmeicheln); up to QS + 1 other
+// persons of the leader's choice in sight and hearing get AT +1, defense +1 and FK +1 in the next KR; not cumulative)
+// In a party fight the leader picks the allies in the result; "Done" spends the action and gives them the bonus in one request
+// (the turn may pass with it). Alone, the result names how many allies benefit.
+export function LeaderAction({ stats, heroId, fight }: { stats: Stats; heroId: string; fight: Fight }) {
+   const language = useLanguageStore((state) => state.language)
+   const gate = useTurnGate(heroId, fight)
+   const link = useEncounterLink()
+   const [rolling, setRolling] = useState(false)
+   // The check's result and the allies chosen; null until rolled
+   const outcome = useRef<{ success: boolean; quality: number; ids: string[] } | null>(null)
+   if (!stats.generalSpecialAbilities.includes('Anführer')) return null
+   const actionReason = gate.reason('action')
+   const { talent, value } = talentFor(stats, 'ueberreden')
+
+   function finish() {
+      setRolling(false)
+      const done = outcome.current
+      outcome.current = null
+      if (!done) return
+      if (!done.success || !link || !done.ids.length) {
+         void gate.spend('action', done.success ? 'Anführer' : 'Anführer (Überreden failed)')
+         return
+      }
+      const names = link.allies.filter((ally) => done.ids.includes(ally.id)).map((ally) => ally.name).join(', ')
+      void link.lead(done.quality, done.ids, names).then((ok) => { if (ok) useFightStore.getState().spend(heroId, 'action') })
+   }
+
+   return <div className='fight-card fight-lead'>
+      <h4><Flag size={16} aria-hidden='true' />{t('Anführer', language)}</h4>
+      <p className='fight-note'>{t('1 action and an Überreden check (Aufschwatzen, Manipulieren or Schmeicheln): up to QS + 1 allies get AT, defense and FK +1 in the next combat round (S. 215).', language)}</p>
+      <button className='primary-button' type='button' disabled={actionReason !== null} onClick={() => { outcome.current = null; setRolling(true) }}>
+         {t('Lead allies (Überreden)', language)}</button>
+      {actionReason && <small className='fight-note'>{t(actionReason, language)}</small>}
+      {rolling && <TalentProbeDialog stats={stats} talent={talent} value={value}
+         renderResult={({ result, quality }) => {
+            const qs = result.success ? quality ?? 0 : 0
+            if (outcome.current?.success !== result.success || outcome.current.quality !== qs) outcome.current = { success: result.success, quality: qs, ids: [] }
+            if (!result.success || !link) return null
+            return <LeaderTargets key={qs} max={qs + 1} onChange={(ids) => { if (outcome.current) outcome.current.ids = ids }} />
+         }}
+         onClose={finish} />}
+   </div>
+}
+
+function LeaderTargets({ max, onChange }: { max: number; onChange: (ids: string[]) => void }) {
+   const language = useLanguageStore((state) => state.language)
+   const allies = useEncounterLink()?.allies ?? []
+   const [chosen, setChosen] = useState<string[]>(() => allies.slice(0, max).map((ally) => ally.id))
+   useEffect(() => onChange(chosen), [chosen, onChange])
+   if (!allies.length) return <p className='fight-note'>{t('No allies in this fight.', language)}</p>
+   const toggle = (id: string) => setChosen((list) => list.includes(id) ? list.filter((entry) => entry !== id) : [...list, id])
+   return <fieldset className='fight-lead-targets'>
+      <legend>{t('Allies ({count} of up to {max})', language).replace('{count}', String(chosen.length)).replace('{max}', String(max))}</legend>
+      <div className='fight-options'>
+         {allies.map((ally) => {
+            const active = chosen.includes(ally.id)
+            return <button key={ally.id} type='button' aria-pressed={active} disabled={!active && chosen.length >= max}
+               className={`probe-chip${active ? ' is-active' : ''}`} onClick={() => toggle(ally.id)}>{ally.name}</button>
+         })}
+      </div>
+      <small className='fight-note'>{t('"Done" spends the action; the chosen allies get AT, defense and FK +1 in the next combat round.', language)}</small>
+   </fieldset>
 }
 
 function talentFor(stats: Stats, key: string) {

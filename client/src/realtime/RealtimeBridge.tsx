@@ -26,6 +26,11 @@ export function RealtimeBridge() {
          void queryClient.invalidateQueries({ queryKey: ['parties'] })
          void queryClient.invalidateQueries({ queryKey: ['party-sheet'] })
          void queryClient.invalidateQueries({ queryKey: ['encounter'] })
+         // The own heroes may have changed on another device or by the GM meanwhile
+         void queryClient.invalidateQueries({ queryKey: ['stats'] })
+         void queryClient.invalidateQueries({ queryKey: ['heroes'] })
+         void queryClient.invalidateQueries({ queryKey: ['presence'] })
+         void queryClient.invalidateQueries({ queryKey: ['check-requests'] })
       }
       socket.on('notice', onNotice)
       socket.on('connect', onConnect)

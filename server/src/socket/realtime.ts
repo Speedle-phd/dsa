@@ -26,10 +26,12 @@ export const realtime = {
    // An accepted member's open tabs join the room at once (their earlier subscribe was refused while pending).
    joinParty(userId: string, partyId: string) {
       io?.in(userRoom(userId)).socketsJoin(partyRoom(partyId))
+      io?.to(partyRoom(partyId)).emit('notice', { topic: 'presence', partyId })
    },
    // Removed members and players who left must stop receiving the party's notices at once.
    leaveParty(userId: string, partyId: string) {
       io?.in(userRoom(userId)).socketsLeave(partyRoom(partyId))
+      io?.to(partyRoom(partyId)).emit('notice', { topic: 'presence', partyId })
    },
    closeParty(partyId: string) {
       io?.in(partyRoom(partyId)).socketsLeave(partyRoom(partyId))

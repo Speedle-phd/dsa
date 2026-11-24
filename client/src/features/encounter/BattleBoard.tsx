@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { BrickWall, Flame, Mountain, Sprout, TreePine, Waves } from 'lucide-react'
-import { useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { getErrorMessage } from '@/utils/errorHandling'
+import { onPing, sendPing } from '@/realtime/socket'
 import { cellAt, cellKey, firstFreeCell, reachableCells, squaresFor, stepPosition } from './boardGeometry'
 import { encounterKey, moveCombatant, setObstacles, type Combatant, type Encounter, type ObstacleKind, type Position } from './encounterApi'
 import { obstacleLabels } from './obstacleLabels'
@@ -14,6 +15,10 @@ import { tokenClass, tokenLabel } from './tokenStyle'
 const obstacleIcons = { wall: BrickWall, rock: Mountain, tree: TreePine, water: Waves, bush: Sprout, fire: Flame } as const
 
 type Drag = { id: string; pointerId: number; startX: number; startY: number; moved: boolean; cell: Position | null }
+type Ping = { id: number; x: number; y: number; by: string }
+// A ping shows for 2 s; a long press of 500 ms on touch sends one (user request, Nov 2026)
+const pingMs = 2000
+const longPressMs = 500
 export type TerrainTool = ObstacleKind | 'erase' | null
 
 // Grid battle board, 1 square = `board.scale` Schritt (user decision). Drag & drop with mouse or touch; alternatives: select a token
@@ -32,7 +37,13 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
    const [planned, setPlanned] = useState<{ id: string; cell: Position } | null>(null)
    const [painting, setPainting] = useState<{ pointerId: number; cells: Map<string, Position> } | null>(null)
    const [announcement, setAnnouncement] = useState('')
+   const [pings, setPings] = useState<Ping[]>([])
+   const longPress = useRef<{ pointerId: number; x: number; y: number; timer: number } | null>(null)
+   // The click (or token release) that ends a long press must not also move or select
+   const suppressClick = useRef(false)
    const { board } = encounter
+   // Pings only in the running party fight (a prepared fight's scope is "partyId:encounterId")
+   const live = !partyId.includes(':')
    const isGm = encounter.role === 'gm'
    const setEncounter = (next: Encounter | null) => queryClient.setQueryData(encounterKey(partyId), next)
    const move = useMutation({
@@ -51,6 +62,33 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
       onSuccess: setEncounter,
       onError: (error) => toast.error(getErrorMessage(error)),
    })
+
+   // Mark a square for everyone in the party (socket event, not stored); quietly skipped while rate-limited
+   function ping(cell: Position) {
+      void sendPing(partyId, cell.x, cell.y).then((result) => {
+         if (!result.ok && result.error !== 'rate-limited') toast.error(t('The mark could not be sent.', language))
+      }, () => toast.error(t('The mark could not be sent.', language)))
+   }
+   useEffect(() => {
+      if (!live) return
+      const timers: number[] = []
+      const off = onPing((event) => {
+         if (event.partyId !== partyId) return
+         const id = Date.now() + Math.random()
+         setPings((current) => [...current, { id, x: event.x, y: event.y, by: event.by }])
+         setAnnouncement(t('{name} marks column {x}, row {y}.', language).replace('{name}', event.by)
+            .replace('{x}', String(event.x + 1)).replace('{y}', String(event.y + 1)))
+         timers.push(window.setTimeout(() => setPings((current) => current.filter((entry) => entry.id !== id)), pingMs))
+      })
+      return () => {
+         off()
+         timers.forEach((timer) => window.clearTimeout(timer))
+      }
+   }, [live, partyId, language])
+   function cancelLongPress() {
+      if (longPress.current) window.clearTimeout(longPress.current.timer)
+      longPress.current = null
+   }
 
    const positionOf = (combatant: Combatant) => (combatant.id in pending ? pending[combatant.id] : combatant.position)
    const placed = encounter.combatants.filter((combatant) => positionOf(combatant))
@@ -112,6 +150,11 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
    }
 
    function onTokenPointerDown(event: PointerEvent<HTMLButtonElement>, combatant: Combatant) {
+      const position = positionOf(combatant)
+      if (live && !terrain && event.altKey && event.button === 0 && position) {
+         event.preventDefault()
+         return ping(position)
+      }
       if (terrain || !combatant.canControl || event.button !== 0) return
       event.currentTarget.setPointerCapture(event.pointerId)
       setDrag({ id: combatant.id, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, moved: false, cell: null })
@@ -122,6 +165,11 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
       setDrag({ ...drag, moved, cell: moved ? cellFromPointer(event) : null })
    }
    function onTokenPointerUp(event: PointerEvent<HTMLButtonElement>, combatant: Combatant) {
+      if (suppressClick.current) {
+         suppressClick.current = false
+         setDrag(null)
+         return
+      }
       if (!drag || drag.pointerId !== event.pointerId) return
       setDrag(null)
       if (drag.moved) {
@@ -137,6 +185,11 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
       if (event.key === 'Escape') {
          setPlanned(null)
          return onSelect(null)
+      }
+      // P marks the token's square for everyone
+      if (live && (event.key === 'p' || event.key === 'P') && position) {
+         event.preventDefault()
+         return ping(position)
       }
       if (!combatant.canControl || !position) return
       if (costly(combatant)) {
@@ -162,6 +215,18 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
 
    // Terrain painting (GM): press and drag over squares, sent as one change
    function onBoardPointerDown(event: PointerEvent<HTMLDivElement>) {
+      if (!terrain && live && event.pointerType === 'touch') {
+         const cell = cellFromPointer(event)
+         if (!cell) return
+         cancelLongPress()
+         const timer = window.setTimeout(() => {
+            longPress.current = null
+            suppressClick.current = true
+            ping(cell)
+         }, longPressMs)
+         longPress.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, timer }
+         return
+      }
       if (!terrain || event.button !== 0) return
       const cell = cellFromPointer(event)
       if (!cell) return
@@ -169,12 +234,15 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
       setPainting({ pointerId: event.pointerId, cells: new Map([[cellKey(cell), cell]]) })
    }
    function onBoardPointerMove(event: PointerEvent<HTMLDivElement>) {
+      const press = longPress.current
+      if (press && press.pointerId === event.pointerId && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 10) cancelLongPress()
       if (!painting || painting.pointerId !== event.pointerId) return
       const cell = cellFromPointer(event)
       if (!cell || painting.cells.has(cellKey(cell))) return
       setPainting({ ...painting, cells: new Map(painting.cells).set(cellKey(cell), cell) })
    }
    function onBoardPointerUp(event: PointerEvent<HTMLDivElement>) {
+      if (longPress.current?.pointerId === event.pointerId) cancelLongPress()
       if (!painting || painting.pointerId !== event.pointerId || !terrain) return
       const kind = terrain === 'erase' ? null : terrain
       const cells = [...painting.cells.values()].filter((cell) => kind === null || !occupied.has(cellKey(cell)))
@@ -183,6 +251,16 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
    }
    // Select-and-place: a click on a square moves the selected token there
    function onBoardClick(event: React.MouseEvent<HTMLDivElement>) {
+      if (suppressClick.current) {
+         suppressClick.current = false
+         return
+      }
+      // Alt-click marks the square for everyone (terrain and tokens included)
+      if (live && !terrain && event.altKey) {
+         const cell = cellAt({ x: event.clientX, y: event.clientY }, event.currentTarget.getBoundingClientRect(), board)
+         if (cell) ping(cell)
+         return
+      }
       if (terrain || event.target !== event.currentTarget || !selected?.canControl) return
       const rect = event.currentTarget.getBoundingClientRect()
       const cell = cellAt({ x: event.clientX, y: event.clientY }, rect, board)
@@ -231,14 +309,11 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
             <span className='battle-tray-name'>{combatant.name}</span>
          </li>)}</ul>
       </div>}
-      <p className='battle-hint'>{t(hint, language)}
-         {selected?.canControl && positionOf(selected) && (isGm || !fighting) && !terrain && <> <button className='quiet-button battle-unplace' type='button' onClick={() => commit(selected, null)}>
-            {t('Take off the board', language)}</button></>}
-      </p>
       <div className='battle-stage'>
          <div className='battle-board-scroll'>
             <div ref={boardRef} className={terrain ? 'battle-board is-painting' : 'battle-board'} onClick={onBoardClick}
-               onPointerDown={onBoardPointerDown} onPointerMove={onBoardPointerMove} onPointerUp={onBoardPointerUp} onPointerCancel={() => setPainting(null)}
+               onPointerDown={onBoardPointerDown} onPointerMove={onBoardPointerMove} onPointerUp={onBoardPointerUp} onPointerCancel={() => { setPainting(null); cancelLongPress() }}
+               onContextMenu={(event) => { if (live && longPress.current) event.preventDefault() }}
                role='group' aria-label={`${t('Battle board', language)} (${board.width} × ${board.height})`}
                style={{ gridTemplateColumns: `repeat(${board.width}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${board.height}, minmax(0, 1fr))`,
                   aspectRatio: `${board.width} / ${board.height}`, '--board-columns': board.width, '--board-rows': board.height } as React.CSSProperties}>
@@ -264,12 +339,19 @@ export function BattleBoard({ encounter, partyId, selectedId, onSelect, moveRang
                      <TokenFace combatant={combatant} />
                   </button>
                })}
+               {pings.map((entry) => <span key={entry.id} className='battle-ping' aria-hidden='true'
+                  style={{ gridColumn: entry.x + 1, gridRow: entry.y + 1 }}><small>{entry.by}</small></span>)}
                {ghost?.combatant && <span className={tokenClass(ghost.combatant, 'is-ghost')} aria-hidden='true'
                   style={{ gridColumn: ghost.cell.x + 1, gridRow: ghost.cell.y + 1 }}><TokenFace combatant={ghost.combatant} /></span>}
             </div>
          </div>
          {overlay}
       </div>
+      <p className='battle-hint'>{t(hint, language)}
+         {live && !terrain && <> {t('Alt-click or long-press a square to mark it for everyone (P on a focused token).', language)}</>}
+         {selected?.canControl && positionOf(selected) && (isGm || !fighting) && !terrain && <> <button className='quiet-button battle-unplace' type='button' onClick={() => commit(selected, null)}>
+            {t('Take off the board', language)}</button></>}
+      </p>
       <p className='sr-only' aria-live='polite'>{announcement}</p>
    </div>
 }

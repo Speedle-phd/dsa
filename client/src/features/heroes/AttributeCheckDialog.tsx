@@ -1,5 +1,5 @@
 import { Dices, X } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useModalKeyboard } from '@/components/useModalKeyboard'
 import { useLanguageStore } from '@/locales/languageStore'
@@ -9,7 +9,7 @@ import { useCheckState } from './checkState'
 import { improveRoll, type CombatOutcome, type D20Roll } from './combatRoll'
 import { rollD20 } from './d20'
 import { FateD20Actions, type D20FateUse } from './FateActions'
-import { ProbeStepper } from './ProbeDialog'
+import { ProbeStepper, type ProbeExtraSource } from './ProbeDialog'
 import { attributeDifficultyPresets } from './skillCheck'
 import type { Stats } from './statsApi'
 import { attributeLabels, getAttributeAbbreviation, type TalentAttribute } from './talentCatalog'
@@ -26,7 +26,10 @@ const outcomeLabels: Record<CombatOutcome, string> = {
 }
 
 // Eigenschaftsprobe: 1W20 against the modified attribute (S. 20–21); setup → roll → result → Done.
-export function AttributeCheckDialog({ stats, attribute, onClose }: { stats: Stats; attribute: TalentAttribute; onClose: () => void }) {
+// `extraSources` / `renderResult`: a GM check request (its modifier, "Send the result")
+export function AttributeCheckDialog({ stats, attribute, extraSources = [], renderResult, onClose }: {
+   stats: Stats; attribute: TalentAttribute; extraSources?: ProbeExtraSource[]; renderResult?: (result: D20Roll) => ReactNode; onClose: () => void
+}) {
    const language = useLanguageStore((state) => state.language)
    const titleId = useId()
    const dialogRef = useModalKeyboard(onClose)
@@ -39,7 +42,8 @@ export function AttributeCheckDialog({ stats, attribute, onClose }: { stats: Sta
    const name = t(attributeLabels[attribute], language)
    const abbreviation = getAttributeAbbreviation(attribute, language)
    const base = stats[attribute]
-   const target = base + check.total + difficulty
+   const extra = extraSources.reduce((sum, source) => sum + source.value, 0)
+   const target = base + check.total + difficulty + extra
    // source: DSA5 Regelwerk, S. 20 (an effective value of 0 or less allows no check)
    const reasons = [...check.blocked, ...check.unresolved, ...(target <= 0 ? ['Effective target ≤ 0: no check possible.'] : [])]
 
@@ -98,7 +102,8 @@ export function AttributeCheckDialog({ stats, attribute, onClose }: { stats: Sta
                      <strong>{t('Other modifiers', language)}: {check.total === 0 ? '±0' : signed(check.total)}</strong>
                      <small>{check.sources.length > 0
                         ? check.sources.map((source) => `${translateRuleLabel(source.label, language)} ${signed(source.value)}`).join(' · ')
-                        : t('Conditions, Belastung and owned abilities are applied automatically.', language)}</small>
+                        : t('Conditions, Belastung and owned abilities are applied automatically.', language)}
+                        {extraSources.map((source) => <span key={source.label}> · {t(source.label, language)} {signed(source.value)}</span>)}</small>
                   </div>
                   <CheckModifierButton check={check} label={name} />
                </div>
@@ -127,6 +132,7 @@ export function AttributeCheckDialog({ stats, attribute, onClose }: { stats: Sta
             {result && !rolling && <section className='probe-fate' aria-label={t('Fate points', language)}>
                <FateD20Actions stats={stats} result={result} used={fateUsed} onUse={useFate} improveAbility='Eigenschaft verbessern' />
             </section>}
+            {result && !rolling && renderResult?.(result)}
 
             <footer className='editor-actions'>
                {result && !rolling

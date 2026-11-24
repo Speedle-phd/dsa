@@ -9,6 +9,7 @@ import { changeTurn, encounterKey, endTurn, type Actions, type Encounter, type H
 import { AllyDefensePanel, AllyTurnPanel } from './AllyFight'
 import { BlutrauschOffer } from './BlutrauschOffer'
 import { DamageRollPanel, FightLog, NpcAttackForm, OpenAttackPanel } from './GmCombat'
+import { NpcFightHints } from './NpcFightHints'
 import { clampWindow, useFightWindow } from './fightWindow'
 import { HeroFightSection } from './HeroFightSection'
 
@@ -123,6 +124,7 @@ export function FightDock({ encounter, partyId, ownHero }: { encounter: Encounte
       body = <>
          <ActionChips actions={active.actions} />
          <p className='party-muted'>{t('Drag the token to move it. The attack ends the turn.', language)}</p>
+         {active.npc && <NpcFightHints values={active.npc} />}
          {active.actions.action && <NpcAttackForm key={active.id} encounter={encounter} partyId={partyId} npc={active} />}
          {endTurnButton()}
       </>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { canControlCombatant, clampPosition, damagePoints, isAdjacent, initialsFor, initiativeOrder, npcDefenseTarget, npcGroupName, npcState, previousDefenses, stepTurn, tokenAssignment, type RuleCombatant } from './encounterRules'
+import { canControlCombatant, leaderTargets, clampPosition, damagePoints, isAdjacent, initialsFor, initiativeOrder, npcDefenseTarget, npcGroupName, npcState, previousDefenses, stepTurn, tokenAssignment, type RuleCombatant } from './encounterRules'
 
 const fighter = (id: string, initiative: number | null, initiativeBase = 10, tiebreak = 0, change: Partial<RuleCombatant> = {}): RuleCombatant =>
    ({ id, kind: 'npc', name: id, initiative, initiativeBase, tiebreak, ...change })
@@ -197,5 +197,23 @@ describe('board scale (user decision: Schritt per square)', () => {
       expect(squaresFor(7, 2)).toBe(3)
       expect(squaresFor(12, 5)).toBe(2)
       expect(schrittFor(3, 2)).toBe(6)
+   })
+})
+
+describe('Anführer (S. 215)', () => {
+   const party = [{ id: 'lead', kind: 'hero' as const, down: false }, { id: 'h2', kind: 'hero' as const, down: false },
+      { id: 'wolf', kind: 'ally' as const, down: false }, { id: 'orc', kind: 'npc' as const, down: false }, { id: 'h3', kind: 'hero' as const, down: false }]
+   const leader = { id: 'lead', kind: 'hero' as const }
+   it('grants up to QS + 1 other allies, including companions', () => {
+      expect(leaderTargets(leader, party, ['h2', 'wolf'], 1)).toEqual({ ids: ['h2', 'wolf'] })
+      expect(leaderTargets(leader, party, ['h2', 'wolf', 'h3'], 1)).toEqual({ error: 'Anführer reaches at most QS + 1 allies.' })
+   })
+   it('refuses the leader, opponents and unknown combatants', () => {
+      expect(leaderTargets(leader, party, ['lead'], 3)).toHaveProperty('error')
+      expect(leaderTargets(leader, party, ['orc'], 3)).toHaveProperty('error')
+      expect(leaderTargets(leader, party, ['nobody'], 3)).toHaveProperty('error')
+   })
+   it('an NPC leader supports other NPCs', () => {
+      expect(leaderTargets({ id: 'orc', kind: 'npc' }, [...party, { id: 'orc2', kind: 'npc', down: false }], ['orc2'], 1)).toEqual({ ids: ['orc2'] })
    })
 })

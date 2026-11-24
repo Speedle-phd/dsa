@@ -8,6 +8,8 @@ import { t } from '@/locales/translation'
 import { getErrorMessage } from '@/utils/errorHandling'
 import { GmHeroActions } from './GmHeroActions'
 import { levelsLabel } from './levels'
+import { OnlineDot } from './OnlineDot'
+import { usePresence } from '@/realtime/presence'
 import { answerRequest, partiesKey, removeMember, setVisibility, type Party, type PartyMember, type Visibility } from './partyApi'
 
 const visibilityLabels: Record<Visibility, string> = {
@@ -37,12 +39,13 @@ export function PartyMemberCard({ party, member }: { party: Party; member: Party
    })
    const pending = member.state === 'pending'
    const conditions = Object.entries(hero.conditions ?? {})
+   const presence = usePresence(party._id)
 
    return <li className={`party-member${pending ? ' is-pending' : ''}`}>
       <header className='party-member-head'>
          <span className='companion-avatar' aria-hidden='true'>{hero.name.slice(0, 2).toUpperCase()}</span>
          <div className='party-member-title'>
-            <h3>{hero.name}{member.isSelf && <small> · {t('your hero', language)}</small>}</h3>
+            <h3>{presence && !pending && <OnlineDot online={presence.charIds.includes(member.charId)} />}{hero.name}{member.isSelf && <small> · {t('your hero', language)}</small>}</h3>
             <small>{[hero.species, hero.profession, member.playerName && `${t('Player', language)}: ${member.playerName}`].filter(Boolean).join(' · ')}</small>
          </div>
          {pending && <span className='party-badge'>{t('Waiting for the GM', language)}</span>}

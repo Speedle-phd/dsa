@@ -9,10 +9,11 @@ import { FightDock } from '@/features/encounter/FightDock'
 import { FightLog } from '@/features/encounter/GmCombat'
 import { GmTools } from '@/features/encounter/GmTools'
 import { GmHeroOverview } from '@/features/encounter/GmHeroOverview'
+import { CheckRequestPanel } from '@/features/parties/CheckRequestPanel'
 import { InitiativeTracker } from '@/features/encounter/InitiativeTracker'
 import { PreparedFights } from '@/features/encounter/PreparedFights'
 import { useAllySync } from '@/features/encounter/allySync'
-import { useHitEffects, usePartyFightCleanup } from '@/features/encounter/partyFightSync'
+import { useHitEffects, usePanelMirror, usePartyFightCleanup } from '@/features/encounter/partyFightSync'
 import { useHeroFightSpeed } from '@/features/encounter/useHeroFightSpeed'
 import { encounterKey, startEncounter, useEncounter, type HeroCombatant } from '@/features/encounter/encounterApi'
 import { useParty } from '@/features/parties/partyApi'
@@ -37,6 +38,7 @@ export function FightPage() {
    // The hero's companions, summons and Radau join from the fight panel; hits and the end of the fight reach the panel
    useAllySync(encounter, partyId, player)
    useHitEffects(encounter, player)
+   usePanelMirror(encounter, player, partyId)
    usePartyFightCleanup(partyId, !query.isSuccess || Boolean(encounter))
 
    return <main className='dashboard-shell' lang={language}>
@@ -61,6 +63,7 @@ export function FightPage() {
                   <InitiativeTracker encounter={encounter} partyId={partyId} selectedId={selectedId} onSelect={setSelectedId} />
                </section>
                {isGm && <GmHeroOverview encounter={encounter} partyId={partyId} />}
+               {isGm && party.data && <CheckRequestPanel party={party.data} compact />}
                <FightLog encounter={encounter} />
             </aside>
          </div>}

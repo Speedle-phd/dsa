@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { useLanguageStore } from '@/locales/languageStore'
 import { translateRuleLabel } from '@/locales/translation'
 import { effectBonus, useActiveEffects } from './activeEffectsApi'
-import { findProfile } from './checkProfiles'
+import { findProfile, roundSources } from './checkProfiles'
 import { useFightStore } from './fightStore'
 import type { CheckContext, CheckProfile, Stats, TargetRule } from './statsApi'
 import { talentCatalog } from './talentCatalog'
@@ -84,18 +84,10 @@ export function useCheckState(stats: Stats, kind: CheckProfile['kind'], checkKey
       .filter((reason) => !((context.preserveAction || (kind === 'talent' && checkKey === 'selbstbeherrschung' && context.preserveActionCheck)) &&
          reason.startsWith('Schmerz IV:')))
    for (const effect of activeEffects) if (effect.blocked) blocked.push(`${translateRuleLabel(effect.label, language)}: ${effect[language]}`)
-   const fightSources: Array<{ label: string; value: number; page: number }> = []
-   // source: DSA5 Regelwerk, S. 250 (Vorstoß: AT +2, no defense; Verteidigungshaltung: defenses +4, no attacks)
-   if (stance === 'Vorstoß') {
-      if (kind === 'defense') blocked.push('Vorstoß: no defense this combat round.')
-      if (kind === 'attack' && checkKey !== 'Schilde') fightSources.push({ label: 'Vorstoß', value: 2, page: 250 })
-   }
-   if (stance === 'Verteidigungshaltung') {
-      if (kind === 'attack' || kind === 'ranged') blocked.push('Verteidigungshaltung: no attacks this combat round.')
-      if (kind === 'defense') fightSources.push({ label: 'Verteidigungshaltung', value: 4, page: 250 })
-   }
-   // source: DSA5 Regelwerk, S. 231–244 (Patzer table: one level of Schmerz for 3 KR; a Zustand, so Zustand ignorieren drops it)
-   if (tempPain && !ignoreConditions) fightSources.push({ label: 'Schmerz (Patzer)', value: -1, page: 34 })
+   // Stance, Patzer Schmerz and Anführer of this KR (shared with the GM overview, checkProfiles.ts)
+   const round = roundSources(kind, checkKey, { stance, leader, tempPain, ignoreConditions })
+   blocked.push(...round.blocked)
+   const fightSources: Array<{ label: string; value: number; page: number }> = [...round.sources]
    // source: DSA5 Regelwerk, S. 273 (Verwandlungselixier: one level of Schmerz while transforming)
    const transition = effectBonus(running, 'transitionPain')
    if (transition && !ignoreConditions) fightSources.push({ label: 'Schmerz (Verwandlung)', value: -transition.value, page: 273 })
@@ -123,8 +115,6 @@ export function useCheckState(stats: Stats, kind: CheckProfile['kind'], checkKey
    if (spellSong) fightSources.push({ label: spellSong.label, value: spellSong.value, page: spellSong.page })
    const craftSong = kind === 'talent' && talentCatalog.some((talent) => talent.key === checkKey && talent.category === 'craft') ? effectBonus(running, 'craftBonus') : null
    if (craftSong) fightSources.push({ label: craftSong.label, value: craftSong.value, page: craftSong.page })
-   // source: DSA5 Regelwerk, S. 215 (Anführer bonus for this KR)
-   if (leader && combat) fightSources.push({ label: 'Anführer', value: 1, page: 215 })
    // source: DSA5 Regelwerk, S. 173 (Lästige Mindergeister: all skill checks −1 while they stay; not a Zustand)
    const spirits = kind === 'talent' ? effectBonus(running, 'checkPenalty') : null
    if (spirits) fightSources.push({ label: spirits.label, value: -spirits.value, page: spirits.page })

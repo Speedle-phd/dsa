@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { CheckProfile, Stats } from '@/features/heroes/statsApi'
+import type { HeroPanel } from './heroPanel'
 import { heroOverview } from './heroOverview'
 
 const profile = (kind: CheckProfile['kind'], total: number, blocked: string[] = [], burden = kind !== 'ranged'): CheckProfile =>
@@ -67,5 +68,37 @@ describe('heroOverview', () => {
    it('has no AT/PA for a broken weapon', () => {
       const stats = makeStats({ statuses: [], equipment: [{ item: 'Langschwert', weight: 1, amount: 1, carriedOn: 'Equipped', category: 'weapon', condition: 'broken' }] } as Partial<Stats>)
       expect(heroOverview(stats, 'Mensch').weapons[0]).toMatchObject({ at: null, pa: null, notes: ['Broken'] })
+   })
+
+   describe('with the panel copy of the current KR', () => {
+      const plain = () => makeStats({ statuses: [], permanentStatuses: [] })
+      const panel = (change: Partial<HeroPanel> = {}): HeroPanel => ({
+         round: 2, stance: null, leader: false, tempPain: false, ignoreConditions: false, fateDefense: false,
+         defensePenalty: 0, nextActionPenalty: 0, noDefense: false, casting: null, weapons: [], ...change,
+      })
+      const sword = (overview: ReturnType<typeof heroOverview>) => overview.weapons.find((weapon) => weapon.label === 'Langschwert')
+
+      it('Vorstoß: AT +2 and no defense (S. 250)', () => {
+         const overview = heroOverview(plain(), 'Mensch', panel({ stance: 'Vorstoß' }), 2)
+         expect(sword(overview)).toMatchObject({ at: 13, pa: null })
+         expect(overview.dodge).toBeNull()
+         expect(overview.blocked).toContain('Vorstoß: no defense this combat round.')
+      })
+
+      it('Verteidigungshaltung with a Schip and one earlier defense: no attack, defenses +4 +4 −3 (S. 250, 30, 232)', () => {
+         const overview = heroOverview(plain(), 'Mensch', panel({ stance: 'Verteidigungshaltung', fateDefense: true, defensePenalty: 3 }), 2)
+         expect(sword(overview)).toMatchObject({ at: null, pa: 11 })
+         expect(overview.dodge).toBe(11)
+      })
+
+      it('ignores a panel copy from an earlier KR', () => {
+         const overview = heroOverview(plain(), 'Mensch', panel({ round: 1, stance: 'Vorstoß' }), 2)
+         expect(sword(overview)).toMatchObject({ at: 11, pa: 6 })
+         expect(overview.round).toBeNull()
+      })
+
+      it('Zustand ignorieren drops the condition penalty for the KR (S. 30)', () => {
+         expect(sword(heroOverview(plain(), 'Mensch', panel({ ignoreConditions: true }), 2))).toMatchObject({ at: 12, pa: 7 })
+      })
    })
 })

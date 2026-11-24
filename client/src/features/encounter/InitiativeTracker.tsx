@@ -7,11 +7,14 @@ import { QuantityStepper } from '@/components/QuantityStepper'
 import { heroInitiative } from '@/features/heroes/fightHelpers'
 import { useFightStore } from '@/features/heroes/fightStore'
 import { getStatsForHero } from '@/features/heroes/statsApi'
+import { OnlineDot } from '@/features/parties/OnlineDot'
+import { usePresence } from '@/realtime/presence'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { getErrorMessage } from '@/utils/errorHandling'
 import { damageCombatant, encounterKey, grantPassing, removeCombatant, updateCombatant, type Combatant, type Encounter, type HeroCombatant, type NpcCombatant } from './encounterApi'
 import { NpcAttackForm } from './GmCombat'
+import { NpcFightHints } from './NpcFightHints'
 import { TokenBadge } from './Token'
 
 const stateLabels = { unhurt: 'unhurt', wounded: 'wounded', badlyWounded: 'badly wounded', down: 'down' } as const
@@ -22,6 +25,8 @@ export function InitiativeTracker({ encounter, partyId, selectedId, onSelect }: 
 }) {
    const language = useLanguageStore((state) => state.language)
    const isGm = encounter.role === 'gm'
+   // Presence only for the running fight (a prepared fight's scope is "partyId:encounterId")
+   const presence = usePresence(partyId.includes(':') ? '' : partyId)
    return <ol className='initiative-list'>
       {encounter.combatants.map((combatant) => <li key={combatant.id}
          className={['initiative-row', combatant.id === encounter.activeId ? 'is-active' : '', combatant.id === selectedId ? 'is-selected' : ''].filter(Boolean).join(' ')}
@@ -30,7 +35,7 @@ export function InitiativeTracker({ encounter, partyId, selectedId, onSelect }: 
             onClick={() => onSelect(selectedId === combatant.id ? null : combatant.id)}>
             <TokenBadge combatant={combatant} />
             <span className='initiative-name'>
-               <strong>{combatant.name}</strong>
+               <strong>{combatant.kind === 'hero' && presence && <OnlineDot online={presence.charIds.includes(combatant.charId)} />}{combatant.name}</strong>
                <small>{combatant.kind === 'npc'
                   ? <>{t(stateLabels[combatant.state], language)}{isGm && combatant.npc && ` · ${combatant.npc.health} / ${combatant.npc.maxHealth} ${t('LeP', language)}`}{combatant.hidden && ` · ${t('hidden', language)}`}</>
                   : combatant.kind === 'ally' ? `${t('Ally', language)} · ${encounter.combatants.find((entry) => entry.id === combatant.ownerId)?.name ?? '?'}`
@@ -111,6 +116,7 @@ function GmControls({ combatant, partyId, encounter }: { combatant: Combatant; p
             {npc.npc.damage && <div><dt>{t('TP', language)}</dt><dd>{npc.npc.damage}</dd></div>}
             {npc.npc.speed !== null && <div><dt>{t('GS', language)}</dt><dd>{npc.npc.speed}</dd></div>}
          </dl>
+         <NpcFightHints values={npc.npc} />
          {npc.npc.notes && <p className='party-muted'>{npc.npc.notes}</p>}
          {encounter.round >= 1 && npc.state !== 'down' && <details className='battle-dock-more'>
             <summary>{t('Passierschlag (AT −4, no action, no defense)', language)}</summary>
