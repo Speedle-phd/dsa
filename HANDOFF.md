@@ -266,6 +266,29 @@ User decisions: tracker and grid board together (background images later); NPC t
 - Metal armor without equipped "Unterkleidung für Metallrüstungen" gets BE +1 (S. 374); test fixtures with metal armor include it.
 
 ## Open ideas / next steps
+
+- **Archiv der Kräuter** (Nov 2026): the book is indexed. Done:
+   - **Phase 0**: rule switches, Aventurian calendar, plant item state (doc `docs/dsa5/rules/herbs/foundations.md`).
+   - **Phase 1**: Herbarium, store, plant use, Pflanzenkunde knowledge (doc `docs/dsa5/rules/herbs/herbarium.md`). Summaries exist for all 132 plants (`server/src/utils/herbs/herbSummaries.ts`); `scripts/adk_herbs.py … --digest a b <file>` prints the raw page text when a summary needs checking.
+   **Approved plan** (`~/.claude/plans/can-you-come-up-atomic-fern-…md`):
+   - Phases:
+     - 0: rule switches per party/solo hero, a party calendar, herb item metadata
+     - 1: Herbarium catalog, lookup, store, using raw herbs
+     - 2: Kräutersuche with a GM herb-find request
+     - 3: Haltbarkeit
+     - 4: plant recipes and AdK elixirs
+     - 5: Rauschmittel/Sucht
+     - 6: Krankheiten/Alltagsarzneien
+     - 7: Pflanzenwesen/Homunculus
+     - 8: wooden artefacts
+     - 9: GM landscapes
+   - User decisions:
+     - short de/en summaries in own words + `AdK S. …`, no book prose
+     - Fokusregeln as GM switches per party
+     - a party calendar set by the GM, using the common Aventurian calendar (12 × 30 + 5 Namenlose Tage; the books don't define it)
+     - the GM picks the plants of a general herb search, the app suggests them
+   - App choice: AdK catalogs live on the server (`server/src/utils/herbs/`) and the client loads them via `GET /api/catalog/herbs`.
+   Chapter map with app targets and a suggested order: `docs/dsa5/rules/archiv-der-kraeuter-index.md`; 132 plants and 134 recipes as facts-only tables: `docs/dsa5/rules/alchemy/plants-index.md`. Pages: `python scripts/dsa5_pages.py <S.> --book kraeuter` (printed page = PDF page index, offset 1).
 1. Liturgies (reuse `ProbeDialog` + KaP like the spell Probe).
 2. Optional Patzer table for spells (S. 258); Reiterkampf (S. 239–240, 242).
 3. LO effects and non-familiar companion AP rules once the user names the source (e.g. Aventurisches Kompendium / Bestiarium).

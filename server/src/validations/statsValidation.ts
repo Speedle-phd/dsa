@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { attributeNames, statsRules } from './statsRules'
+import { herbForms } from '@/utils/herbItem'
+import { maxCalendarDay } from '@/utils/bookRules'
 
 const nonEmptyString = z.string().trim().min(1)
 
@@ -73,6 +75,12 @@ const experienceSchema = z.object({
    spent: z.number().min(0).default(0),
 })
 
+// Plant items (AdK): raw, preserved or a product; in-game day numbers (bookRules.ts)
+export const herbItemSchema = z.object({
+   form: z.enum(herbForms),
+   obtainedDay: z.number().int().min(0).max(maxCalendarDay).nullable().default(null),
+   keepsUntilDay: z.number().int().min(0).max(maxCalendarDay).nullable().default(null),
+})
 const equipmentSchema = z.object({
    item: nonEmptyString,
    weight: z.number().min(0),
@@ -82,6 +90,7 @@ const equipmentSchema = z.object({
    description: z.string().optional(),
    condition: z.enum(['damaged', 'broken']).optional(),
    quality: z.number().int().min(1).max(6).optional(),
+   herb: herbItemSchema.optional(),
 })
 const equipmentArraySchema = z.array(equipmentSchema)
 
@@ -94,6 +103,7 @@ export const purchaseEquipmentSchema = z.object({
    unitPriceSilbertaler: z.number().min(0),
    description: z.string().optional(),
    quality: z.number().int().min(1).max(6).optional(),
+   herb: herbItemSchema.optional(),
    contents: z.array(z.object({
       item: nonEmptyString,
       category: nonEmptyString,

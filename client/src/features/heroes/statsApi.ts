@@ -3,6 +3,7 @@ import { axiosInstance } from '@/axios/axios'
 export type VitalResourcesType = 'health' | 'mana' | 'karmaEnergy'
 import type { EntryEffect, EntryPurchase } from './characterEntryApi'
 import type { TalentAttribute } from './talentCatalog'
+import type { HerbItemState } from '@/features/books/bookApi'
 
 export type Resource = {
    value: number
@@ -43,6 +44,8 @@ export type EquipmentEntry = {
    condition?: 'damaged' | 'broken'
    // Qualitätsstufe of an alchemical elixir (S. 271, 379)
    quality?: number
+   // Plants and plant products (Archiv der Kräuter): raw, preserved or made; in-game days (bookApi.ts)
+   herb?: HerbItemState
 }
 
 export type EquipmentPurchaseInput = {
@@ -54,6 +57,7 @@ export type EquipmentPurchaseInput = {
    unitPriceSilbertaler: number
    description?: string
    quality?: number
+   herb?: HerbItemState
    contents?: Array<{ item: string; category: string; unitWeight: number; amount: number; description?: string }>
 }
 

@@ -7,12 +7,15 @@ export type AventurianStoreItem = {
    }
    weight: number
    sourcePage?: number
+   // Items from an expansion book (Archiv der Kräuter): the page refers to that book
+   sourceBook?: 'AdK'
    duration?: number | 'unlimited'
    description?: string
    kind?: 'equipment' | 'weapon' | 'shield' | 'armor' | 'bundle' | 'elixir' | 'poison' | 'herb' | 'book' | 'artifact' |
       'animal' | 'vehicle' | 'feed'
    // Priced options picked in the purchase dialog (Alchimica QS, trained mounts); the option label is appended to the name.
-   variants?: Array<{ id: string; label: string; silbertaler: number; quality?: number }>
+   // Plants (Archiv der Kräuter): raw or processed; the name stays the plant's and the inventory keeps the form instead
+   variants?: Array<{ id: string; label: string; silbertaler: number; quality?: number; herbForm?: 'raw' | 'preserved' }>
    // The rulebook lists no fixed price ("unterschiedlich" or a range): the buyer enters the agreed price.
    priceVaries?: { min?: number; max?: number }
    priceUnit?: 'per week' | 'per volume'

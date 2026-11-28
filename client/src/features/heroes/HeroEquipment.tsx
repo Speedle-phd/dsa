@@ -470,13 +470,13 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
                            <div className='equipment-row-actions'>
                               {statsQuery.data && <WeaponRepairButton stats={statsQuery.data} entry={entry} index={equipment.indexOf(entry)} />}
                               {/* Only consumables can be used up: effect items open their dialog, the others ask how many */}
-                              {(isConsumableItem(entry.item) || isUsedUpItem(entry.item)) && <button
+                              {(isConsumableItem(entry.item, entry.herb) || isUsedUpItem(entry.item)) && <button
                                  className='icon-button'
                                  type='button'
                                  aria-haspopup='dialog'
                                  title={t('Use up', language)}
                                  aria-label={`${t('Use up', language)}: ${equipmentDisplayName(entry.item, language)}`}
-                                 onClick={() => isConsumableItem(entry.item) ? setConsumeTarget(entry) : setUseTarget(entry)}
+                                 onClick={() => isConsumableItem(entry.item, entry.herb) ? setConsumeTarget(entry) : setUseTarget(entry)}
                                  disabled={saveEquipmentMutation.isPending}
                               >
                                  <Utensils size={15} />

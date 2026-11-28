@@ -3,7 +3,7 @@
 DSA5 (Das Schwarze Auge, 5. Edition) hero manager: `client/` (React + Vite), `server/` (Express + MongoDB).
 
 - DSA5 mechanics: follow `.github/instructions/dsa5.instructions.md`. Never invent rules; cite `S. <page>`.
-- Rule knowledge: `docs/dsa5/rules/rulebook-index.md` → topic docs → `python scripts/dsa5_pages.py <pages>`. Never read the whole PDF.
+- Rule knowledge: `docs/dsa5/rules/rulebook-index.md` → topic docs → `python scripts/dsa5_pages.py <pages>`. Archiv der Kräuter: `docs/dsa5/rules/archiv-der-kraeuter-index.md`, pages via `--book kraeuter`. Never read the whole PDF.
 - Keep changes minimal and match existing code style.
 - UI work: follow `.github/instructions/ui-patterns.instructions.md` and `responsive.instructions.md`.
 - Current state and open work: see `HANDOFF.md` in the repo root.

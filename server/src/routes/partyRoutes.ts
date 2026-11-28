@@ -13,7 +13,10 @@ import {
    rotateInviteCode,
    setVisibility,
    updateParty,
+   updatePartyCalendar,
+   updatePartyRules,
 } from '@/controllers/partyController'
+import { calendarActionSchema, partyRulesSchema } from '@/validations/bookValidation'
 import { createPartySchema, joinPartySchema, memberVisibilitySchema, updatePartySchema } from '@/validations/partyValidation'
 import {
    addNpcs, changeTurn, damageCombatant, endEncounter, getEncounter, moveCombatant, removeCombatant, resizeBoard,
@@ -40,6 +43,9 @@ router.post('/join/:code', validateRequest(joinPartySchema), requestJoin)
 router.get('/:id', getParty)
 router.patch('/:id', validateRequest(updatePartySchema), updateParty)
 router.post('/:id/invite-code', rotateInviteCode)
+// Book rules and in-game date (GM)
+router.put('/:id/rules', validateRequest(partyRulesSchema), updatePartyRules)
+router.post('/:id/calendar', validateRequest(calendarActionSchema), updatePartyCalendar)
 router.post('/:id/members/:charId/:answer', answerRequest)
 router.patch('/:id/members/:charId', validateRequest(memberVisibilitySchema), setVisibility)
 router.delete('/:id/members/:charId', removeMember)

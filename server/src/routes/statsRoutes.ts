@@ -48,6 +48,8 @@ import { addSummonSchema, summonActionSchema } from '@/validations/summonValidat
 import {
    companionAddSchema, companionRemoveSchema, companionResourcesSchema, companionTrickSchema, companionUpdateSchema,
 } from '@/validations/companionValidation'
+import { getBookContext, getHerbReference, updateBookSettings } from '@/controllers/bookController'
+import { bookSettingsSchema } from '@/validations/bookValidation'
 import { adjustMana, changePermanentMana, changeSpell, changeTrick, getMagicReference, removeSpell, removeTrick, updateMagicSettings, updateSpellNotes } from '@/controllers/magicController'
 import { magicRemoveSchema, magicSettingsSchema, manaAdjustmentSchema, permanentManaSchema, spellChangeSchema, spellNotesSchema } from '@/validations/magicValidation'
 import { validateRequest } from '@/middleware/validateRequest'
@@ -99,6 +101,10 @@ router.put('/magic-trick/:id', validateRequest(magicRemoveSchema), changeTrick)
 router.put('/remove-magic-trick/:id', validateRequest(magicRemoveSchema), removeTrick)
 router.put('/spell-notes/:id', validateRequest(spellNotesSchema), updateSpellNotes)
 router.put('/magic-settings/:id', validateRequest(magicSettingsSchema), updateMagicSettings)
+// Book rules and in-game date that apply to the hero (its party's, or its own without a party)
+router.get('/book-context/:id', getBookContext)
+router.get('/herb-reference', getHerbReference)
+router.put('/book-settings/:id', validateRequest(bookSettingsSchema), updateBookSettings)
 router.put('/adjust-mana/:id', validateRequest(manaAdjustmentSchema), adjustMana)
 router.put('/permanent-mana/:id', validateRequest(permanentManaSchema), changePermanentMana)
 router.get('/karma-reference', getKarmaReference)

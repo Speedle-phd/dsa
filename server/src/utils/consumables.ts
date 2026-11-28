@@ -1,4 +1,5 @@
 // Consumable Alchimica, herbs and poisons: what happens when a hero uses one (S. 270–274, 342, 344–346).
+import { herbByName } from './herbs/herbCatalog'
 export type Localized = { de: string; en: string }
 export type Dice = { count: number; sides: number; bonus: number }
 
@@ -45,7 +46,7 @@ export type Consumable =
    | { kind: 'mana'; page: number; dice: Dice }
    | { kind: 'antidote'; page: number; quality: number }
    | { kind: 'effect'; page: number; effect: EffectSpec; needsWeapon?: boolean }
-   | { kind: 'info'; page: number; note: Localized }
+   | { kind: 'info'; page: number; note: Localized; book?: 'AdK' }
 
 const minutes = (value: number): Localized => ({ de: `${value} Minute${value === 1 ? '' : 'n'}`, en: `${value} minute${value === 1 ? '' : 's'}` })
 const hours = (value: number): Localized => ({ de: `${value} Stunde${value === 1 ? '' : 'n'}`, en: `${value} hour${value === 1 ? '' : 's'}` })
@@ -129,6 +130,10 @@ export function consumableFor(item: string, storedQuality?: number, weapon?: str
       weapon, values: {},
       note: { de: 'Wirkt nur, wenn der Treffer den RS durchdringt; nur Klingen- und Stichwaffen.', en: 'Works only if the hit gets through the armor; bladed or piercing weapons only.' },
    } }
+   // Plants of Archiv der Kräuter without an automated rule: used up, the effect is resolved with the GM (AdK plant page)
+   const herb = herbByName(name)
+   if (herb) return { kind: 'info', page: herb.page, book: 'AdK', note: {
+      de: `Wirkung laut AdK S. ${herb.page}: mit der Spielleitung abhandeln.`, en: `Effect as on AdK p. ${herb.page}: resolve it with the GM.` } }
    return null
 }
 

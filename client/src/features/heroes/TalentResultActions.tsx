@@ -8,6 +8,7 @@ import { activeEffectsKey, startAbilityEffect, useActiveEffects } from './active
 import type { ProbeResultState } from './ProbeDialog'
 import type { Stats } from './statsApi'
 import { talentDetails } from './talentDetails'
+import { HerbKnowledge } from '@/features/herbs/HerbKnowledge'
 
 // source: DSA5 Regelwerk, S. 217–219 (Fischer, Jäger, Sammler: one more QS of food on a successful check)
 const foodAbilities: Record<string, string> = { fischenUndAngeln: 'Fischer', tierkunde: 'Jäger', pflanzenkunde: 'Sammler' }
@@ -40,6 +41,7 @@ export function TalentResultActions({ stats, talentKey, state }: { stats: Stats;
             </button>}
       </section>}
       {/* source: DSA5 Regelwerk, S. 215 (Anführer: up to QS+1 allies in sight and hearing) */}
+      {talentKey === 'pflanzenkunde' && <HerbKnowledge statsId={stats._id} quality={quality} />}
       {talentKey === 'ueberreden' && owns('Anführer') && <p className='probe-talent-notes'>
          {t('Anführer: up to {n} allies get AT, defense and FK +1 in the next combat round.', language).replace('{n}', String(quality + 1))}
       </p>}

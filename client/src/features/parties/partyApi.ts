@@ -4,6 +4,7 @@ import { axiosInstance } from '@/axios/axios'
 import type { Hero } from '@/features/heroes/heroApi'
 import type { Stats } from '@/features/heroes/statsApi'
 import { subscribeParty } from '@/realtime/socket'
+import type { BookRules } from '@/features/books/bookRules'
 
 export type Visibility = 'private' | 'summary' | 'full'
 export type PartyRole = 'gm' | 'member' | 'pending' | null
@@ -33,6 +34,9 @@ export type Party = {
    _id: string; name: string; status: 'active' | 'archived'; role: PartyRole
    gm: { userId: string; username: string }
    inviteCode?: string
+   // Book rules in effect and the in-game date (bookApi.ts; only the GM changes them)
+   rules: BookRules
+   calendarDay: number | null
    members: PartyMember[]
 }
 export type PartySummary = {

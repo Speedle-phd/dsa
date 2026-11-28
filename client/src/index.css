@@ -1002,6 +1002,11 @@
       .quiet-button {
          width: 100%;
       }
+      /* In the column layout a flex basis would set the height (12rem): size by content instead */
+      .search-field,
+      .toolbar-row select {
+         flex-basis: auto;
+      }
 
       .store-grid {
          grid-template-columns: minmax(0, 1fr);
@@ -1474,8 +1479,21 @@
    .purse-form-grid label {
       display: grid;
       gap: 0.25rem;
+      min-width: 0;
       font-size: var(--fs-sm);
       font-weight: 700;
+   }
+   /* Number inputs keep a browser default width; let them fill their column instead of overflowing it */
+   .purse-form-grid input {
+      width: 100%;
+      min-width: 0;
+   }
+   /* Cancel and confirm share one row, also on phones (where quiet buttons are otherwise full width) */
+   .purse-form .modal-actions > button {
+      flex: 1 1 8rem;
+      width: auto;
+      justify-content: center;
+      white-space: nowrap;
    }
    .purse-form-grid input,
    .equipment-placement-select {
@@ -3643,6 +3661,16 @@
       .talent-note-display,
       .talent-note-edit {
          width: 100%;
+      }
+   }
+   /* Very narrow phones (360 px): the header's controls were 2 px too wide; tighten spacing instead of hiding controls */
+   @media (max-width: 380px) {
+      .dashboard-header {
+         gap: 0.5rem;
+         padding-inline: 0.85rem;
+      }
+      .header-actions {
+         gap: 0.3rem;
       }
    }
    @media (max-width: 520px) {
@@ -5937,6 +5965,184 @@
    .regen-extras {
       display: grid;
       gap: 0.25rem;
+   }
+   /* Herbarium (Alchemy tab, Archiv der Kräuter): one card per plant in an auto grid */
+   .herbarium {
+      display: grid;
+      gap: 0.9rem;
+   }
+   .herbarium .section-heading {
+      margin-bottom: 0;
+   }
+   .herbarium > .party-muted {
+      margin: 0;
+   }
+   .herb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+      gap: 0.9rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .herb-card {
+      display: grid;
+      align-content: start;
+      gap: 0.55rem;
+      height: 100%;
+      padding: 0.9rem 1rem;
+      background: hsl(var(--background-100));
+      border: 1px solid hsl(var(--background-200));
+      border-radius: var(--radius-md);
+      font-size: var(--fs-sm);
+   }
+   .herb-card > header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+   }
+   .herb-card h3 {
+      margin: 0;
+      font-size: var(--fs-md);
+   }
+   .herb-card header small {
+      flex: 0 0 auto;
+      color: hsl(var(--text-600));
+      font-size: var(--fs-2xs);
+   }
+   .herb-types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .herb-types li {
+      padding: 0.1rem 0.5rem;
+      color: hsl(var(--primary-800));
+      background: hsl(var(--primary-100));
+      border-radius: 999px;
+      font-size: var(--fs-2xs);
+      font-weight: 600;
+   }
+   .herb-values {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem 0.75rem;
+      margin: 0;
+   }
+   .herb-values dt,
+   .herb-effects dt {
+      color: hsl(var(--text-600));
+      font-size: var(--fs-2xs);
+   }
+   .herb-values dd,
+   .herb-effects dd {
+      margin: 0;
+   }
+   .herb-values dd {
+      font-weight: 700;
+   }
+   .herb-effects {
+      display: grid;
+      gap: 0.35rem;
+      margin: 0;
+   }
+   .herb-note,
+   .herb-landscape,
+   .herb-recipes {
+      margin: 0;
+   }
+   .herb-note {
+      color: hsl(var(--text-600));
+      font-size: var(--fs-xs);
+   }
+   .herb-more summary {
+      cursor: pointer;
+      color: hsl(var(--primary-700));
+      font-weight: 600;
+   }
+   .herb-more[open] {
+      display: grid;
+      gap: 0.4rem;
+   }
+   .herb-knowledge {
+      display: grid;
+      gap: 0.3rem;
+      margin: 0.4rem 0 0;
+      padding: 0;
+      list-style: none;
+   }
+   .herb-knowledge strong {
+      margin-right: 0.35rem;
+      color: hsl(var(--primary-700));
+   }
+   .herb-knowledge-check {
+      display: grid;
+      gap: 0.5rem;
+   }
+   .herb-knowledge-check .field-group span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+   }
+   /* Date and book rules (party page, Alchemy tab): the in-game date and the optional book rules */
+   .book-settings {
+      display: grid;
+      gap: 1rem;
+   }
+   .book-settings .section-heading {
+      margin-bottom: 0;
+   }
+   .book-hero-picker {
+      max-width: 22rem;
+      margin: 0;
+   }
+   .alchemy-book-hint {
+      margin: 0;
+   }
+   .book-calendar {
+      display: grid;
+      gap: 0.75rem;
+   }
+   .book-calendar-today {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+      font-size: var(--fs-lg);
+   }
+   .book-calendar-steps {
+      display: grid;
+      grid-template-columns: repeat(4, max-content);
+      gap: 0.5rem;
+   }
+   .book-calendar-set {
+      display: grid;
+      grid-template-columns: minmax(4.5rem, 6rem) minmax(10rem, 14rem) minmax(6rem, 8rem) auto;
+      justify-content: start;
+      align-items: end;
+      gap: 0.75rem;
+   }
+   .book-rules {
+      display: grid;
+   }
+   .book-rules h3 {
+      margin: 0 0 0.25rem;
+      font-size: var(--fs-md);
+   }
+   @media (max-width: 640px) {
+      .book-calendar-steps {
+         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .book-calendar-set {
+         grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      }
+      .book-calendar-set .primary-button {
+         grid-column: 1 / -1;
+      }
    }
    .regen-toggle,
    .regen-field {

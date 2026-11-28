@@ -1,5 +1,6 @@
 export { carriedEquipmentWeight } from './containers'
 import { carriedEquipmentWeight } from './containers'
+import { sameHerbState, type HerbItemState } from './herbItem'
 
 export type EquipmentPurse = {
    dukaten: number
@@ -16,6 +17,7 @@ export type EquipmentPurchaseEntry = {
    carriedOn: string
    description: string
    quality?: number
+   herb?: HerbItemState
 }
 
 export type EquipmentPurchaseInput = {
@@ -27,6 +29,8 @@ export type EquipmentPurchaseInput = {
    unitPriceSilbertaler: number
    description?: string
    quality?: number
+   // A plant item (AdK): raw, preserved or a product, with its in-game days
+   herb?: HerbItemState
    // Equipment package (S. 364–365): paid once at the package price, each piece is added on its own (× amount)
    contents?: Array<{ item: string; category: string; unitWeight: number; amount: number; description?: string }>
 }
@@ -135,22 +139,23 @@ export function purchaseEquipment(
    }
 
    const pieces = purchase.contents?.length
-      ? purchase.contents.map((piece) => ({ ...piece, amount: piece.amount * purchase.amount, quality: undefined }))
+      ? purchase.contents.map((piece) => ({ ...piece, amount: piece.amount * purchase.amount, quality: undefined, herb: undefined }))
       : [{ item: purchase.item, category: purchase.category, unitWeight: purchase.unitWeight, amount: purchase.amount,
-         description: purchase.description, quality: purchase.quality }]
+         description: purchase.description, quality: purchase.quality, herb: purchase.herb }]
    if (pieces.some((piece) => !Number.isSafeInteger(piece.amount) || piece.amount < 1 || !Number.isFinite(piece.unitWeight) || piece.unitWeight < 0)) {
       return { ok: false, reason: 'invalid-purchase' }
    }
 
    const nextEquipment = equipment.map((entry) => ({ ...entry }))
    for (const piece of pieces) {
-      // Merges into an identical stack at the same place (same quality)
+      // Merges into an identical stack at the same place (same quality; plants: same state and days)
       const existingIndex = nextEquipment.findIndex(
          (entry) =>
             entry.item === piece.item &&
             entry.category === piece.category &&
             entry.carriedOn === purchase.carriedOn &&
-            entry.quality === piece.quality,
+            entry.quality === piece.quality &&
+            sameHerbState(entry.herb, piece.herb),
       )
 
       if (existingIndex >= 0) {
@@ -168,6 +173,7 @@ export function purchaseEquipment(
             carriedOn: purchase.carriedOn,
             description: piece.description?.trim() ?? '',
             ...(piece.quality ? { quality: piece.quality } : {}),
+            ...(piece.herb ? { herb: piece.herb } : {}),
          })
       }
    }

@@ -4,7 +4,8 @@ An index plus small topic docs, not a reproduction of the rulebook.
 
 - `rules/rulebook-index.md` — chapter → page map and list of topic docs
 - `rules/<topic>/*.md` — concise, implementation-oriented summaries with `S. <page>` sources
-- `../../scripts/dsa5_pages.py` — extracts printed pages from `DSA5 rulebook.pdf` (`pip install pypdf`)
+- `rules/archiv-der-kraeuter-index.md` — chapter map of the expansion "Archiv der Kräuter" (AdK); plants and recipes in `rules/alchemy/plants-index.md`
+- `../../scripts/dsa5_pages.py` — extracts printed pages from `DSA5 rulebook.pdf`, or with `--book kraeuter` from `Archiv_der_Kraeuter.pdf` (`pip install pypdf`)
 
 Lookup order (cheapest first):
 

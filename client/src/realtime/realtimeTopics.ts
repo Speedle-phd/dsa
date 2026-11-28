@@ -5,11 +5,11 @@ import type { RealtimeNotice } from './socket'
 export function keysForNotice(notice: RealtimeNotice): QueryKey[] {
    switch (notice.topic) {
       case 'hero':
-         return [['stats', notice.charId], ['heroes', notice.charId], ['parties'], ['party-sheet']]
+         return [['stats', notice.charId], ['heroes', notice.charId], ['parties'], ['party-sheet'], ['book-context']]
       case 'party':
-         return [['parties', notice.partyId], ['parties']]
+         return [['parties', notice.partyId], ['parties'], ['book-context']]
       case 'parties':
-         return [['parties']]
+         return [['parties'], ['book-context']]
       case 'encounter':
          return [['encounter', notice.partyId]]
       case 'presence':

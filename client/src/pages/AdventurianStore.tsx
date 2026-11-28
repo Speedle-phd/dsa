@@ -6,7 +6,10 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { getStatsForHero, type Stats } from '@/features/heroes/statsApi'
 import { StorePurchaseDialog, type StoreSelection } from '@/features/store/StorePurchaseDialog'
 import { MarketRatePanel } from '@/features/store/MarketRatePanel'
-import { aventurianStore } from '@/utils/aventurian_store'
+import { aventurianStore, type AventurianStoreItem } from '@/utils/aventurian_store'
+import { useBookContext } from '@/features/books/bookApi'
+import { useHerbReference } from '@/features/herbs/herbApi'
+import { adkStoreCategory, adkStoreItems } from '@/features/herbs/herbStore'
 import { useQuery } from '@tanstack/react-query'
 import {
    ArrowLeft,
@@ -57,11 +60,9 @@ const purseToKreuzer = (purse: CurrencyPurse) =>
    purse.heller * 10 +
    purse.kreuzer
 
-const categoryNames = Object.keys(aventurianStore) as Array<
-   keyof typeof aventurianStore
->
 
 const categoryIcons: Record<string, LucideIcon> = {
+   [adkStoreCategory]: Leaf,
    Traveling_and_Tools: Wrench,
    Sources_of_Light: Lamp,
    Refills_and_Accessories: PackageOpen,
@@ -114,10 +115,20 @@ export const AdventurianStore = () => {
       enabled: Boolean(hero),
    })
 
+   // With Archiv der Kräuter switched on (party or hero), its plants replace the core herbs (same plants, more data)
+   const adk = useBookContext(statsQuery.data?._id).data?.rules.adk ?? false
+   const herbReference = useHerbReference(adk)
+   const catalog = useMemo<Record<string, AventurianStoreItem[]>>(() => {
+      if (!adk || !herbReference.data) return aventurianStore
+      const rest = Object.fromEntries(Object.entries(aventurianStore).filter(([name]) => name !== 'Healing_Herbs'))
+      return { ...rest, [adkStoreCategory]: adkStoreItems(herbReference.data.herbs) }
+   }, [adk, herbReference.data])
+   const categoryNames = Object.keys(catalog)
+
    const categories = useMemo(() => {
-      return categoryNames.map((categoryName) => ({
+      return Object.keys(catalog).map((categoryName) => ({
          name: categoryName,
-         items: (aventurianStore[categoryName] ?? []).filter((item) => {
+         items: (catalog[categoryName] ?? []).filter((item) => {
             const normalizedQuery = debouncedSearchTerm.trim().toLowerCase()
             const matchesQuery = [item.name, t(item.name, language)].some(
                (name) => name.toLowerCase().includes(normalizedQuery),
@@ -127,7 +138,7 @@ export const AdventurianStore = () => {
             return matchesQuery && matchesCategory
          }),
       }))
-   }, [debouncedSearchTerm, language, selectedCategory])
+   }, [catalog, debouncedSearchTerm, language, selectedCategory])
 
    if (!hero) {
       return <Navigate to='/dashboard' replace />

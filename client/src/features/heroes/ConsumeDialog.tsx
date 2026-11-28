@@ -10,6 +10,8 @@ import { aventurianStore } from '@/utils/aventurian_store'
 import { getErrorMessage } from '@/utils/errorHandling'
 import { catalogEntry, equipmentDisplayName } from '@/utils/storePricing'
 import { activeEffectsKey, consumeItem, type ConsumeOutcome } from './activeEffectsApi'
+import { useHerbReference } from '@/features/herbs/herbApi'
+import { herbEffectText } from '@/features/herbs/herbStore'
 import { parseDamage } from './combatRoll'
 import { rollDamage } from './fightHelpers'
 import type { EquipmentEntry, Stats } from './statsApi'
@@ -62,9 +64,14 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
       },
    })
 
-   const effectText = item?.alchemy && quality ? item.alchemy.levels[quality - 1]?.[language] : item?.herb?.effect[language]
-   const Icon = item?.kind === 'poison' ? Skull : item?.kind === 'herb' ? Leaf : FlaskConical
-   const action = item?.kind === 'poison' || name === 'Waffenbalsam' ? 'Apply' : item?.kind === 'herb' ? 'Use' : 'Drink'
+   // Plants of Archiv der Kräuter: the summary per route from the book data (the core herbs keep their store text)
+   const adkHerb = useHerbReference(Boolean(entry.herb) || !item).data?.herbs.find((herb) => herb.key === entry.item) ?? null
+   const isHerb = item?.kind === 'herb' || adkHerb !== null
+   const effectText = item?.alchemy && quality ? item.alchemy.levels[quality - 1]?.[language]
+      : adkHerb ? herbEffectText(adkHerb)[language] : item?.herb?.effect[language]
+   const Icon = item?.kind === 'poison' ? Skull : isHerb ? Leaf : FlaskConical
+   const action = item?.kind === 'poison' || name === 'Waffenbalsam' ? 'Apply' : isHerb ? 'Use' : 'Drink'
+   const pageLabel = adkHerb ? `AdK ${t('S.', language)} ${adkHerb.page}` : item?.sourcePage ? `${t('S.', language)} ${item.alchemy ? '272–274' : item.sourcePage}` : ''
 
    return createPortal(
       <div className='modal-backdrop' role='presentation' onMouseDown={onClose}>
@@ -72,14 +79,14 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
             onMouseDown={(event) => event.stopPropagation()}>
             <header className='editor-header'>
                <div>
-                  <p className='eyebrow'>{t(item?.kind ?? 'equipment', language)}{item?.sourcePage ? ` · ${t('S.', language)} ${item.alchemy ? '272–274' : item.sourcePage}` : ''}</p>
+                  <p className='eyebrow'>{t(isHerb ? 'herb' : item?.kind ?? 'equipment', language)}{pageLabel ? ` · ${pageLabel}` : ''}</p>
                   <h2 id={titleId}>{equipmentDisplayName(entry.item, language)}</h2>
                </div>
                <button className='icon-button editor-close' type='button' onClick={onClose} aria-label={t('Close', language)}><X size={20} /></button>
             </header>
 
             <div className='store-purchase-body'>
-               {effectText && <div className={`store-effect-card${item?.kind === 'herb' ? ' is-herb' : ''}`}>
+               {effectText && <div className={`store-effect-card${isHerb ? ' is-herb' : ''}`}>
                   <Icon size={18} aria-hidden='true' />
                   <div><strong>{quality ? `${t('Effect at', language)} QS ${quality}` : t('Effect', language)}</strong><p>{effectText}</p></div>
                </div>}
@@ -116,7 +123,9 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
                   <span><strong>{t('Use it anyway', language)}</strong>
                      <small>{t('A stronger effect of this kind is running; only the strongest counts (S. 272). The item is used up without a new effect.', language)}</small></span>
                </label>}
-               <p className='combat-note'>{t('Elixirs take effect at the start of the next combat round (S. 272). Timed effects run until you end them.', language)}</p>
+               {adkHerb && !['Wirselkraut', 'Gulmond'].includes(adkHerb.key)
+                  ? <p className='combat-note'>{t('The app does not apply this plant’s effect: one application is used up; resolve the effect with the GM.', language)}</p>
+                  : <p className='combat-note'>{t('Elixirs take effect at the start of the next combat round (S. 272). Timed effects run until you end them.', language)}</p>}
             </div>
 
             <footer className='store-purchase-footer'>

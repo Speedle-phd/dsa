@@ -82,3 +82,16 @@ describe('Gestapelte Alchimieeffekte (S. 272)', () => {
       expect(calcRegeneration('health', 4, { ...situation, poisonedOrSick: true }, entries, { herbHealth: 2 })).toMatchObject({ amount: 0 })
    })
 })
+
+describe('plants of Archiv der Kräuter', () => {
+   it('a plant without an automated rule is used up with a note to its AdK page', () => {
+      expect(consumableFor('Bleichmohn')).toMatchObject({ kind: 'info', page: 21, book: 'AdK' })
+   })
+   it('core-rule herbs keep their rules (Wirselkraut, Gulmond)', () => {
+      expect(consumableFor('Wirselkraut')).toMatchObject({ kind: 'effect', page: 346 })
+      expect(consumableFor('Gulmond')).toMatchObject({ kind: 'effect', page: 345 })
+   })
+   it('unknown items stay unusable', () => {
+      expect(consumableFor('Seil')).toBeNull()
+   })
+})

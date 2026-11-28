@@ -1,3 +1,4 @@
+import type { HerbItemState } from '@/utils/herbItem'
 export type PublicUser = {
    _id: string
    username: string
@@ -134,6 +135,7 @@ export type Equipments = {
    category: string
    description?: string
    quality?: number
+   herb?: HerbItemState
 }
 
 export type TalentEntry = {

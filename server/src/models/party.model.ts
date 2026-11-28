@@ -1,4 +1,5 @@
 import mongoose, { Schema, type Document } from 'mongoose'
+import { bookRuleKeys, type BookRules } from '@/utils/bookRules'
 
 export const partyStatuses = ['active', 'archived'] as const
 export const memberStates = ['pending', 'accepted'] as const
@@ -20,8 +21,16 @@ export interface IPartyDocument extends Document {
    inviteCode: string
    status: (typeof partyStatuses)[number]
    members: mongoose.Types.DocumentArray<PartyMember & Document>
+   // Optional book rules the GM switches on (bookRules.ts) and the party's in-game date (day number, null = not set)
+   rules?: Partial<BookRules> | null
+   calendarDay?: number | null
    createdAt: Date
    updatedAt: Date
+}
+
+// One Boolean per book rule (shared with the hero's own switches in stats.model.ts)
+export function bookRuleSchema() {
+   return new Schema(Object.fromEntries(bookRuleKeys.map((key) => [key, { type: Boolean, default: false }])), { _id: false })
 }
 
 // A party (Heldengruppe) led by one game master; players join with one hero each (user decision, Nov 2026).
@@ -42,6 +51,8 @@ const partySchema = new Schema<IPartyDocument>(
          }],
          default: [],
       },
+      rules: { type: bookRuleSchema(), default: () => ({}) },
+      calendarDay: { type: Number, default: null },
    },
    { timestamps: true },
 )

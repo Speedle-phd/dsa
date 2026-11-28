@@ -4,7 +4,7 @@ source: DSA5 Regelwerk, S. 270–274, 342, 344–346, 379–380
 
 ## Summary
 
-- Alchimica are bought per QS: price = rate × QS (S. 379). Ingredient level caps the QS when brewing (S. 271); brewing itself is not implemented.
+- Alchimica are bought per QS: price = rate × QS (S. 379). Ingredient level caps the QS when brewing (S. 271); brewing is in the Alchemy tab (see below).
 - Elixirs take effect at the start of the next KR unless stated otherwise (S. 272).
 - Gestapelte Alchimieeffekte: if several supernatural effects do the same thing, only the strongest applies (S. 272).
 - Herbs: one application per person; effects do not stack within one regeneration phase unless the herb says so (S. 344). Processed herbs keep three months (S. 345).

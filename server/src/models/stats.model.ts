@@ -5,6 +5,9 @@ import type { EntryPurchase } from '@/utils/characterEntryCatalog'
 import type { MagicSettings, OwnedSpell, OwnedTrick } from '@/utils/magicCatalog'
 import type { OwnedBlessing, OwnedLiturgy } from '@/utils/karmaCatalog'
 import mongoose, { Schema, type Document } from 'mongoose'
+import type { BookRules } from '@/utils/bookRules'
+import { bookRuleSchema } from '@/models/party.model'
+import { herbForms, type HerbItemState } from '@/utils/herbItem'
 
 const DEFAULT_ATTRIBUTE_VALUE = 0
 
@@ -138,7 +141,12 @@ export interface IStatsDocument extends Document {
       description: string
       condition?: 'damaged' | 'broken'
       quality?: number
+      herb?: HerbItemState
    }>
+
+   // A hero without a party keeps its own book rules and in-game date (bookRules.ts); a party's win while it plays in one
+   bookRules?: Partial<BookRules> | null
+   calendarDay?: number | null
 
    isSorcerer: boolean
    isConsecratedPerson: boolean
@@ -436,6 +444,15 @@ const statsSchema = new Schema<IStatsDocument>(
                condition: { type: String, enum: ['damaged', 'broken'] },
                // Qualitätsstufe of an alchemical elixir (S. 271, 379)
                quality: { type: Number, min: 1, max: 6 },
+               // Plants and plant products (AdK): raw, preserved or made; in-game days obtained and keeps until
+               herb: {
+                  type: new Schema({
+                     form: { type: String, enum: herbForms, required: true },
+                     obtainedDay: { type: Number, default: null },
+                     keepsUntilDay: { type: Number, default: null },
+                  }, { _id: false }),
+                  default: undefined,
+               },
             },
          ],
          required: true,
@@ -470,6 +487,8 @@ const statsSchema = new Schema<IStatsDocument>(
          type: [{ _id: false, key: { type: String, required: true }, paidAP: { type: Number, default: 0, min: 0 } }],
          default: [],
       },
+      bookRules: { type: bookRuleSchema(), default: () => ({}) },
+      calendarDay: { type: Number, default: null },
       magicSettings: {
          artifacts: { type: String, default: '', maxlength: 4000 },
          artifactItems: { type: [String], default: [] },

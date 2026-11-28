@@ -73,7 +73,9 @@ export function useActiveEffects(stats: Pick<Stats, '_id'> | undefined) {
 }
 
 // Mirrors the server rules (consumables.ts): which inventory items open the consume dialog.
-export function isConsumableItem(name: string) {
+// `herb`: plants bought or found with Archiv der Kräuter carry their state and can always be used (AdK plant page)
+export function isConsumableItem(name: string, herb?: unknown) {
+   if (herb) return true
    const kind = catalogEntry(name)?.item.kind
    return kind === 'elixir' || kind === 'herb' || kind === 'poison'
 }

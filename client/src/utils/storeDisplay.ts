@@ -50,7 +50,7 @@ export function getItemDetails(item: AventurianStoreItem, language?: Language) {
       details.push(`${label('Search')} ${formatModifier(item.herb.search)} · ${label('Identification')} ${formatModifier(item.herb.identify)} · ${label('Applications per QS')} ${item.herb.applications}`)
    }
    if (item.book) details.push(`${label('Language/script')}: ${label(item.book.script)}`)
-   if (item.sourcePage !== undefined) details.push(`${label('DSA5 Rulebook')} · ${label('S.')} ${item.sourcePage}`)
+   if (item.sourcePage !== undefined) details.push(`${label(item.sourceBook === 'AdK' ? 'Archiv der Kräuter' : 'DSA5 Rulebook')} · ${label('S.')} ${item.sourcePage}`)
    return details
 }
 

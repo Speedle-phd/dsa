@@ -9,6 +9,7 @@ import { defaultPlacement } from '@/features/heroes/containers'
 import { useHeroStore } from '@/features/heroes/heroStore'
 import { PlacementSelect } from '@/features/heroes/PlacementSelect'
 import { formatKreuzer } from '@/features/services/servicesApi'
+import { useBookContext } from '@/features/books/bookApi'
 import { purchaseEquipmentForHero, type Stats } from '@/features/heroes/statsApi'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
@@ -54,6 +55,7 @@ export function StorePurchaseDialog({ item, stats, heroId, onClose }: {
    const effectivePlacement = placement ?? defaultPlacement(stats.equipment, name, quantity)
    // Equipment packages go into the inventory piece by piece (S. 364–365)
    const pieces = bundlePieces(item)
+   const calendarDay = useBookContext(item.sourceBook === 'AdK' ? stats._id : undefined).data?.calendarDay ?? null
 
    const companionMutation = useMutation({
       mutationFn: () => updateCompanions(stats._id, { action: 'add-companion', species: item.name, name: t(item.name, language), familiar: false }),
@@ -70,6 +72,8 @@ export function StorePurchaseDialog({ item, stats, heroId, onClose }: {
             item: name, category: item.category, unitWeight: item.weight, amount: quantity, carriedOn: effectivePlacement,
             unitPriceSilbertaler: price, ...(description ? { description } : {}),
             ...(variant?.quality ? { quality: variant.quality } : {}),
+            // Plants remember their form and the in-game day of purchase (shelf life, AdK S. 284)
+            ...(variant?.herbForm ? { herb: { form: variant.herbForm, obtainedDay: calendarDay, keepsUntilDay: null } } : {}),
             ...(pieces.length ? { contents: pieces } : {}),
          })
       },
@@ -106,7 +110,7 @@ export function StorePurchaseDialog({ item, stats, heroId, onClose }: {
                </ul>}
 
                {item.variants && <fieldset className='form-section'>
-                  <legend>{t(item.kind === 'elixir' ? 'Quality level (QS)' : 'Training', language)}</legend>
+                  <legend>{t(item.kind === 'elixir' ? 'Quality level (QS)' : item.kind === 'herb' ? 'Form' : 'Training', language)}</legend>
                   <div className={`probe-segmented${item.kind === 'elixir' ? ' store-quality-picker' : ''}`}>
                      {item.variants.map((option) => <button key={option.id} type='button' aria-pressed={variant?.id === option.id}
                         className={variant?.id === option.id ? 'is-active' : undefined} onClick={() => setVariant(option)}>

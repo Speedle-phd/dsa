@@ -2,10 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Check, Dices, FlaskConical, FlaskRound, Plus, Search, X } from 'lucide-react'
 import { useId, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/axios/axios'
 import { throwColoredDice } from '@/components/diceEngine'
 import { useModalKeyboard } from '@/components/useModalKeyboard'
+import { useBookContext } from '@/features/books/bookApi'
+import { Herbarium } from '@/features/herbs/Herbarium'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t, translateRuleLabel } from '@/locales/translation'
 import { aventurianStore } from '@/utils/aventurian_store'
@@ -41,10 +44,12 @@ export function HeroAlchemy({ hero }: { hero: Hero }) {
    const [analysing, setAnalysing] = useState<Elixir | null>(null)
    const [learning, setLearning] = useState<string | null>(null)
    const stats = statsQuery.data
+   // Archiv der Kräuter switched on for this hero (its party's rules or its own)
+   const adk = useBookContext(stats?._id).data?.rules.adk ?? false
    if (statsQuery.isError) return <p className='field-error'>{getErrorMessage(statsQuery.error)}</p>
    if (!stats) return <p>{t('Loading...', language)}</p>
    const owned = stats.equipment.filter((item) => item.amount > 0)
-   const supplies = owned.filter((item) => isConsumableItem(item.item))
+   const supplies = owned.filter((item) => isConsumableItem(item.item, item.herb))
    const lab = bestLaboratory(owned.map((item) => item.item))
    const talentValue = stats.talents.find((entry) => entry.key === 'alchimie')?.value ?? 0
    const known = (name: string) => stats.generalSpecialAbilities.includes(recipeKey(name))
@@ -87,6 +92,8 @@ export function HeroAlchemy({ hero }: { hero: Hero }) {
             })}</tbody>
          </table></div>
       </section>
+
+      {adk ? <Herbarium /> : <p className='party-muted alchemy-book-hint'>{t('More plants and recipes: switch on Archiv der Kräuter under Settings → Date and book rules (for a party: the GM on the party page).', language)} <Link to='/settings'>{t('Settings', language)}</Link></p>}
 
       {consume && <ConsumeDialog stats={stats} entry={consume} index={stats.equipment.indexOf(consume)} onClose={() => setConsume(null)} />}
       {brewing && lab && <BrewDialog stats={stats} elixir={brewing} lab={lab} onClose={() => setBrewing(null)} />}

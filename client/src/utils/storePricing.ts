@@ -33,7 +33,7 @@ const formatSilbertaler = (value: number, language: Language) =>
 
 // The stored equipment name keeps the variant (German, as printed) so the inventory knows the QS or training.
 export function purchaseName(item: AventurianStoreItem, variant?: StoreVariant) {
-   return variant && variant.id !== 'untrained' ? `${item.name} (${variant.label})` : item.name
+   return variant && variant.id !== 'untrained' && !variant.herbForm ? `${item.name} (${variant.label})` : item.name
 }
 
 export function defaultVariant(item: AventurianStoreItem) {

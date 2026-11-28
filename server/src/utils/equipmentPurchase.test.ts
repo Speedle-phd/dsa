@@ -166,3 +166,18 @@ describe('equipment packages (S. 364–365)', () => {
       expect(result.ok && result.equipment.filter((entry) => entry.item === 'Kletterseil')).toEqual([expect.objectContaining({ amount: 14 })])
    })
 })
+
+describe('plant items (AdK)', () => {
+   const purse = { dukaten: 10, silbertaler: 0, heller: 0, kreuzer: 0 }
+   const buy = (equipment: EquipmentPurchaseEntry[], obtainedDay: number) => purchaseEquipment(purse, equipment, {
+      item: 'Wirselkraut', category: 'Healing_Herbs', unitWeight: 0, amount: 2, carriedOn: 'Backpack', unitPriceSilbertaler: 2,
+      herb: { form: 'raw', obtainedDay, keepsUntilDay: obtainedDay + 7 } })
+   it('herbs picked on the same day share a stack, herbs of another day stay apart', () => {
+      const first = buy([], 100)
+      if (!first.ok) throw new Error('purchase failed')
+      const same = buy(first.equipment, 100)
+      const other = buy(first.equipment, 103)
+      expect(same.ok && same.equipment).toEqual([expect.objectContaining({ amount: 4, herb: { form: 'raw', obtainedDay: 100, keepsUntilDay: 107 } })])
+      expect(other.ok && other.equipment.map((entry) => entry.herb?.obtainedDay)).toEqual([100, 103])
+   })
+})

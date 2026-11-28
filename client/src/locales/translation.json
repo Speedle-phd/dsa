@@ -13054,5 +13054,257 @@
    "\"Done\" spends the action; the chosen allies get AT, defense and FK +1 in the next combat round.": {
       "de": "„Fertig“ verbraucht die Aktion; die gewählten Verbündeten erhalten in der nächsten KR AT, Verteidigung und FK +1.",
       "en": "\"Done\" spends the action; the chosen allies get AT, defense and FK +1 in the next combat round."
+   },
+   "Game world": {
+      "de": "Spielwelt",
+      "en": "Game world"
+   },
+   "Date and book rules": {
+      "de": "Datum und Buchregeln",
+      "en": "Date and book rules"
+   },
+   "Book rules": {
+      "de": "Buchregeln",
+      "en": "Book rules"
+   },
+   "Fokusregel": {
+      "de": "Fokusregel",
+      "en": "Fokusregel"
+   },
+   "Not built yet.": {
+      "de": "Noch nicht umgesetzt.",
+      "en": "Not built yet."
+   },
+   "Needs {rule}.": {
+      "de": "Benötigt {rule}.",
+      "en": "Needs {rule}."
+   },
+   "Search herbs with Pflanzenkunde and Sinnesschärfe by landscape.": {
+      "de": "Kräuter mit Pflanzenkunde und Sinnesschärfe nach Landschaft suchen.",
+      "en": "Search herbs with Pflanzenkunde and Sinnesschärfe by landscape."
+   },
+   "Search modifiers per region instead of per landscape.": {
+      "de": "Suchmodifikatoren je Region statt je Landschaftstyp.",
+      "en": "Search modifiers per region instead of per landscape."
+   },
+   "Shelf life by a Pflanzenkunde check instead of a flat three months.": {
+      "de": "Haltbarkeit per Pflanzenkunde-Probe statt pauschal drei Monate.",
+      "en": "Shelf life by a Pflanzenkunde check instead of a flat three months."
+   },
+   "Shelf life per plant part and method, without a check.": {
+      "de": "Haltbarkeit je Pflanzenteil und Methode, ohne Probe.",
+      "en": "Shelf life per plant part and method, without a check."
+   },
+   "Drugs: Zechen check, Berauscht, overdose and addiction.": {
+      "de": "Rauschmittel: Zechen-Probe, Berauscht, Überdosierung und Sucht.",
+      "en": "Drugs: Zechen check, Berauscht, overdose and addiction."
+   },
+   "No date set": {
+      "de": "Kein Datum gesetzt",
+      "en": "No date set"
+   },
+   "Advance the date": {
+      "de": "Datum weiterstellen",
+      "en": "Advance the date"
+   },
+   "−1 day": {
+      "de": "−1 Tag",
+      "en": "−1 day"
+   },
+   "+1 day": {
+      "de": "+1 Tag",
+      "en": "+1 day"
+   },
+   "+1 week": {
+      "de": "+1 Woche",
+      "en": "+1 week"
+   },
+   "+1 month": {
+      "de": "+1 Monat",
+      "en": "+1 month"
+   },
+   "Day": {
+      "de": "Tag",
+      "en": "Day"
+   },
+   "Month": {
+      "de": "Monat",
+      "en": "Month"
+   },
+   "Year (BF)": {
+      "de": "Jahr (BF)",
+      "en": "Year (BF)"
+   },
+   "Set date": {
+      "de": "Datum setzen",
+      "en": "Set date"
+   },
+   "These apply to every hero of the party.": {
+      "de": "Gilt für alle Helden der Gruppe.",
+      "en": "These apply to every hero of the party."
+   },
+   "The GM sets the date and the book rules.": {
+      "de": "Die Spielleitung legt Datum und Buchregeln fest.",
+      "en": "The GM sets the date and the book rules."
+   },
+   "Set by the GM of {party}.": {
+      "de": "Festgelegt von der Spielleitung von {party}.",
+      "en": "Set by the GM of {party}."
+   },
+   "This hero plays without a party: you set the date and the book rules.": {
+      "de": "Dieser Held spielt ohne Gruppe: Du legst Datum und Buchregeln fest.",
+      "en": "This hero plays without a party: you set the date and the book rules."
+   },
+   "This hero plays in a party: its GM sets the rules and the date.": {
+      "de": "Dieser Held spielt in einer Gruppe: Die Spielleitung legt Regeln und Datum fest.",
+      "en": "This hero plays in a party: its GM sets the rules and the date."
+   },
+   "Set a date first.": {
+      "de": "Setze zuerst ein Datum.",
+      "en": "Set a date first."
+   },
+   "This date is out of range.": {
+      "de": "Dieses Datum liegt außerhalb des gültigen Bereichs.",
+      "en": "This date is out of range."
+   },
+   "Herbarium in the Alchemy tab, the book’s plants in the store, plant knowledge after Pflanzenkunde.": {
+      "de": "Herbarium im Alchimie-Tab, die Pflanzen des Bandes im Laden, Pflanzenwissen nach Pflanzenkunde.",
+      "en": "Herbarium in the Alchemy tab, the book’s plants in the store, plant knowledge after Pflanzenkunde."
+   },
+   "Herbarium": {
+      "de": "Herbarium",
+      "en": "Herbarium"
+   },
+   "Plant name": {
+      "de": "Pflanzenname",
+      "en": "Plant name"
+   },
+   "Search plants": {
+      "de": "Pflanzen suchen",
+      "en": "Search plants"
+   },
+   "Effect type": {
+      "de": "Wirkungstyp",
+      "en": "Effect type"
+   },
+   "All effect types": {
+      "de": "Alle Wirkungstypen",
+      "en": "All effect types"
+   },
+   "All landscapes": {
+      "de": "Alle Landschaftstypen",
+      "en": "All landscapes"
+   },
+   "Landscape": {
+      "de": "Landschaftstyp",
+      "en": "Landscape"
+   },
+   "{count} of {total} plants": {
+      "de": "{count} von {total} Pflanzen",
+      "en": "{count} of {total} plants"
+   },
+   "No plant matches these filters.": {
+      "de": "Keine Pflanze passt zu diesen Filtern.",
+      "en": "No plant matches these filters."
+   },
+   "Price raw / processed": {
+      "de": "Preis roh / verarbeitet",
+      "en": "Price raw / processed"
+   },
+   "No raw effect.": {
+      "de": "Roh ohne Wirkung.",
+      "en": "No raw effect."
+   },
+   "Effect: see the plant page (summary to come).": {
+      "de": "Wirkung: siehe Pflanzenseite (Zusammenfassung folgt).",
+      "en": "Effect: see the plant page (summary to come)."
+   },
+   "Recipes": {
+      "de": "Rezepte",
+      "en": "Recipes"
+   },
+   "Knowledge and regions": {
+      "de": "Wissen und Regionen",
+      "en": "Knowledge and regions"
+   },
+   "Regions": {
+      "de": "Regionen",
+      "en": "Regions"
+   },
+   "Rulebook": {
+      "de": "Regelwerk",
+      "en": "Rulebook"
+   },
+   "What does the hero know about …? (AdK)": {
+      "de": "Was weiß der Held über …? (AdK)",
+      "en": "What does the hero know about …? (AdK)"
+   },
+   "Choose a plant": {
+      "de": "Pflanze wählen",
+      "en": "Choose a plant"
+   },
+   "Summary to come: see AdK S. {page}.": {
+      "de": "Zusammenfassung folgt: siehe AdK S. {page}.",
+      "en": "Summary to come: see AdK S. {page}."
+   },
+   "Form": {
+      "de": "Form",
+      "en": "Form"
+   },
+   "roh": {
+      "de": "roh",
+      "en": "raw"
+   },
+   "verarbeitet": {
+      "de": "verarbeitet",
+      "en": "processed"
+   },
+   "Archiv der Kräuter": {
+      "de": "Archiv der Kräuter",
+      "en": "Archiv der Kräuter"
+   },
+   "The app does not apply this plant’s effect: one application is used up; resolve the effect with the GM.": {
+      "de": "Die App wendet die Wirkung dieser Pflanze nicht an: Eine Anwendung wird verbraucht; die Wirkung mit der Spielleitung abhandeln.",
+      "en": "The app does not apply this plant’s effect: one application is used up; resolve the effect with the GM."
+   },
+   "Heilung": {
+      "de": "Heilung",
+      "en": "Healing"
+   },
+   "Gift": {
+      "de": "Gift",
+      "en": "Poison"
+   },
+   "physisch": {
+      "de": "physisch",
+      "en": "physical"
+   },
+   "psychisch": {
+      "de": "psychisch",
+      "en": "mental"
+   },
+   "Nützlich": {
+      "de": "Nützlich",
+      "en": "Useful"
+   },
+   "Wehrhaft": {
+      "de": "Wehrhaft",
+      "en": "Defensive"
+   },
+   "Übernatürlich": {
+      "de": "Übernatürlich",
+      "en": "Supernatural"
+   },
+   "Archiv der Kraeuter": {
+      "de": "Archiv der Kräuter",
+      "en": "Archiv der Kräuter"
+   },
+   "Create a hero first: date and book rules belong to a hero or its party.": {
+      "de": "Lege zuerst einen Helden an: Datum und Buchregeln gehören zu einem Helden oder seiner Gruppe.",
+      "en": "Create a hero first: date and book rules belong to a hero or its party."
+   },
+   "More plants and recipes: switch on Archiv der Kräuter under Settings → Date and book rules (for a party: the GM on the party page).": {
+      "de": "Mehr Pflanzen und Rezepte: Archiv der Kräuter unter Einstellungen → Datum und Buchregeln einschalten (in einer Gruppe: die Spielleitung auf der Gruppenseite).",
+      "en": "More plants and recipes: switch on Archiv der Kräuter under Settings → Date and book rules (for a party: the GM on the party page)."
    }
 }

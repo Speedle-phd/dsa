@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { DashboardHeader } from '@/components/DashboardHeader'
 import { PageHeading } from '@/components/PageHeading'
+import { PartyBookSettings } from '@/features/books/BookSettings'
 import { CheckRequestPanel } from '@/features/parties/CheckRequestPanel'
 import { OnlineDot } from '@/features/parties/OnlineDot'
 import { PartyMemberCard } from '@/features/parties/PartyMemberCard'
@@ -52,6 +53,7 @@ function PartyContent({ party }: { party: Party }) {
          <OnlineDot online={presence.gmOnline} />{t(presence.gmOnline ? 'The game master is online.' : 'The game master is offline.', language)}</p>}
       {party.status === 'archived' && <p className='state-panel'>{t('This party is archived.', language)}</p>}
       {isGm && <GmPanel party={party} />}
+      {party.role !== 'pending' && <PartyBookSettings party={party} />}
       {party.role !== 'pending' && party.status === 'active' && <CheckRequestPanel party={party} />}
       {isGm && pending.length > 0 && <section className='overview-section'>
          <header className='section-heading'><h2>{t('Join requests', language)}</h2></header>

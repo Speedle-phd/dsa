@@ -8,11 +8,12 @@ applyTo: 'docs/dsa5/**, server/src/utils/**, server/src/validations/**, client/s
 ## Lookup order (cheapest first)
 
 1. **Topic doc** — `docs/dsa5/rules/<topic>/*.md`. If one covers the mechanic, use it and stop.
-2. **Index** — `docs/dsa5/rules/rulebook-index.md` to find the printed page range.
+2. **Index** — `docs/dsa5/rules/rulebook-index.md` to find the printed page range. Herbs, plant recipes, drugs/addiction, diseases, wooden artefacts: `docs/dsa5/rules/archiv-der-kraeuter-index.md` (book "Archiv der Kräuter", cite `AdK S. …`).
 3. **PDF extract** — pull only the needed pages from `DSA5 rulebook.pdf`:
    ```powershell
    python scripts/dsa5_pages.py 226-228
    python scripts/dsa5_pages.py 225-250 --grep "Verteidigung"
+   python scripts/dsa5_pages.py 275-281 --book kraeuter   # Archiv der Kräuter
    ```
    Page numbers are the **printed** page numbers (`S. …`); the script handles the PDF offset.
    Never read the whole PDF. Narrow with `--grep` before widening the range.

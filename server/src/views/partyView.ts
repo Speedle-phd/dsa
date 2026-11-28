@@ -2,6 +2,7 @@ import type { IPartyDocument } from '@/models/party.model'
 import { partyRole, rosterDetail, type RosterDetail } from '@/utils/partyRules'
 import type { PublicStats } from '@/types/apiContracts'
 import { toRuleShape } from '@/utils/partyAccess'
+import { normalizeBookRules, storedBookRules } from '@/utils/bookRules'
 
 export type HeroBasics = { name: string; species: string; profession: string }
 type Bar = { current: number; max: number }
@@ -65,6 +66,9 @@ export function partyView(party: IPartyDocument, viewerId: string, heroes: HeroL
       role,
       gm: { userId: shape.gmUserId, username: usernames.get(shape.gmUserId) ?? '' },
       ...(isGm ? { inviteCode: party.inviteCode } : {}),
+      // Book rules in effect and the in-game date (everyone sees them; only the GM changes them)
+      rules: normalizeBookRules(storedBookRules(party.rules)),
+      calendarDay: party.calendarDay ?? null,
       members: visibleMembers.map((member) => {
          const hero = heroes.get(member.charId)
          const basics = hero?.basics ?? { name: '?', species: '', profession: '' }

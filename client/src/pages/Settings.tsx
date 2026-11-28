@@ -6,6 +6,7 @@ import { useDiceSettings } from '@/components/diceSettings'
 import { useThemeStore, type ThemePreference } from '@/theme/themeStore'
 import { themes } from '@/theme/themes'
 import { PageHeading } from '@/components/PageHeading'
+import { HeroBookSettingsPicker } from '@/features/books/BookSettings'
 import { getSettings, updateSettings, type Visibility } from '@/features/parties/partyApi'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
@@ -81,6 +82,7 @@ export function Settings() {
                   <small>{t(reducedMotion ? 'Your system asks for reduced motion, so dice roll without animation.' : 'Roll instantly without the 3D dice animation. Saved in this browser.', language)}</small></span>
             </label>
          </section>
+         <HeroBookSettingsPicker />
       </section>
    </main>
 }

@@ -9,6 +9,7 @@ import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from
 import { toRuleShape } from '@/utils/partyAccess'
 import { canViewParty, canViewSheet, heroIsTaken, partyRole } from '@/utils/partyRules'
 import { syncResources } from '@/utils/statsPersistence'
+import { applyCalendarAction, storedBookRules, type BookRules, type CalendarAction } from '@/utils/bookRules'
 import { inviteCode as inviteCodeSchema, objectId } from '@/validations/partyValidation'
 import { buildCharResponse } from '@/views/charView'
 import { partySummaryView, partyView, type HeroLookup } from '@/views/partyView'
@@ -117,6 +118,27 @@ export async function updateParty(req: Request, res: Response) {
       await endPartyEncounters(party._id)
       realtime.closeParty(String(party._id))
    }
+   await respondWithParty(res, party, viewerId)
+}
+
+// Book rules of the party (user decision, Nov 2026: the GM switches them; members follow them)
+export async function updatePartyRules(req: Request, res: Response) {
+   const { party, viewerId } = await gmParty(req)
+   const change = req.body.rules as Partial<BookRules>
+   party.rules = { ...storedBookRules(party.rules), ...change }
+   await party.save()
+   notifyParty(party, ...party.members.map((member) => String(member.userId)))
+   await respondWithParty(res, party, viewerId)
+}
+
+// The party's in-game date (user decision, Nov 2026: the GM sets and advances it)
+export async function updatePartyCalendar(req: Request, res: Response) {
+   const { party, viewerId } = await gmParty(req)
+   const next = applyCalendarAction(party.calendarDay, req.body as CalendarAction)
+   if ('error' in next) throw new BadRequestError(next.error)
+   party.calendarDay = next.day
+   await party.save()
+   notifyParty(party, ...party.members.map((member) => String(member.userId)))
    await respondWithParty(res, party, viewerId)
 }
 
