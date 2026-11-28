@@ -1,22 +1,27 @@
-import { Leaf, Search } from 'lucide-react'
+import { Leaf, Search, Sprout } from 'lucide-react'
 import { useDeferredValue, useState } from 'react'
 import { useLanguageStore } from '@/locales/languageStore'
 import { t } from '@/locales/translation'
 import { getErrorMessage } from '@/utils/errorHandling'
+import type { Stats } from '@/features/heroes/statsApi'
 import { routeLabels, useHerbReference, type Herb } from './herbApi'
+import { HerbSearchDialog } from './HerbSearchDialog'
 
 const signed = (value: number) => (value > 0 ? `+${value}` : value === 0 ? '±0' : `−${Math.abs(value)}`)
 const silver = (value: number | null) => (value === null ? '—' : `${String(value).replace('.', ',')} S`)
 
 // The plants of Archiv der Kräuter (AdK S. 11–142): values from the book, effects as short summaries with the page.
-// Shown in the Alchemy tab when the book is switched on for the hero (party or own rules).
-export function Herbarium() {
+// Shown in the Alchemy tab when the book is switched on for the hero (party or own rules). With the Kräutersuche switched
+// on, the hero can search for herbs here (AdK S. 275–278).
+export function Herbarium({ stats, searchEnabled }: { stats: Stats; searchEnabled: boolean }) {
    const language = useLanguageStore((state) => state.language)
    const reference = useHerbReference()
    const [query, setQuery] = useState('')
    const [effectType, setEffectType] = useState('')
    const [landscape, setLandscape] = useState('')
    const search = useDeferredValue(query.trim().toLowerCase())
+   // null: closed; '': a general search; a plant name: a specific search for it
+   const [searching, setSearching] = useState<string | null>(null)
 
    if (reference.isError) return <section className='overview-section'><p className='field-error'>{getErrorMessage(reference.error)}</p>
       <button className='quiet-button' type='button' onClick={() => void reference.refetch()}>{t('Try again', language)}</button></section>
@@ -26,7 +31,8 @@ export function Herbarium() {
       && (!effectType || herb.effectTypes.includes(effectType)) && (!landscape || herb.landscapes.includes(landscape)))
 
    return <section className='overview-section herbarium' data-nav-label={t('Herbarium', language)}>
-      <header className='section-heading'><Leaf size={19} aria-hidden='true' /><div><p className='eyebrow'>Archiv der Kräuter · AdK S. 11–142</p><h2>{t('Herbarium', language)}</h2></div></header>
+      <header className='section-heading'><Leaf size={19} aria-hidden='true' /><div><p className='eyebrow'>Archiv der Kräuter · AdK S. 11–142</p><h2>{t('Herbarium', language)}</h2></div>
+         {searchEnabled && <button className='quiet-button section-action' type='button' onClick={() => setSearching('')}><Sprout size={16} aria-hidden='true' />{t('Search for herbs', language)}</button>}</header>
       <div className='toolbar-row'>
          <label className='search-field search-field--wide'><Search size={17} aria-hidden='true' />
             <input type='search' value={query} placeholder={t('Plant name', language)} aria-label={t('Search plants', language)} onChange={(event) => setQuery(event.target.value)} /></label>
@@ -40,12 +46,14 @@ export function Herbarium() {
          </select>
       </div>
       <p className='party-muted' role='status'>{t('{count} of {total} plants', language).replace('{count}', String(shown.length)).replace('{total}', String(herbs.length))}</p>
-      {shown.length ? <ul className='herb-grid'>{shown.map((herb) => <li key={herb.key}><HerbCard herb={herb} /></li>)}</ul>
+      {shown.length ? <ul className='herb-grid'>{shown.map((herb) => <li key={herb.key}><HerbCard herb={herb}
+         onSearch={searchEnabled && herb.search !== null && herb.distribution?.some((value) => value !== null) ? () => setSearching(herb.key) : undefined} /></li>)}</ul>
          : <p className='combat-empty'>{t('No plant matches these filters.', language)}</p>}
+      {searching !== null && <HerbSearchDialog stats={stats} initialPlant={searching || undefined} onClose={() => setSearching(null)} />}
    </section>
 }
 
-function HerbCard({ herb }: { herb: Herb }) {
+function HerbCard({ herb, onSearch }: { herb: Herb; onSearch?: () => void }) {
    const language = useLanguageStore((state) => state.language)
    const summary = herb.summary
    const routes = (['touch', 'inhale', 'eat'] as const).filter((route) => summary?.[route])
@@ -68,6 +76,8 @@ function HerbCard({ herb }: { herb: Herb }) {
       </dl> : <p className='herb-note'>{summary ? t('No raw effect.', language) : t('Effect: see the plant page (summary to come).', language)}</p>}
       {herb.recipes.length > 0 && <p className='herb-recipes'><strong>{t('Recipes', language)}:</strong> {herb.recipes.map((recipe) =>
          `${recipe.name} (${recipe.book === 'RW' ? t('Rulebook', language) : 'AdK'} ${t('S.', language)} ${recipe.page})`).join(', ')}</p>}
+      {onSearch && <button className='quiet-button herb-search-button' type='button' onClick={onSearch} aria-label={`${t('Search for this plant', language)}: ${herb.key}`}>
+         <Sprout size={15} aria-hidden='true' />{t('Search for this plant', language)}</button>}
       {(summary?.knowledge.length || herb.regions) && <details className='herb-more'>
          <summary>{t('Knowledge and regions', language)}</summary>
          {summary && summary.knowledge.length > 0 && <ol className='herb-knowledge'>{summary.knowledge.map((entry, index) =>

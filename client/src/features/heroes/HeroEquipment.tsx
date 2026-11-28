@@ -34,6 +34,8 @@ import { isConsumableItem } from './activeEffectsApi'
 import { ConsumeDialog } from './ConsumeDialog'
 import { UseItemDialog } from './UseItemDialog'
 import { isUsedUpItem } from '@/utils/storeConsumables'
+import { useHerbReference } from '@/features/herbs/herbApi'
+import { adkStoreCategory, adkStoreItems } from '@/features/herbs/herbStore'
 import {
    adjustPurseForHero,
    getStatsForHero,
@@ -59,7 +61,8 @@ const coinLabels = {
    heller: 'Heller',
    kreuzer: 'Kreuzer',
 } as const
-const catalogCategories: string[] = [...Object.keys(aventurianStore), 'Other']
+// Store categories have translated names; Archiv der Kräuter plants (store, herb search) get their own category
+const catalogCategories: string[] = [...Object.keys(aventurianStore), adkStoreCategory, 'Other']
 
 const toKreuzer = (purse: EquipmentPurse) =>
    purse.dukaten * 1000 +
@@ -113,6 +116,9 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
       () => statsQuery.data?.equipment ?? [],
       [statsQuery.data?.equipment],
    )
+   // Archiv der Kräuter plants are not in the client store catalog; their store items come from the herb reference
+   const herbReference = useHerbReference(equipment.some((entry) => entry.herb || entry.category === adkStoreCategory)).data
+   const herbStoreItems = useMemo(() => herbReference ? adkStoreItems(herbReference.herbs) : [], [herbReference])
    const sortedEquipment = useMemo(
       () => sortEquipment(equipment, sortKey, sortDirection),
       [equipment, sortDirection, sortKey],
@@ -433,7 +439,9 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
                               {entry.description && (
                                  <Tooltip
                                     content={(() => {
-                                       const item = catalogEntry(entry.item)?.item
+                                       const item = entry.category === adkStoreCategory
+                                          ? herbStoreItems.find((herbItem) => herbItem.name === entry.item)
+                                          : catalogEntry(entry.item)?.item
                                        if (item && entry.description === getPurchaseDescription(item)) return getPurchaseDescription(item, language)
                                        return item?.description === entry.description ? t(entry.description, language) : entry.description
                                     })()}
@@ -470,13 +478,13 @@ export default function HeroEquipment({ hero }: { hero: Hero }) {
                            <div className='equipment-row-actions'>
                               {statsQuery.data && <WeaponRepairButton stats={statsQuery.data} entry={entry} index={equipment.indexOf(entry)} />}
                               {/* Only consumables can be used up: effect items open their dialog, the others ask how many */}
-                              {(isConsumableItem(entry.item, entry.herb) || isUsedUpItem(entry.item)) && <button
+                              {(isConsumableItem(entry.item, entry.herb, entry.category) || isUsedUpItem(entry.item)) && <button
                                  className='icon-button'
                                  type='button'
                                  aria-haspopup='dialog'
                                  title={t('Use up', language)}
                                  aria-label={`${t('Use up', language)}: ${equipmentDisplayName(entry.item, language)}`}
-                                 onClick={() => isConsumableItem(entry.item, entry.herb) ? setConsumeTarget(entry) : setUseTarget(entry)}
+                                 onClick={() => isConsumableItem(entry.item, entry.herb, entry.category) ? setConsumeTarget(entry) : setUseTarget(entry)}
                                  disabled={saveEquipmentMutation.isPending}
                               >
                                  <Utensils size={15} />

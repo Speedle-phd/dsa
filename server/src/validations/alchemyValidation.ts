@@ -8,4 +8,6 @@ export const brewElixirSchema = z.object({
    success: z.boolean(),
    quality: z.number().int().min(0).max(6),
    placement: z.string().trim().min(1).max(200),
+   // Alchimistische Äquivalenzlehre (AdK S. 297): points of extra difficulty, 10 % saved each
+   substitution: z.number().int().min(0).max(5).default(0),
 })

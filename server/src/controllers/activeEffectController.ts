@@ -10,6 +10,8 @@ import { normalizeStatuses } from '@/utils/statusRules'
 import { abilityEffectSchema, activeEffectActionSchema, consumeItemSchema } from '@/validations/activeEffectValidation'
 import { abilityEffectSpec, conditionsAfterEffect } from '@/utils/abilityEffects'
 import { buildStatResponse } from '@/views/statsView'
+import { bookContext } from '@/utils/bookContext'
+import { isSpoiled } from '@/utils/herbs/shelfLife'
 
 export function viewEffect(effect: IActiveEffectDocument) {
    const values = effect.toObject().values ?? {}
@@ -49,6 +51,11 @@ export async function consumeItemController(req: Request, res: Response) {
    const equipment = stat.toObject().equipment
    const entry = equipment[input.index]
    if (!entry || entry.item !== input.item || entry.amount < 1) throw new BadRequestError('This item is no longer in the equipment.')
+   // A spoiled plant has lost its effect (AdK S. 284; user decision, Nov 2026: it can no longer be used)
+   if (entry.herb) {
+      const context = await bookContext(stat)
+      if (isSpoiled(entry.herb, context.rules, context.calendarDay)) throw new BadRequestError('This plant is spoiled (AdK S. 284).')
+   }
    const consumable = consumableFor(entry.item, entry.quality, input.weapon)
    if (!consumable) throw new BadRequestError('This item has no consumable rule effect.')
    const outcome: { kind: string; amount?: number; cured?: boolean } = { kind: consumable.kind }

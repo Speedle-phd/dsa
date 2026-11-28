@@ -49,6 +49,9 @@ import {
    companionAddSchema, companionRemoveSchema, companionResourcesSchema, companionTrickSchema, companionUpdateSchema,
 } from '@/validations/companionValidation'
 import { getBookContext, getHerbReference, updateBookSettings } from '@/controllers/bookController'
+import { searchHerbs } from '@/controllers/herbSearchController'
+import { craftHerbalSchema, herbSearchSchema, preserveHerbSchema } from '@/validations/herbSearchValidation'
+import { craftHerbal, preserveHerb } from '@/controllers/herbItemController'
 import { bookSettingsSchema } from '@/validations/bookValidation'
 import { adjustMana, changePermanentMana, changeSpell, changeTrick, getMagicReference, removeSpell, removeTrick, updateMagicSettings, updateSpellNotes } from '@/controllers/magicController'
 import { magicRemoveSchema, magicSettingsSchema, manaAdjustmentSchema, permanentManaSchema, spellChangeSchema, spellNotesSchema } from '@/validations/magicValidation'
@@ -104,6 +107,9 @@ router.put('/magic-settings/:id', validateRequest(magicSettingsSchema), updateMa
 // Book rules and in-game date that apply to the hero (its party's, or its own without a party)
 router.get('/book-context/:id', getBookContext)
 router.get('/herb-reference', getHerbReference)
+router.post('/herb-search/:id', validateRequest(herbSearchSchema), searchHerbs)
+router.post('/preserve-herb/:id', validateRequest(preserveHerbSchema), preserveHerb)
+router.post('/craft-herbal/:id', validateRequest(craftHerbalSchema), craftHerbal)
 router.put('/book-settings/:id', validateRequest(bookSettingsSchema), updateBookSettings)
 router.put('/adjust-mana/:id', validateRequest(manaAdjustmentSchema), adjustMana)
 router.put('/permanent-mana/:id', validateRequest(permanentManaSchema), changePermanentMana)

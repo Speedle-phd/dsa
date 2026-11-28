@@ -2,7 +2,8 @@ import { axiosInstance } from '@/axios/axios'
 import type { Stats } from './statsApi'
 
 export type EntryCategory = 'advantages' | 'disadvantages' | 'generalSpecialAbilities' | 'languages' | 'scripts'
-export type EntryEffect = { de: string; en: string; page: number }
+// book: the source when it is not the Regelwerk (page is then that book's page)
+export type EntryEffect = { de: string; en: string; page: number; book?: 'AdK' }
 export type EntryGroup = 'general' | 'fate' | 'magic' | 'tradition' | 'staff' | 'witch' | 'karma'
 export type EntrySelection = {
    category: EntryCategory
@@ -26,6 +27,8 @@ export type EntryReference = {
       // Free-text subjects: the book's examples (level = the level the book gives)
       suggestions?: EntrySuggestion[]
       creationOnly?: boolean
+      // Offered only with this optional book switched on (book rules)
+      book?: 'AdK'
       // Special abilities: Overview (general, fate, karma) or the Arcana sections
       group?: EntryGroup
       effect: EntryEffect

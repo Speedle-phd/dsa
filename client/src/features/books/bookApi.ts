@@ -4,7 +4,8 @@ import type { Party } from '@/features/parties/partyApi'
 import type { BookRules } from './bookRules'
 
 // Mirrors server/src/utils/herbItem.ts: plant items are raw, preserved or a product; days are in-game day numbers
-export type HerbItemState = { form: 'raw' | 'preserved' | 'product'; obtainedDay: number | null; keepsUntilDay: number | null }
+// lasting: keeps for many years (AdK S. 285–286), never spoils
+export type HerbItemState = { form: 'raw' | 'preserved' | 'product'; obtainedDay: number | null; keepsUntilDay: number | null; lasting?: boolean }
 
 export type CalendarAction = { action: 'set'; day: number } | { action: 'advance'; days: number } | { action: 'clear' }
 

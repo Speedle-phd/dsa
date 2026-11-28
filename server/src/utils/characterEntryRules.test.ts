@@ -23,8 +23,28 @@ describe("Character entry catalog and advancement (S. 162–179, 215–224, 352)
       for (const entry of characterEntryCatalog) {
          expect(entry.effect.de.length).toBeGreaterThan(5)
          expect(entry.effect.en.length).toBeGreaterThan(5)
-         expect(entry.effect.page).toBeGreaterThanOrEqual(163)
+         // Regelwerk entries from S. 163; Archiv der Kräuter's entries cite its recipe and rule pages (S. 148–297)
+         expect(entry.effect.page).toBeGreaterThanOrEqual(entry.effect.book === "AdK" ? 144 : 163)
       }
+   })
+   it("adds Archiv der Kräuter's alchemical recipes as Berufsgeheimnisse (AdK S. 159–178)", () => {
+      const secret = characterEntryCatalog.find((item) => item.key === "Berufsgeheimnis (Unverwundbarkeitselixier)")
+      expect(secret).toMatchObject({ ap: 8, book: "AdK", requirements: [{ talent: "alchimie", minimum: 12 }], effect: { page: 171, book: "AdK" } })
+      // 56 alchemical recipes, Liebesküchlein (S. 148) and the Alchimistische Äquivalenzlehre (S. 297)
+      expect(characterEntryCatalog.filter((item) => item.book === "AdK")).toHaveLength(58)
+   })
+   it("Alchimistische Äquivalenzlehre needs Alchimie 10 and two of five lore talents at 10 (AdK S. 297)", () => {
+      const hero = state()
+      const set = (key: string, value: number) => {
+         const existing = hero.talents.find((entry) => entry.key === key)
+         if (existing) existing.value = value
+         else hero.talents.push({ key, value })
+      }
+      set("alchimie", 10)
+      set("magiekunde", 10)
+      expect(quoteEntry(hero, selection("Alchimistische Äquivalenzlehre")).problems.length).toBeGreaterThan(0)
+      set("sternkunde", 10)
+      expect(quoteEntry(hero, selection("Alchimistische Äquivalenzlehre"))).toMatchObject({ ap: 15, problems: [] })
    })
    it("quotes Analytiker at 5 AP and requires Magiekunde 4 (S. 215)", () => {
       const hero = state()

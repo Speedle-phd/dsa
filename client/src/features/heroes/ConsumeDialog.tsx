@@ -12,6 +12,7 @@ import { catalogEntry, equipmentDisplayName } from '@/utils/storePricing'
 import { activeEffectsKey, consumeItem, type ConsumeOutcome } from './activeEffectsApi'
 import { useHerbReference } from '@/features/herbs/herbApi'
 import { herbEffectText } from '@/features/herbs/herbStore'
+import { isPlantRecipe, recipeKindLabels } from '@/features/herbs/recipeRules'
 import { parseDamage } from './combatRoll'
 import { rollDamage } from './fightHelpers'
 import type { EquipmentEntry, Stats } from './statsApi'
@@ -64,14 +65,23 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
       },
    })
 
-   // Plants of Archiv der Kräuter: the summary per route from the book data (the core herbs keep their store text)
-   const adkHerb = useHerbReference(Boolean(entry.herb) || !item).data?.herbs.find((herb) => herb.key === entry.item) ?? null
-   const isHerb = item?.kind === 'herb' || adkHerb !== null
+   // Plants of Archiv der Kräuter: the summary per route from the book data (the core herbs keep their store text).
+   // Products of its recipes (made, or brewed as "Name (QS n)"): the recipe summary, for a brew its QS line (AdK S. 145–178).
+   const reference = useHerbReference(Boolean(entry.herb) || !item).data
+   const adkHerb = reference?.herbs.find((herb) => herb.key === entry.item) ?? null
+   const adkRecipe = !item && !adkHerb ? reference?.recipes.find((recipe) => recipe.key === entry.item.replace(/ \(QS [1-6]\)$/, '')) ?? null : null
+   const recipeQuality = quality ?? Number(/\(QS ([1-6])\)$/.exec(entry.item)?.[1] ?? 0)
+   const isHerb = item?.kind === 'herb' || adkHerb !== null || (adkRecipe !== null && isPlantRecipe(adkRecipe))
+   const recipePoison = adkRecipe?.kind === 'gift' || adkRecipe?.kind === 'alchimistischesGift'
    const effectText = item?.alchemy && quality ? item.alchemy.levels[quality - 1]?.[language]
-      : adkHerb ? herbEffectText(adkHerb)[language] : item?.herb?.effect[language]
-   const Icon = item?.kind === 'poison' ? Skull : isHerb ? Leaf : FlaskConical
-   const action = item?.kind === 'poison' || name === 'Waffenbalsam' ? 'Apply' : isHerb ? 'Use' : 'Drink'
-   const pageLabel = adkHerb ? `AdK ${t('S.', language)} ${adkHerb.page}` : item?.sourcePage ? `${t('S.', language)} ${item.alchemy ? '272–274' : item.sourcePage}` : ''
+      : adkHerb ? herbEffectText(adkHerb)[language]
+      : adkRecipe ? (adkRecipe.summary?.qualities && recipeQuality ? adkRecipe.summary.qualities[recipeQuality - 1] : adkRecipe.summary?.effect)?.[language]
+         ?? t('Effect: see the recipe page (summary to come).', language)
+      : item?.herb?.effect[language]
+   const Icon = item?.kind === 'poison' || recipePoison ? Skull : isHerb ? Leaf : FlaskConical
+   const action = item?.kind === 'poison' || name === 'Waffenbalsam' ? 'Apply' : isHerb || recipePoison ? 'Use' : 'Drink'
+   const adkPage = adkHerb?.page ?? adkRecipe?.page
+   const pageLabel = adkPage ? `AdK ${t('S.', language)} ${adkPage}` : item?.sourcePage ? `${t('S.', language)} ${item.alchemy ? '272–274' : item.sourcePage}` : ''
 
    return createPortal(
       <div className='modal-backdrop' role='presentation' onMouseDown={onClose}>
@@ -79,7 +89,7 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
             onMouseDown={(event) => event.stopPropagation()}>
             <header className='editor-header'>
                <div>
-                  <p className='eyebrow'>{t(isHerb ? 'herb' : item?.kind ?? 'equipment', language)}{pageLabel ? ` · ${pageLabel}` : ''}</p>
+                  <p className='eyebrow'>{t(adkRecipe ? recipeKindLabels[adkRecipe.kind] : isHerb ? 'herb' : item?.kind ?? 'equipment', language)}{pageLabel ? ` · ${pageLabel}` : ''}</p>
                   <h2 id={titleId}>{equipmentDisplayName(entry.item, language)}</h2>
                </div>
                <button className='icon-button editor-close' type='button' onClick={onClose} aria-label={t('Close', language)}><X size={20} /></button>
@@ -88,7 +98,7 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
             <div className='store-purchase-body'>
                {effectText && <div className={`store-effect-card${isHerb ? ' is-herb' : ''}`}>
                   <Icon size={18} aria-hidden='true' />
-                  <div><strong>{quality ? `${t('Effect at', language)} QS ${quality}` : t('Effect', language)}</strong><p>{effectText}</p></div>
+                  <div><strong>{quality || (adkRecipe?.summary?.qualities && recipeQuality) ? `${t('Effect at', language)} QS ${quality ?? recipeQuality}` : t('Effect', language)}</strong><p>{effectText}</p></div>
                </div>}
                {item?.poison && <div className='store-effect-card is-poison'>
                   <Skull size={18} aria-hidden='true' />
@@ -123,7 +133,8 @@ export function ConsumeDialog({ stats, entry, index, onClose }: { stats: Stats; 
                   <span><strong>{t('Use it anyway', language)}</strong>
                      <small>{t('A stronger effect of this kind is running; only the strongest counts (S. 272). The item is used up without a new effect.', language)}</small></span>
                </label>}
-               {adkHerb && !['Wirselkraut', 'Gulmond'].includes(adkHerb.key)
+               {adkRecipe ? <p className='combat-note'>{t('The app does not apply this effect yet: the item is used up; resolve the effect with the GM.', language)}</p>
+                  : adkHerb && !['Wirselkraut', 'Gulmond'].includes(adkHerb.key)
                   ? <p className='combat-note'>{t('The app does not apply this plant’s effect: one application is used up; resolve the effect with the GM.', language)}</p>
                   : <p className='combat-note'>{t('Elixirs take effect at the start of the next combat round (S. 272). Timed effects run until you end them.', language)}</p>}
             </div>

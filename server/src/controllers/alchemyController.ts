@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import { BadRequestError, UnauthorizedError } from '@/utils/appError'
 import { bestLaboratory, brewedQuality, brewPlan } from '@/utils/alchemy'
 import { calcBurden } from '@/utils/baseAttributes'
+import { bookContext } from '@/utils/bookContext'
 import { basePlacements, isContainer } from '@/utils/containers'
 import { carriedEquipmentWeight, purchaseEquipment } from '@/utils/equipmentPurchase'
 import { adjustPurse } from '@/utils/purseAdjustment'
@@ -14,10 +15,15 @@ import { buildStatResponse } from '@/views/statsView'
 export async function brewElixir(req: Request, res: Response) {
    if (!req.user) throw new UnauthorizedError('User not authenticated')
    const stat = await findStatsForUser(req.params.id, req.user._id)
-   const { elixir, level, asp, success, quality, placement } = brewElixirSchema.parse(req.body)
+   const { elixir, level, asp, success, quality, placement, substitution } = brewElixirSchema.parse(req.body)
    if (!stat.generalSpecialAbilities.includes(`Berufsgeheimnis (${elixir})`)) throw new BadRequestError(`The recipe ${elixir} is a Berufsgeheimnis (S. 215, 270).`)
    const owned = stat.equipment.filter((item) => item.amount > 0).map((item) => item.item)
-   const plan = brewPlan({ elixir, level, asp, laboratory: bestLaboratory(owned) })
+   // Archiv der Kräuter adds its alchemical recipes (AdK S. 158–178) for heroes with the book switched on
+   const { rules } = await bookContext(stat)
+   if (substitution && !(rules.adk && stat.generalSpecialAbilities.includes('Alchimistische Äquivalenzlehre'))) {
+      throw new BadRequestError('Substituting ingredients needs the special ability Alchimistische Äquivalenzlehre (AdK S. 297).')
+   }
+   const plan = brewPlan({ elixir, level, asp, laboratory: bestLaboratory(owned), adk: rules.adk, substitution })
    if (!(basePlacements as readonly string[]).includes(placement) && !(isContainer(placement) && owned.includes(placement))) {
       throw new BadRequestError('Choose a valid placement for the elixir.')
    }
@@ -40,7 +46,8 @@ export async function brewElixir(req: Request, res: Response) {
       stat.purse = bought.purse
       equipment = bought.equipment
    } else {
-      const paid = adjustPurse(stat.purse, { direction: 'lose', coins: { dukaten: 0, silbertaler: plan.ingredientCost, heller: 0, kreuzer: 0 } })
+      // in Heller: a saving can leave tenths of a Silbertaler (AdK S. 297)
+      const paid = adjustPurse(stat.purse, { direction: 'lose', coins: { dukaten: 0, silbertaler: 0, heller: Math.round(plan.ingredientCost * 10), kreuzer: 0 } })
       if (!paid.ok) throw new BadRequestError('Not enough money for the ingredients.')
       stat.purse = paid.purse
    }

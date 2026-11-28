@@ -1,5 +1,6 @@
 // Consumable Alchimica, herbs and poisons: what happens when a hero uses one (S. 270–274, 342, 344–346).
 import { herbByName } from './herbs/herbCatalog'
+import { recipeByName } from './herbs/recipeCatalog'
 export type Localized = { de: string; en: string }
 export type Dice = { count: number; sides: number; bonus: number }
 
@@ -134,6 +135,14 @@ export function consumableFor(item: string, storedQuality?: number, weapon?: str
    const herb = herbByName(name)
    if (herb) return { kind: 'info', page: herb.page, book: 'AdK', note: {
       de: `Wirkung laut AdK S. ${herb.page}: mit der Spielleitung abhandeln.`, en: `Effect as on AdK p. ${herb.page}: resolve it with the GM.` } }
+   // Products of Archiv der Kräuter's recipes (made or brewed, AdK S. 145–178): used up, the summary (for a brew its QS line)
+   // shows what happens; poisons and drugs are resolved with the GM until their rules are built
+   const recipe = recipeByName(name)
+   if (recipe) {
+      const line = recipe.summary?.qualities && q >= 1 && q <= 6 ? recipe.summary.qualities[index] : recipe.summary?.effect
+      return { kind: 'info', page: recipe.page, book: 'AdK', note: line ?? {
+         de: `Wirkung laut AdK S. ${recipe.page}: mit der Spielleitung abhandeln.`, en: `Effect as on AdK p. ${recipe.page}: resolve it with the GM.` } }
+   }
    return null
 }
 

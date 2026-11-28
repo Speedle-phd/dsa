@@ -12271,10 +12271,6 @@
       "de": "Die QS der Probe auf Selbstbeherrschung eingeben.",
       "en": "Enter the QS of the Selbstbeherrschung check."
    },
-   "Choose one of the core elixirs (S. 272–274).": {
-      "de": "Eines der Elixiere aus dem Regelwerk wählen (S. 272–274).",
-      "en": "Choose one of the core elixirs (S. 272–274)."
-   },
    "Ingredient level must be 1–6 (S. 271).": {
       "de": "Die Ingredienzienstufe muss zwischen 1 und 6 liegen (S. 271).",
       "en": "Ingredient level must be 1–6 (S. 271)."
@@ -12282,10 +12278,6 @@
    "Charge 0, 4 or 8 AsP (S. 271).": {
       "de": "Mit 0, 4 oder 8 AsP aufladen (S. 271).",
       "en": "Charge 0, 4 or 8 AsP (S. 271)."
-   },
-   "Choose one of the core elixirs.": {
-      "de": "Eines der Elixiere aus dem Regelwerk wählen.",
-      "en": "Choose one of the core elixirs."
    },
    "Resource not found": {
       "de": "Nicht gefunden.",
@@ -13306,5 +13298,641 @@
    "More plants and recipes: switch on Archiv der Kräuter under Settings → Date and book rules (for a party: the GM on the party page).": {
       "de": "Mehr Pflanzen und Rezepte: Archiv der Kräuter unter Einstellungen → Datum und Buchregeln einschalten (in einer Gruppe: die Spielleitung auf der Gruppenseite).",
       "en": "More plants and recipes: switch on Archiv der Kräuter under Settings → Date and book rules (for a party: the GM on the party page)."
+   },
+   "Search for herbs": {
+      "de": "Kräuter suchen",
+      "en": "Search for herbs"
+   },
+   "Search for this plant": {
+      "de": "Gezielt suchen",
+      "en": "Search for this plant"
+   },
+   "Herb search": {
+      "de": "Kräutersuche",
+      "en": "Herb search"
+   },
+   "No bad weather": {
+      "de": "Kein schlechtes Wetter",
+      "en": "No bad weather"
+   },
+   "Rain or snow": {
+      "de": "Regen oder Schnee",
+      "en": "Rain or snow"
+   },
+   "Storm": {
+      "de": "Sturm",
+      "en": "Storm"
+   },
+   "Hurricane": {
+      "de": "Orkan",
+      "en": "Hurricane"
+   },
+   "General herb search": {
+      "de": "Allgemeine Kräutersuche",
+      "en": "General herb search"
+   },
+   "Search difficulty": {
+      "de": "Suchschwierigkeit",
+      "en": "Search difficulty"
+   },
+   "Kind of search": {
+      "de": "Art der Suche",
+      "en": "Kind of search"
+   },
+   "A specific plant": {
+      "de": "Bestimmte Pflanze",
+      "en": "A specific plant"
+   },
+   "Anything useful": {
+      "de": "Alles Nützliche",
+      "en": "Anything useful"
+   },
+   "Weather": {
+      "de": "Wetter",
+      "en": "Weather"
+   },
+   "Plant": {
+      "de": "Pflanze",
+      "en": "Plant"
+   },
+   "Choose the landscape and the weather, then what the hero looks for. A specific plant uses its search difficulty; a general search is −1 (AdK S. 277).": {
+      "de": "Wähle Landschaftstyp und Wetter, dann wonach der Held sucht. Eine bestimmte Pflanze zählt mit ihrer Suchschwierigkeit, die allgemeine Suche ist um −1 erschwert (AdK S. 277).",
+      "en": "Choose the landscape and the weather, then what the hero looks for. A specific plant uses its search difficulty; a general search is −1 (AdK S. 277)."
+   },
+   "{plant} does not grow wild in this landscape; choose another landscape or plant.": {
+      "de": "{plant} wächst in diesem Landschaftstyp nicht wild; wähle einen anderen Landschaftstyp oder eine andere Pflanze.",
+      "en": "{plant} does not grow wild in this landscape; choose another landscape or plant."
+   },
+   "Base time": {
+      "de": "Grundzeitraum",
+      "en": "Base time"
+   },
+   "Roll Pflanzenkunde": {
+      "de": "Pflanzenkunde würfeln",
+      "en": "Roll Pflanzenkunde"
+   },
+   "The hero found up to {count} kinds of plants with {applications} each. Choose them from what grows in {landscape} (most common first, AdK S. 261–266):": {
+      "de": "Der Held hat bis zu {count} Pflanzenarten mit je {applications} gefunden. Wähle sie aus dem, was in {landscape} wächst (häufigste zuerst, AdK S. 261–266):",
+      "en": "The hero found up to {count} kinds of plants with {applications} each. Choose them from what grows in {landscape} (most common first, AdK S. 261–266):"
+   },
+   "the smallest number of applications": {
+      "de": "der kleinsten Zahl an Anwendungen",
+      "en": "the smallest number of applications"
+   },
+   "applications": {
+      "de": "Anwendungen",
+      "en": "applications"
+   },
+   "Take the plants": {
+      "de": "Pflanzen mitnehmen",
+      "en": "Take the plants"
+   },
+   "Found after {hours} hours:": {
+      "de": "Nach {hours} Stunden gefunden:",
+      "en": "Found after {hours} hours:"
+   },
+   "In the inventory as raw plants, picked today.": {
+      "de": "Im Inventar als rohe Pflanzen, heute gepflückt.",
+      "en": "In the inventory as raw plants, picked today."
+   },
+   "The hero found up to {count} kinds of plants. The GM now chooses which ones; they appear in the inventory.": {
+      "de": "Der Held hat bis zu {count} Pflanzenarten gefunden. Die Spielleitung wählt jetzt aus, welche; sie erscheinen im Inventar.",
+      "en": "The hero found up to {count} kinds of plants. The GM now chooses which ones; they appear in the inventory."
+   },
+   "No usable herbs today (AdK S. 276).": {
+      "de": "Heute keine nutzbaren Kräuter (AdK S. 276).",
+      "en": "No usable herbs today (AdK S. 276)."
+   },
+   "The Pflanzenkunde check failed: no usable herbs today (AdK S. 276).": {
+      "de": "Die Probe auf Pflanzenkunde ist misslungen: heute keine nutzbaren Kräuter (AdK S. 276).",
+      "en": "The Pflanzenkunde check failed: no usable herbs today (AdK S. 276)."
+   },
+   "The Sinnesschärfe check failed: no herbs today, but tomorrow the hero knows where to look (AdK S. 278).": {
+      "de": "Die Probe auf Sinnesschärfe ist misslungen: heute keine Kräuter, aber morgen weiß der Held, wo er suchen muss (AdK S. 278).",
+      "en": "The Sinnesschärfe check failed: no herbs today, but tomorrow the hero knows where to look (AdK S. 278)."
+   },
+   "Herb search: QS of Pflanzenkunde": {
+      "de": "Kräutersuche: QS der Pflanzenkunde",
+      "en": "Herb search: QS of Pflanzenkunde"
+   },
+   "Shortened search": {
+      "de": "Verkürzte Suche",
+      "en": "Shortened search"
+   },
+   "{n} applications of {plant}": {
+      "de": "{n} Anwendungen {plant}",
+      "en": "{n} applications of {plant}"
+   },
+   "up to {n} kinds of plants": {
+      "de": "bis zu {n} Pflanzenarten",
+      "en": "up to {n} kinds of plants"
+   },
+   "1 kind of plant": {
+      "de": "1 Pflanzenart",
+      "en": "1 kind of plant"
+   },
+   "Use the QS for …": {
+      "de": "Die QS einsetzen für …",
+      "en": "Use the QS for …"
+   },
+   "More plants": {
+      "de": "Mehr Pflanzen",
+      "en": "More plants"
+   },
+   "A quicker, easier search": {
+      "de": "Schneller und leichter suchen",
+      "en": "A quicker, easier search"
+   },
+   "Hours available (fewer: Sinnesschärfe −1 per 2 hours saved)": {
+      "de": "Verfügbare Stunden (weniger: Sinnesschärfe −1 je 2 gesparte Stunden)",
+      "en": "Hours available (fewer: Sinnesschärfe −1 per 2 hours saved)"
+   },
+   "Hours available": {
+      "de": "Verfügbare Stunden",
+      "en": "Hours available"
+   },
+   "Shortened search: Sinnesschärfe {value}": {
+      "de": "Verkürzte Suche: Sinnesschärfe {value}",
+      "en": "Shortened search: Sinnesschärfe {value}"
+   },
+   "Herb finds": {
+      "de": "Kräuterfunde",
+      "en": "Herb finds"
+   },
+   "When a hero searches for anything useful, you choose here which plants were found.": {
+      "de": "Sucht ein Held nach allem Nützlichen, wählst du hier, welche Pflanzen er gefunden hat.",
+      "en": "When a hero searches for anything useful, you choose here which plants were found."
+   },
+   "{hero} searched {landscape}: the GM is choosing the plants.": {
+      "de": "{hero} hat {landscape} abgesucht: Die Spielleitung wählt die Pflanzen.",
+      "en": "{hero} searched {landscape}: the GM is choosing the plants."
+   },
+   "Dismissed": {
+      "de": "Verworfen",
+      "en": "Dismissed"
+   },
+   "searched {landscape} and found up to {count} kinds of plants (the smallest number of applications each).": {
+      "de": "hat {landscape} abgesucht und bis zu {count} Pflanzenarten gefunden (je die kleinste Zahl an Anwendungen).",
+      "en": "searched {landscape} and found up to {count} kinds of plants (the smallest number of applications each)."
+   },
+   "Nothing found": {
+      "de": "Nichts gefunden",
+      "en": "Nothing found"
+   },
+   "Give {count} of {max}": {
+      "de": "{count} von {max} zuteilen",
+      "en": "Give {count} of {max}"
+   },
+   "The herb search (Archiv der Kräuter) is not switched on for this hero.": {
+      "de": "Die Kräutersuche (Archiv der Kräuter) ist für diesen Helden nicht eingeschaltet.",
+      "en": "The herb search (Archiv der Kräuter) is not switched on for this hero."
+   },
+   "This plant does not grow wild in this landscape.": {
+      "de": "Diese Pflanze wächst in diesem Landschaftstyp nicht wild.",
+      "en": "This plant does not grow wild in this landscape."
+   },
+   "A search of less than 2 hours finds nothing (AdK S. 278).": {
+      "de": "Eine Suche von weniger als 2 Stunden findet nichts (AdK S. 278).",
+      "en": "A search of less than 2 hours finds nothing (AdK S. 278)."
+   },
+   "The found plants could not be added.": {
+      "de": "Die gefundenen Pflanzen konnten nicht hinzugefügt werden.",
+      "en": "The found plants could not be added."
+   },
+   "This find was already handled.": {
+      "de": "Dieser Fund wurde schon bearbeitet.",
+      "en": "This find was already handled."
+   },
+   "The hero is no longer in this party.": {
+      "de": "Der Held ist nicht mehr in dieser Gruppe.",
+      "en": "The hero is no longer in this party."
+   },
+   "Herb find not found": {
+      "de": "Kräuterfund nicht gefunden",
+      "en": "Herb find not found"
+   },
+   "Choose the plant you search for.": {
+      "de": "Wähle die Pflanze, nach der du suchst.",
+      "en": "Choose the plant you search for."
+   },
+   "Choose plants that grow in this landscape, at most as many as were found.": {
+      "de": "Wähle Pflanzen, die in diesem Landschaftstyp wachsen, höchstens so viele wie gefunden.",
+      "en": "Choose plants that grow in this landscape, at most as many as were found."
+   },
+   "* only under a condition (e.g. in caves); point at the plant for the remark.": {
+      "de": "* nur unter Bedingungen (z. B. in Höhlen); die Anmerkung zeigt der Hinweis an der Pflanze.",
+      "en": "* only under a condition (e.g. in caves); point at the plant for the remark."
+   },
+   "Preserve": {
+      "de": "Haltbar machen",
+      "en": "Preserve"
+   },
+   "Throw away": {
+      "de": "Wegwerfen",
+      "en": "Throw away"
+   },
+   "raw": {
+      "de": "roh",
+      "en": "raw"
+   },
+   "preserved": {
+      "de": "haltbar gemacht",
+      "en": "preserved"
+   },
+   "product": {
+      "de": "hergestellt",
+      "en": "product"
+   },
+   "spoiled": {
+      "de": "verdorben",
+      "en": "spoiled"
+   },
+   "Keeps until": {
+      "de": "Haltbar bis",
+      "en": "Keeps until"
+   },
+   "Preserved: keeps until {date}.": {
+      "de": "Haltbar gemacht: hält bis {date}.",
+      "en": "Preserved: keeps until {date}."
+   },
+   "The check failed: the plants stay raw, the material is used up.": {
+      "de": "Die Probe ist misslungen: Die Pflanzen bleiben roh, das Material ist verbraucht.",
+      "en": "The check failed: the plants stay raw, the material is used up."
+   },
+   "How to preserve": {
+      "de": "Art der Haltbarmachung",
+      "en": "How to preserve"
+   },
+   "With a Pflanzenkunde check": {
+      "de": "Mit Pflanzenkunde-Probe",
+      "en": "With a Pflanzenkunde check"
+   },
+   "By plant part": {
+      "de": "Nach Pflanzenteil",
+      "en": "By plant part"
+   },
+   "Plant part": {
+      "de": "Pflanzenteil",
+      "en": "Plant part"
+   },
+   "Method": {
+      "de": "Methode",
+      "en": "Method"
+   },
+   "One Pflanzenkunde check preserves all {amount} applications: 1 month plus 1 month per QS (a critical success doubles it). Material: {cost} Kreuzer, used up also on a failure.": {
+      "de": "Eine Pflanzenkunde-Probe macht alle {amount} Anwendungen haltbar: 1 Monat plus 1 Monat je QS (ein kritischer Erfolg verdoppelt das). Material: {cost} Kreuzer, auch bei Misslingen verbraucht.",
+      "en": "One Pflanzenkunde check preserves all {amount} applications: 1 month plus 1 month per QS (a critical success doubles it). Material: {cost} Kreuzer, used up also on a failure."
+   },
+   "Choose the part you keep and the method. Each application takes 5 minutes; no check. Some methods need a vessel, oil, vinegar or alcohol (GM).": {
+      "de": "Wähle den Pflanzenteil, den du aufbewahrst, und die Methode. Jede Anwendung dauert 5 Minuten, ohne Probe. Manche Methoden brauchen ein Gefäß, Öl, Essig oder Alkohol (Meister).",
+      "en": "Choose the part you keep and the method. Each application takes 5 minutes; no check. Some methods need a vessel, oil, vinegar or alcohol (GM)."
+   },
+   "No in-game date is set: plants cannot spoil or be preserved until one is (settings or party page).": {
+      "de": "Es ist kein Spieldatum gesetzt: Pflanzen verderben erst und lassen sich erst haltbar machen, wenn eines gesetzt ist (Einstellungen oder Gruppenseite).",
+      "en": "No in-game date is set: plants cannot spoil or be preserved until one is (settings or party page)."
+   },
+   "Set an in-game date first (settings or party page).": {
+      "de": "Setze zuerst ein Spieldatum (Einstellungen oder Gruppenseite).",
+      "en": "Set an in-game date first (settings or party page)."
+   },
+   "Only raw plants can be preserved.": {
+      "de": "Nur rohe Pflanzen lassen sich haltbar machen.",
+      "en": "Only raw plants can be preserved."
+   },
+   "This plant is spoiled (AdK S. 284).": {
+      "de": "Diese Pflanze ist verdorben (AdK S. 284).",
+      "en": "This plant is spoiled (AdK S. 284)."
+   },
+   "Haltbarmachung (Archiv der Kräuter) is not switched on for this hero.": {
+      "de": "Haltbarmachung (Archiv der Kräuter) ist für diesen Helden nicht eingeschaltet.",
+      "en": "Haltbarmachung (Archiv der Kräuter) is not switched on for this hero."
+   },
+   "Shelf life per plant part is not switched on for this hero.": {
+      "de": "Haltbarkeit nach Pflanzenteilen ist für diesen Helden nicht eingeschaltet.",
+      "en": "Shelf life per plant part is not switched on for this hero."
+   },
+   "This plant is no longer in the inventory.": {
+      "de": "Diese Pflanze ist nicht mehr im Inventar.",
+      "en": "This plant is no longer in the inventory."
+   },
+   "Choose a plant part and a method from the table (AdK S. 285).": {
+      "de": "Wähle einen Pflanzenteil und eine Methode aus der Tabelle (AdK S. 285).",
+      "en": "Choose a plant part and a method from the table (AdK S. 285)."
+   },
+   "Not enough money: the material costs 5 Kreuzer per application.": {
+      "de": "Nicht genug Geld: Das Material kostet 5 Kreuzer pro Anwendung.",
+      "en": "Not enough money: the material costs 5 Kreuzer per application."
+   },
+   "Blätter und Kräuter": {
+      "de": "Blätter und Kräuter",
+      "en": "Leaves and herbs"
+   },
+   "Blütenteile und Knospen": {
+      "de": "Blütenteile und Knospen",
+      "en": "Flower parts and buds"
+   },
+   "Dornen und Stacheln": {
+      "de": "Dornen und Stacheln",
+      "en": "Thorns and spines"
+   },
+   "Fasern und Myzel": {
+      "de": "Fasern und Myzel",
+      "en": "Fibres and mycelium"
+   },
+   "Fruchtkörper": {
+      "de": "Fruchtkörper",
+      "en": "Fruiting bodies"
+   },
+   "Harz": {
+      "de": "Harz",
+      "en": "Resin"
+   },
+   "Holz, Rinde und Schale": {
+      "de": "Holz, Rinde und Schale",
+      "en": "Wood, bark and shell"
+   },
+   "Saft und Gel": {
+      "de": "Saft und Gel",
+      "en": "Sap and gel"
+   },
+   "Samen": {
+      "de": "Samen",
+      "en": "Seeds"
+   },
+   "Stängel": {
+      "de": "Stängel",
+      "en": "Stalks"
+   },
+   "Triebe und Sprossen": {
+      "de": "Triebe und Sprossen",
+      "en": "Shoots and sprouts"
+   },
+   "Wurzeln und Wurzelstock": {
+      "de": "Wurzeln und Wurzelstock",
+      "en": "Roots and rootstock"
+   },
+   "Zwiebeln": {
+      "de": "Zwiebeln",
+      "en": "Bulbs"
+   },
+   "Öl": {
+      "de": "Öl",
+      "en": "Oil"
+   },
+   "aushärten lassen": {
+      "de": "aushärten lassen",
+      "en": "let harden"
+   },
+   "auspressen, Sud luftdicht verschließen, Masse trocknen": {
+      "de": "auspressen, Sud luftdicht verschließen, Masse trocknen",
+      "en": "press, seal the juice airtight, dry the pulp"
+   },
+   "auspressen, abkochen und luftdicht verschließen": {
+      "de": "auspressen, abkochen und luftdicht verschließen",
+      "en": "press, boil and seal airtight"
+   },
+   "auspressen, abkochen, absieben und luftdicht verschließen": {
+      "de": "auspressen, abkochen, absieben und luftdicht verschließen",
+      "en": "press, boil, strain and seal airtight"
+   },
+   "dunkel und kühl lagern": {
+      "de": "dunkel und kühl lagern",
+      "en": "store dark and cool"
+   },
+   "einkochen, Masse luftdicht verschließen": {
+      "de": "einkochen, Masse luftdicht verschließen",
+      "en": "boil down, seal the pulp airtight"
+   },
+   "ganz oder zerkleinert trocknen (Sud und Masse getrennt)": {
+      "de": "ganz oder zerkleinert trocknen (Sud und Masse getrennt)",
+      "en": "dry whole or chopped (juice and pulp separately)"
+   },
+   "ganz trocknen und ggf. schälen": {
+      "de": "ganz trocknen und ggf. schälen",
+      "en": "dry whole and peel if needed"
+   },
+   "ganz trocknen": {
+      "de": "ganz trocknen",
+      "en": "dry whole"
+   },
+   "großzügig portionieren und trocknen": {
+      "de": "großzügig portionieren und trocknen",
+      "en": "cut into large portions and dry"
+   },
+   "in Öl, Alkohol oder Essig einlegen": {
+      "de": "in Öl, Alkohol oder Essig einlegen",
+      "en": "pickle in oil, alcohol or vinegar"
+   },
+   "portionieren und trocknen": {
+      "de": "portionieren und trocknen",
+      "en": "portion and dry"
+   },
+   "pulverisieren und mit Öl zu Paste vermischen": {
+      "de": "pulverisieren und mit Öl zu Paste vermischen",
+      "en": "grind and mix with oil into a paste"
+   },
+   "pulverisieren und trocken lagern": {
+      "de": "pulverisieren und trocken lagern",
+      "en": "grind and store dry"
+   },
+   "vom Stängel trennen und einlegen (Essenz)": {
+      "de": "vom Stängel trennen und einlegen (Essenz)",
+      "en": "separate from the stalk and pickle (essence)"
+   },
+   "zerkleinern und einkochen, Sud luftdicht verschließen (Essenz)": {
+      "de": "zerkleinern und einkochen, Sud luftdicht verschließen (Essenz)",
+      "en": "chop and boil down, seal the juice airtight (essence)"
+   },
+   "zerkleinern und trocknen": {
+      "de": "zerkleinern und trocknen",
+      "en": "chop and dry"
+   },
+   "meist nur frisch voll wirksam": {
+      "de": "meist nur frisch voll wirksam",
+      "en": "usually fully effective only when fresh"
+   },
+   "{amount} × {name} made.": {
+      "de": "{amount} × {name} hergestellt.",
+      "en": "{amount} × {name} made."
+   },
+   "The check failed: the plants are lost (S. 144).": {
+      "de": "Die Probe ist misslungen: Die Pflanzen sind verloren (S. 144).",
+      "en": "The check failed: the plants are lost (S. 144)."
+   },
+   "Make": {
+      "de": "Herstellen",
+      "en": "Make"
+   },
+   "Fewer": {
+      "de": "Weniger",
+      "en": "Fewer"
+   },
+   "Uses": {
+      "de": "Verbraucht",
+      "en": "Uses"
+   },
+   "Optional additions (not taken from the inventory):": {
+      "de": "Optionale Zusätze (werden nicht aus dem Inventar genommen):",
+      "en": "Optional additions (not taken from the inventory):"
+   },
+   "{count} applications available": {
+      "de": "{count} Anwendungen verfügbar",
+      "en": "{count} applications available"
+   },
+   "Plant recipes are made with a Pflanzenkunde check: one application of the main plant gives one product, a failure loses the plants (S. 144). Alchemical recipes are Berufsgeheimnisse and are brewed in the laboratory table (S. 158).": {
+      "de": "Pflanzliche Rezepte werden mit einer Pflanzenkunde-Probe hergestellt: Aus einer Anwendung der Hauptpflanze entsteht ein Erzeugnis, bei Misslingen sind die Pflanzen verloren (S. 144). Alchimistische Rezepte sind Berufsgeheimnisse und werden in der Labortabelle gebraut (S. 158).",
+      "en": "Plant recipes are made with a Pflanzenkunde check: one application of the main plant gives one product, a failure loses the plants (S. 144). Alchemical recipes are Berufsgeheimnisse and are brewed in the laboratory table (S. 158)."
+   },
+   "Recipe, plant or ingredient": {
+      "de": "Rezept, Pflanze oder Zutat",
+      "en": "Recipe, plant or ingredient"
+   },
+   "Search recipes": {
+      "de": "Rezepte durchsuchen",
+      "en": "Search recipes"
+   },
+   "Recipe kind": {
+      "de": "Rezeptart",
+      "en": "Recipe kind"
+   },
+   "All recipe kinds": {
+      "de": "Alle Rezeptarten",
+      "en": "All recipe kinds"
+   },
+   "{count} of {total} recipes": {
+      "de": "{count} von {total} Rezepten",
+      "en": "{count} of {total} recipes"
+   },
+   "No recipe matches these filters.": {
+      "de": "Kein Rezept passt zu diesen Filtern.",
+      "en": "No recipe matches these filters."
+   },
+   "Also called": {
+      "de": "Auch genannt",
+      "en": "Also called"
+   },
+   "Brewing conditions": {
+      "de": "Voraussetzungen beim Brauen",
+      "en": "Brewing conditions"
+   },
+   "Effect: see the recipe page (summary to come).": {
+      "de": "Wirkung: siehe Rezeptseite (Zusammenfassung folgt).",
+      "en": "Effect: see the recipe page (summary to come)."
+   },
+   "Quality levels": {
+      "de": "Qualitätsstufen",
+      "en": "Quality levels"
+   },
+   "Needs": {
+      "de": "Benötigt",
+      "en": "Needs"
+   },
+   "in the inventory (not spoiled).": {
+      "de": "im Inventar (nicht verdorben).",
+      "en": "in the inventory (not spoiled)."
+   },
+   "Plant remedy": {
+      "de": "Pflanzliches Hilfsmittel",
+      "en": "Plant remedy"
+   },
+   "Plant poison": {
+      "de": "Pflanzliches Gift",
+      "en": "Plant poison"
+   },
+   "Plant drug": {
+      "de": "Pflanzliches Rauschmittel",
+      "en": "Plant drug"
+   },
+   "Alchemical poison": {
+      "de": "Alchimistisches Gift",
+      "en": "Alchemical poison"
+   },
+   "Alchemical drug": {
+      "de": "Alchimistisches Rauschmittel",
+      "en": "Alchemical drug"
+   },
+   "Processing difficulty": {
+      "de": "Verarbeitungsschwierigkeit",
+      "en": "Processing difficulty"
+   },
+   "Half the poison level": {
+      "de": "Halbe Giftstufe",
+      "en": "Half the poison level"
+   },
+   "Typical ingredients": {
+      "de": "Typische Ingredienzien",
+      "en": "Typical ingredients"
+   },
+   "Archiv der Kräuter is not switched on for this hero.": {
+      "de": "Archiv der Kräuter ist für diesen Helden nicht eingeschaltet.",
+      "en": "Archiv der Kräuter is not switched on for this hero."
+   },
+   "Unknown recipe.": {
+      "de": "Unbekanntes Rezept.",
+      "en": "Unknown recipe."
+   },
+   "Alchemical recipes are brewed (Alchimie), not made with Pflanzenkunde.": {
+      "de": "Alchimistische Rezepte werden gebraut (Alchimie), nicht mit Pflanzenkunde hergestellt.",
+      "en": "Alchemical recipes are brewed (Alchimie), not made with Pflanzenkunde."
+   },
+   "This recipe names no main plant.": {
+      "de": "Dieses Rezept nennt keine Hauptpflanze.",
+      "en": "This recipe names no main plant."
+   },
+   "Not enough usable applications of the main plant in the inventory.": {
+      "de": "Nicht genug verwendbare Anwendungen der Hauptpflanze im Inventar.",
+      "en": "Not enough usable applications of the main plant in the inventory."
+   },
+   "The products could not be added.": {
+      "de": "Die Erzeugnisse konnten nicht hinzugefügt werden.",
+      "en": "The products could not be added."
+   },
+   "Choose one of the known elixir recipes (S. 272–274).": {
+      "de": "Wähle eines der bekannten Elixierrezepte (S. 272–274).",
+      "en": "Choose one of the known elixir recipes (S. 272–274)."
+   },
+   "Typical tools": {
+      "de": "Typische Hilfsmittel",
+      "en": "Typical tools"
+   },
+   "The app does not apply this effect yet: the item is used up; resolve the effect with the GM.": {
+      "de": "Die App wendet diese Wirkung noch nicht an: Der Gegenstand wird verbraucht; die Wirkung mit der Spielleitung abhandeln.",
+      "en": "The app does not apply this effect yet: the item is used up; resolve the effect with the GM."
+   },
+   "Substitute ingredients (Äquivalenzlehre, AdK S. 297)": {
+      "de": "Ingredienzien ersetzen (Äquivalenzlehre, AdK S. 297)",
+      "en": "Substitute ingredients (Äquivalenzlehre, AdK S. 297)"
+   },
+   "Each point of extra difficulty saves 10 % of the ingredient cost.": {
+      "de": "Jeder Punkt Erschwernis spart 10 % der Ingredienzienkosten.",
+      "en": "Each point of extra difficulty saves 10 % of the ingredient cost."
+   },
+   "Äquivalenzlehre (AdK S. 297)": {
+      "de": "Äquivalenzlehre (AdK S. 297)",
+      "en": "Äquivalenzlehre (AdK S. 297)"
+   },
+   "Substituting ingredients needs the special ability Alchimistische Äquivalenzlehre (AdK S. 297).": {
+      "de": "Ingredienzien ersetzen erfordert die Sonderfertigkeit Alchimistische Äquivalenzlehre (AdK S. 297).",
+      "en": "Substituting ingredients needs the special ability Alchimistische Äquivalenzlehre (AdK S. 297)."
+   },
+   "The Äquivalenzlehre saves 10 % per point, at most 50 % (AdK S. 297).": {
+      "de": "Die Äquivalenzlehre spart 10 % je Punkt, höchstens 50 % (AdK S. 297).",
+      "en": "The Äquivalenzlehre saves 10 % per point, at most 50 % (AdK S. 297)."
+   },
+   "One check makes the whole batch: each product uses one application of the main plant. On a failure the plants are lost.": {
+      "de": "Eine Probe stellt die ganze Menge her: Jedes Erzeugnis verbraucht eine Anwendung der Hauptpflanze. Misslingt die Probe, sind die Pflanzen verloren.",
+      "en": "One check makes the whole batch: each product uses one application of the main plant. On a failure the plants are lost."
+   },
+   "Roll {talent}": {
+      "de": "{talent} würfeln",
+      "en": "Roll {talent}"
+   },
+   "This recipe is a Berufsgeheimnis (AdK S. 148).": {
+      "de": "Dieses Rezept ist ein Berufsgeheimnis (AdK S. 148).",
+      "en": "This recipe is a Berufsgeheimnis (AdK S. 148)."
+   },
+   "This recipe is not made with that talent.": {
+      "de": "Dieses Rezept wird nicht mit diesem Talent hergestellt.",
+      "en": "This recipe is not made with that talent."
    }
 }

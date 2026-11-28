@@ -74,6 +74,68 @@ for index in range(266, 272):
         effects[squash(name)] = [COLUMNS[i] for i, x in enumerate(xs) if any(abs(mx - x - shift) <= 6 and abs(my - y) <= 2 for mx, my in marks)]
 
 
+# ---- distribution table (S. 262–266): frequency 1 (sehr selten) … 5 (gewöhnlich) per landscape type, "–" = not there.
+# A row's cells share text fragments ("– – 5 (Aranien),"); each fragment starts at a column found by its x position
+# against the page's header. Parentheses and wrapped continuation lines ("sonst 4") are ignored: the first number counts.
+LANDSCAPE_HEADERS = ["Hoher", "Grasländer,", "Sümpfe,", "Wälder", "Regenwälder", "Gebirge", "Wüsten", "Maraskan"]
+distribution = {}
+for index in range(262, 267):
+    fragments = []
+
+    def on_dist(text, cm, tm, font, size):
+        clean = " ".join(text.replace("\xad", "-").split())
+        if clean:
+            fragments.append((round(tm[4]), round(tm[5]), clean))
+
+    reader.pages[index].extract_text(visitor_text=on_dist)
+    columns = []
+    for header in LANDSCAPE_HEADERS:
+        hits = [x for x, y, t in fragments if t == header and y > 660]
+        columns.append(hits[0] if hits else None)
+    if None in columns:
+        continue
+    name_x = min(x for x, y, t in fragments if t == "Pflanze")
+    header_y = min(y for x, y, t in fragments if t in LANDSCAPE_HEADERS)
+    # a cell belongs to the column whose range (midpoint to the previous header … midpoint to the next) contains it
+    bounds = [(columns[i - 1] + columns[i]) / 2 if i else 0 for i in range(8)]
+    rows, current = [], None
+    for x, y, t in sorted(fragments, key=lambda entry: (-entry[1], entry[0])):
+        if y >= header_y - 5 or y < 40:
+            continue
+        if x <= name_x + 2:
+            # a plant name; a second line 12 points below continues it (rows are 15–16 points apart)
+            if current and abs(current["y"] - y) <= 2:
+                current["name"] += t  # a hyphenated name split into pieces on the same line ("Schlangenzüng" "-")
+            elif current and 0 < current["y"] - y < 14 and not current.get("noted"):
+                current["name"] += " " + t
+            else:
+                current = {"name": t, "y": y, "cells": {}, "note": None}
+                rows.append(current)
+        elif t == "Anmerkung":
+            if current:
+                current["noted"] = True
+            continue
+        elif current and x < columns[0] - 10 and abs(y - current["y"]) > 2:
+            current["note"] = (current["note"] + " " + t) if current["note"] else t
+        elif current and abs(y - current["y"]) <= 2:
+            start = max(i for i in range(8) if bounds[i] <= x)
+            body = re.sub(r"\([^)]*\)?", " ", t)
+            # one cell with two values ("5, 2 (Hochland)", "5 (Norden), sonst 2"): the first value counts
+            body = re.sub(r",?\s*sonst\s*\d\*?", " ", body)
+            body = re.sub(r"(\d\*?)\s*,\s*\d\*?", r"\1", body)
+            tokens = re.findall(r"–\*?|\?|\d\*?", body)
+            for offset, token in enumerate(tokens):
+                column = start + offset
+                if column < 8 and column not in current["cells"]:
+                    digit = re.match(r"\d", token)
+                    current["cells"][column] = int(token[0]) if digit else None
+        elif current and current["note"] and x < columns[0] - 10:
+            current["note"] += " " + t
+    for row in rows:
+        values = [row["cells"].get(column) for column in range(8)]
+        distribution[squash(row["name"])] = {"values": values, "note": row["note"], "complete": len(row["cells"]) == 8}
+
+
 def norm(value):
     value = value.replace("\xad", "")
     value = re.sub(r"(\w)-\s*\n\s*(\w)", r"\1\2", value)
@@ -150,10 +212,18 @@ for number, (name, index) in enumerate(plants, start=1):
         "price": price(field(text, "Preis", ["Rezepte:", "Haltbarkeit:", "Alltagsarzneien"])),
         "recipes": recipes,
         "rawRoutes": [key for key, value in routes.items() if value and not re.match(r"^(keine|–|-)\.?$", value)],
+        # frequency 1–5 per landscape type in the order of herbTypes.herbLandscapes (without Höhlen); null = not there
+        "distribution": (distribution.get(squash(name)) or {}).get("values"),
+        "distributionNote": (distribution.get(squash(name)) or {}).get("note"),
     }
     missing = [k for k in ("landscape", "search", "identify", "applications") if row[k] is None]
     if not row["effectTypes"]:
         missing.append("effectTypes")
+    dist = distribution.get(squash(name))
+    if not dist:
+        missing.append("distribution")
+    elif not dist["complete"]:
+        missing.append("distribution (incomplete row)")
     if missing:
         report.append(f"{name} (S. {index}): {', '.join(missing)}")
     rows.append(row)

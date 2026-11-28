@@ -17,6 +17,8 @@ import {
    updatePartyRules,
 } from '@/controllers/partyController'
 import { calendarActionSchema, partyRulesSchema } from '@/validations/bookValidation'
+import { assignHerbFind, dismissHerbFind, listHerbFinds } from '@/controllers/herbSearchController'
+import { herbFindAssignSchema } from '@/validations/herbSearchValidation'
 import { createPartySchema, joinPartySchema, memberVisibilitySchema, updatePartySchema } from '@/validations/partyValidation'
 import {
    addNpcs, changeTurn, damageCombatant, endEncounter, getEncounter, moveCombatant, removeCombatant, resizeBoard,
@@ -57,6 +59,10 @@ router.post('/:id/check-requests', validateRequest(createCheckRequestSchema), cr
 router.post('/:id/check-requests/:requestId/result', validateRequest(checkResultSchema), answerCheckRequest)
 router.post('/:id/check-requests/:requestId/decline', validateRequest(checkAnswerSchema), declineCheckRequest)
 router.post('/:id/check-requests/:requestId/close', closeCheckRequest)
+// Herb finds of a general herb search: the GM picks the species (AdK S. 278)
+router.get('/:id/herb-finds', listHerbFinds)
+router.post('/:id/herb-finds/:findId/assign', validateRequest(herbFindAssignSchema), assignHerbFind)
+router.post('/:id/herb-finds/:findId/dismiss', dismissHerbFind)
 
 router.get('/:id/encounter', getEncounter)
 router.post('/:id/encounter', validateRequest(startEncounterSchema), startEncounter)

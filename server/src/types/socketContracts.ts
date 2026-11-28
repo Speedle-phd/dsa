@@ -10,6 +10,8 @@ export type RealtimeNotice =
    | { topic: 'presence'; partyId: string }
    // GM check requests of the party changed (new, answered, closed)
    | { topic: 'checks'; partyId: string }
+   // Herb finds of the party changed (a general herb search waits for the GM, or the GM assigned it)
+   | { topic: 'herbs'; partyId: string }
 
 export type CommandAck<T = never> = { ok: true; data?: T } | { ok: false; error: string }
 

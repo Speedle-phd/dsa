@@ -1,24 +1,15 @@
 import type { Request, Response } from 'express'
 import { BadRequestError, UnauthorizedError } from '@/utils/appError'
-import { applyCalendarAction, effectiveBookRules, normalizeBookRules, storedBookRules, type BookRules, type CalendarAction } from '@/utils/bookRules'
-import { activePartyOfHero } from '@/utils/partyAccess'
+import { applyCalendarAction, storedBookRules, type BookRules, type CalendarAction } from '@/utils/bookRules'
+import { bookContext } from '@/utils/bookContext'
 import { findStatsForUser, saveStats } from '@/utils/statsPersistence'
-import type { IStatsDocument } from '@/models/stats.model'
 import { herbs } from '@/utils/herbs/herbCatalog'
-import { herbEffectTypes, herbLandscapes } from '@/utils/herbs/herbTypes'
-
-// The book rules and in-game date that apply to a hero: its party's while it is an accepted member of an active
-// party, otherwise its own (user decision, Nov 2026)
-async function bookContext(stat: IStatsDocument) {
-   const party = await activePartyOfHero({ statsId: String(stat._id) })
-   const member = party?.members.find((entry) => String(entry.statsId) === String(stat._id) && entry.state === 'accepted')
-   const own = { rules: normalizeBookRules(storedBookRules(stat.bookRules)), calendarDay: stat.calendarDay ?? null }
-   if (party && member) {
-      return { source: 'party' as const, party: { _id: String(party._id), name: party.name },
-         rules: effectiveBookRules(own.rules, { rules: storedBookRules(party.rules) }), calendarDay: party.calendarDay ?? null }
-   }
-   return { source: 'hero' as const, party: null, rules: own.rules, calendarDay: own.calendarDay }
-}
+import { herbEffectTypes, herbLandscapes, searchLandscapes } from '@/utils/herbs/herbTypes'
+import { baseHours, generalSearchModifier, landscapeModifiers, weatherModifiers } from '@/utils/herbs/herbSearch'
+import { coreShelfDays, plantParts, preserveCostKreuzer, rawShelfDays } from '@/utils/herbs/shelfLife'
+import { craftModifier } from '@/utils/herbs/crafting'
+import { recipes } from '@/utils/herbs/recipeCatalog'
+import { isPlantRecipeKind } from '@/utils/herbs/recipeTypes'
 
 export async function getBookContext(req: Request, res: Response) {
    if (!req.user) throw new UnauthorizedError('User not authenticated')
@@ -44,5 +35,11 @@ export async function updateBookSettings(req: Request, res: Response) {
 
 // The plants of Archiv der Kräuter (Herbarium, store, Pflanzenkunde); static reference data
 export function getHerbReference(_req: Request, res: Response) {
-   res.json({ herbs, effectTypes: herbEffectTypes, landscapes: herbLandscapes })
+   res.json({ herbs, effectTypes: herbEffectTypes, landscapes: herbLandscapes,
+      // Kräutersuche tables (AdK S. 277) for the search dialog; the server applies the same ones
+      search: { landscapes: searchLandscapes, landscapeModifiers, weatherModifiers, generalSearchModifier, baseHours },
+      // Haltbarkeit (AdK S. 284–286): plant parts and methods, and the day counts the app uses
+      shelfLife: { plantParts, coreShelfDays, rawShelfDays, preserveCostKreuzer },
+      // Recipes (AdK S. 144–178) with the Pflanzenkunde modifier of plant recipes; the server applies the same one
+      recipes: recipes.map((recipe) => ({ ...recipe, craftModifier: isPlantRecipeKind(recipe.kind) ? craftModifier(recipe) : null })) })
 }

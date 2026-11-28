@@ -80,6 +80,7 @@ export const herbItemSchema = z.object({
    form: z.enum(herbForms),
    obtainedDay: z.number().int().min(0).max(maxCalendarDay).nullable().default(null),
    keepsUntilDay: z.number().int().min(0).max(maxCalendarDay).nullable().default(null),
+   lasting: z.boolean().optional(),
 })
 const equipmentSchema = z.object({
    item: nonEmptyString,

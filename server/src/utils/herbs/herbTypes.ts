@@ -11,6 +11,10 @@ export type HerbEffectType = (typeof herbEffectTypes)[number]
 export const herbLandscapes = ['Hoher Norden', 'Grasländer, Heiden und Steppen', 'Sümpfe, Marschen und Moore', 'Wälder', 'Regenwälder', 'Gebirge',
    'Wüstenrandgebiete und Wüsten', 'Maraskan', 'Höhlen'] as const
 export type HerbLandscape = (typeof herbLandscapes)[number]
+// The eight landscape types of the herb search and the distribution table (AdK S. 262, 276); caves count via notes
+export const searchLandscapes = ['Hoher Norden', 'Grasländer, Heiden und Steppen', 'Sümpfe, Marschen und Moore', 'Wälder', 'Regenwälder', 'Gebirge',
+   'Wüstenrandgebiete und Wüsten', 'Maraskan'] as const
+export type SearchLandscape = (typeof searchLandscapes)[number]
 
 export type HerbRoute = 'touch' | 'inhale' | 'eat'
 
@@ -34,6 +38,9 @@ export type HerbFacts = {
    recipes: Array<{ name: string; page: number; book: 'AdK' | 'RW' }>
    // Raw routes the page gives an effect for (Berührung, Einatmung, Verzehr)
    rawRoutes: HerbRoute[]
+   // Frequency per landscape type (AdK S. 261–266): 5 gewöhnlich … 1 sehr selten, null = not there; order of searchLandscapes
+   distribution: Array<number | null> | null
+   distributionNote: string | null
 }
 
 // Short summaries per raw route and what a hero knows per QS of Pflanzenkunde (QS 1, 2, 3+)

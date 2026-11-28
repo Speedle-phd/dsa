@@ -5590,6 +5590,18 @@
       display: grid;
       flex: 1 1 10rem;
    }
+   /* A spoiled plant (AdK S. 284): danger border and status text, not colour alone (the text says "verdorben") */
+   .alchemy-supplies li.is-spoiled {
+      border-color: hsl(var(--danger));
+   }
+   .alchemy-supplies li.is-spoiled small {
+      color: hsl(var(--danger));
+   }
+   .alchemy-supplies li .quiet-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+   }
    .artifact-list {
       grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
    }
@@ -5965,6 +5977,92 @@
    .regen-extras {
       display: grid;
       gap: 0.25rem;
+   }
+   /* Kräutersuche (AdK S. 275–278): search dialog and the GM's herb finds on the party page */
+   .herb-search-dialog .store-purchase-body {
+      display: grid;
+      gap: 0.9rem;
+   }
+   .herb-search-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+      gap: 0.75rem;
+   }
+   /* Part and method names are long: the selects size to their options and wrap instead of cutting them */
+   .herb-preserve-fields {
+      display: flex;
+      flex-wrap: wrap;
+   }
+   .herb-preserve-fields select {
+      width: auto;
+      max-width: 100%;
+   }
+   .herb-search-sum {
+      margin: 0;
+      font-size: var(--fs-sm);
+   }
+   .herb-pick-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
+      gap: 0.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+   }
+   .herb-pick-list .probe-chip {
+      width: 100%;
+      padding: 0.45rem 0.7rem;
+      text-align: left;
+   }
+   .herb-found-list,
+   .herb-finds-done {
+      display: grid;
+      gap: 0.3rem;
+      margin: 0.4rem 0;
+      padding: 0;
+      list-style: none;
+   }
+   .herb-found-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+   }
+   .herb-quality-choice {
+      display: grid;
+      gap: 0.25rem;
+      margin: 0;
+      padding: 0;
+      border: 0;
+   }
+   .herb-quality-choice legend {
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+   }
+   .herb-search-button {
+      justify-self: start;
+   }
+   .herb-finds {
+      display: grid;
+      gap: 0.9rem;
+   }
+   .herb-finds .section-heading {
+      margin-bottom: 0;
+   }
+   .herb-find {
+      display: grid;
+      gap: 0.6rem;
+      padding: 0.9rem 1rem;
+      background: hsl(var(--background-100));
+      border: 1px solid hsl(var(--background-200));
+      border-radius: var(--radius-md);
+   }
+   .herb-find p,
+   .herb-pick-legend {
+      margin: 0;
+   }
+   .herb-finds-done {
+      color: hsl(var(--text-600));
+      font-size: var(--fs-sm);
    }
    /* Herbarium (Alchemy tab, Archiv der Kräuter): one card per plant in an auto grid */
    .herbarium {

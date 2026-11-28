@@ -9,6 +9,7 @@ export type RealtimeNotice =
    | { topic: 'encounter'; partyId: string }
    | { topic: 'presence'; partyId: string }
    | { topic: 'checks'; partyId: string }
+   | { topic: 'herbs'; partyId: string }
 type CommandAck<T = never> = { ok: true; data?: T } | { ok: false; error: string }
 // Online heroes of a party and whether the GM is online (no user ids)
 export type PresenceView = { charIds: string[]; gmOnline: boolean }

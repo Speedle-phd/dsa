@@ -4,7 +4,7 @@
 > This index points to pages; it does not reproduce the book. Cite as `AdK S. <page>` (printed page).
 > Extract pages with `python scripts/dsa5_pages.py <pages> --book kraeuter [--grep <text>]`.
 
-Plants and recipes, one row each: [alchemy/plants-index.md](alchemy/plants-index.md). Book rules, calendar and plant items in the app: [herbs/foundations.md](herbs/foundations.md); Herbarium, store and plant use: [herbs/herbarium.md](herbs/herbarium.md).
+Plants and recipes, one row each: [alchemy/plants-index.md](alchemy/plants-index.md). Book rules, calendar and plant items in the app: [herbs/foundations.md](herbs/foundations.md); Herbarium, store and plant use: [herbs/herbarium.md](herbs/herbarium.md); Kräutersuche: [herbs/herb-search.md](herbs/herb-search.md); Haltbarkeit: [herbs/shelf-life.md](herbs/shelf-life.md); Rezepte and Äquivalenzlehre: [herbs/recipes.md](herbs/recipes.md).
 
 ## Chapters
 

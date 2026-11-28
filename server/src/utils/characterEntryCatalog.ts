@@ -2,6 +2,7 @@ import { talentCatalog } from "./talentCatalog"
 import { combatTechniques } from "./combatRules"
 import { spellProperties } from "./magicCatalog"
 import { entrySuggestions, type EntrySuggestion } from "./entrySuggestions"
+import { alchemicalRecipes, secretTalentMinimum } from "./herbs/recipeCatalog"
 
 export const entryCategories = ["advantages", "disadvantages", "generalSpecialAbilities", "languages", "scripts"] as const
 export type EntryCategory = typeof entryCategories[number]
@@ -9,13 +10,16 @@ export type EntrySelection = { category: EntryCategory; catalogKey: string; leve
 export type EntryPurchase = EntrySelection & { key: string; ap: number }
 export type EntryCredit = { key: string; ap: number }
 export type EntryMode = "record" | "purchase" | "creation"
-export type EntryEffect = { de: string; en: string; page: number }
+// book: the source when it is not the Regelwerk (page is then that book's page)
+export type EntryEffect = { de: string; en: string; page: number; book?: 'AdK' }
 export type EntryRequirement =
    | { talent: string; minimum: number }
    | { attribute: "courage" | "intuition" | "fingerDexterity"; minimum: number }
    | { entry: string; category: EntryCategory }
    | { absent: string; category: EntryCategory }
    | { sum: string[]; minimum: number }
+   // at least `needed` of these talents at FW `minimum` (AdK S. 297, Alchimistische Äquivalenzlehre)
+   | { anyOf: string[]; needed: number; minimum: number }
    | { ranged: number }
    | { writing: true }
 // Where a special ability is listed: Overview (general, fate, karma) or the Arcana sections (S. 214, 274–285).
@@ -39,6 +43,8 @@ export type CatalogEntry = {
    // Free-text subjects: the book's examples to pick from (entrySuggestions.ts)
    suggestions?: EntrySuggestion[]
    effect: EntryEffect
+   // Entries of an optional book: offered only to heroes with that book switched on (book rules)
+   book?: 'AdK'
 }
 
 const entries: CatalogEntry[] = []
@@ -199,6 +205,32 @@ const secrets: Array<[string, number, EntryRequirement[]]> = [
    ["Standharfe", 2, [talent("holzbearbeitung", 8), needs("Instrumente bauen", "generalSpecialAbilities")]],
    ["Uhrwerk", 4, [talent("mechanik", 8), talent("metallbearbeitung", 8)]],
 ]
+// source: Archiv der Kräuter (AdK), S. 297 (new special ability: substitute ingredients when brewing, saving costs)
+entries.push({
+   key: "Alchimistische Äquivalenzlehre", category: "generalSpecialAbilities", ap: 15, book: "AdK",
+   effect: { page: 297, book: "AdK",
+      de: "Beim Brauen eines Rezepts mit typischen Ingredienzien: je 1 Punkt Erschwernis 10 % der Ingredienzienkosten sparen, höchstens 50 %.",
+      en: "When brewing a recipe with typical ingredients: save 10 % of the ingredient cost per point of extra difficulty, at most 50 %." },
+   requirements: [talent("alchimie", 10), { anyOf: ["goetterUndKulte", "magiekunde", "sagenUndLegenden", "sphaerenkunde", "sternkunde"], needed: 2, minimum: 10 }],
+})
+// source: Archiv der Kräuter (AdK), S. 148 (Liebesküchlein: a witches' baking secret)
+entries.push({
+   key: "Berufsgeheimnis (Liebesküchlein)", category: "generalSpecialAbilities", ap: 2, book: "AdK",
+   effect: { page: 148, book: "AdK", de: "Erlaubt das Backen von Liebesküchlein. Lehrmeister erforderlich.", en: "Allows baking Liebesküchlein. Requires a teacher." },
+   requirements: [talent("lebensmittelbearbeitung", 4), needs("Tradition (Hexe)", "generalSpecialAbilities")],
+   approval: approval("Lehrmeister erforderlich.", "Requires a teacher."),
+})
+// source: Archiv der Kräuter (AdK), S. 159–178: each alchemical recipe is a Berufsgeheimnis with its AP value and Alchimie minimum
+for (const recipe of alchemicalRecipes) {
+   if (!recipe.secretAp) continue
+   const minimum = secretTalentMinimum(recipe)
+   entries.push({
+      key: `Berufsgeheimnis (${recipe.key})`, category: "generalSpecialAbilities", ap: recipe.secretAp, book: "AdK",
+      effect: { page: recipe.page, book: "AdK", de: `Erlaubt das Brauen von ${recipe.key}. Lehrmeister erforderlich.`, en: `Allows brewing ${recipe.key}. Requires a teacher.` },
+      requirements: minimum ? [talent("alchimie", minimum)] : [],
+      approval: approval("Lehrmeister erforderlich.", "Requires a teacher."),
+   })
+}
 for (const [name, ap, requirements] of secrets) ability(`Berufsgeheimnis (${name})`, ap, 215, `Erlaubt Anwendung des Geheimwissens ${name}. Lehrmeister erforderlich.`, `Allows use of the professional secret ${name}. Requires a teacher.`, { requirements, approval: approval(name === "Elfenbogen" ? "Lehrmeister und Spezies Elf erforderlich." : "Lehrmeister erforderlich.", name === "Elfenbogen" ? "Requires a teacher and elven species." : "Requires a teacher.") })
 ability("Dokumentfälscher", 5, 216, "Malen & Zeichnen: neues Anwendungsgebiet Dokumente fälschen.", "Unlocks document forgery in Malen & Zeichnen.", { requirements: [talent("malenUndZeichnen", 8), excludes("Blind")] })
 ability("Eiserner Wille", 15, 216, "Während Konzentration SK +1 je Stufe, andere Proben −Stufe; am Ende Betäubung I.", "While concentrating, SK +1 per level and other checks −level; stupor I afterwards.", { levels: 2 })

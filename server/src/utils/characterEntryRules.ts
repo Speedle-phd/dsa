@@ -102,6 +102,7 @@ function requirementMet(state: EntryState, requirement: EntryRequirement) {
    if ("entry" in requirement) return state[requirement.category].some((key) => matches(canonicalEntryName(requirement.category, key), requirement.entry))
    if ("absent" in requirement) return !state[requirement.category].some((key) => matches(canonicalEntryName(requirement.category, key), requirement.absent))
    if ("sum" in requirement) return requirement.sum.reduce((sum, key) => sum + talentValue(state, key), 0) >= requirement.minimum
+   if ("anyOf" in requirement) return requirement.anyOf.filter((key) => talentValue(state, key) >= requirement.minimum).length >= requirement.needed
    if ("writing" in requirement) return state.languages.some((key) => {
       const language = selectionFromEntry("languages", key)
       return language?.level === 3 && languageScripts[language.catalogKey]?.some((script) => state.scripts.includes(script))
@@ -115,6 +116,7 @@ function requirementLabel(requirement: EntryRequirement) {
    if ("entry" in requirement) return requirement.entry
    if ("absent" in requirement) return `Nicht / not: ${requirement.absent}`
    if ("sum" in requirement) return `${requirement.sum.join(" + ")} FW ≥ ${requirement.minimum}`
+   if ("anyOf" in requirement) return `${requirement.needed} × FW ${requirement.minimum}: ${requirement.anyOf.join(" / ")}`
    if ("writing" in requirement) return "A level III language and its matching script are required."
    return `Fernkampf / ranged KtW ≥ ${requirement.ranged}`
 }

@@ -7,6 +7,7 @@ import { useModalKeyboard } from '@/components/useModalKeyboard'
 import { t, translateRuleLabel } from '@/locales/translation'
 import { useLanguageStore } from '@/locales/languageStore'
 import { getErrorMessage } from '@/utils/errorHandling'
+import { useBookContext } from '@/features/books/bookApi'
 import {
    addEntry, getEntryReference, previewEntry, previewEntryRemoval, removeEntry,
    type AddEntryInput, type EntryCategory, type EntryEffect, type EntryGroup, type EntryReference,
@@ -82,7 +83,7 @@ function translateEntryProblem(
 
 function EntryHint({ effect, name, language }: { effect?: EntryEffect; name: string; language: 'de' | 'en' }) {
    return <Tooltip clickToToggle className='tooltip-icon-wrapper' lang={language}
-      content={effect ? `${entryName(name, language)}:${effect[language]} · ${t('DSA5 Rulebook', language)}, ${t('S.', language)} ${effect.page}`
+      content={effect ? `${entryName(name, language)}:${effect[language]} · ${t(effect.book === 'AdK' ? 'Archiv der Kräuter' : 'DSA5 Rulebook', language)}, ${t('S.', language)} ${effect.page}`
          : t('No verified rule description for this custom entry.', language)}>
       <Info size={16} aria-label={`${t('Ability effect', language)}: ${entryName(name, language)}`} />
    </Tooltip>
@@ -123,7 +124,10 @@ function AddEntryDialog({ stats, category, reference, initial, onClose }: {
    const [gmApproved, setGmApproved] = useState(false)
    // Hide what the hero already has; leveled entries offer only higher levels, subject lists only new subjects
    const availability = (item: { key: string; levels?: number; parameter?: string; choices?: string[] }) => entryAvailability(stats[category], item)
-   const entries = reference.entries.filter((item) => item.category === category && availability(item).available)
+   // Entries of an optional book (Archiv der Kräuter's Berufsgeheimnisse) only with that book switched on, or when asked for directly
+   const adk = useBookContext(stats._id).data?.rules.adk ?? false
+   const entries = reference.entries.filter((item) => item.category === category && availability(item).available
+      && (!item.book || adk || item.key === initial?.catalogKey))
    const knownCatalogNames = new Set(reference.entries.map((item) => item.key))
    const entry = entries.find((item) => item.key === catalogKey)
    const open = entry ? availability(entry) : null
@@ -227,7 +231,7 @@ function AddEntryDialog({ stats, category, reference, initial, onClose }: {
                <EntryHint effect={entry.effect} name={entry.key} language={language} />
                {quote && <span>{mode === 'record' ? '0' : `${mode === 'creation' ? '+' : ''}${quote.ap}`} AP</span>}
             </div>
-            <p className='combat-note'>{entry.effect[language]} · {t('S.', language)} {entry.effect.page}</p>
+            <p className='combat-note'>{entry.effect[language]} · {entry.effect.book === 'AdK' ? 'AdK ' : ''}{t('S.', language)} {entry.effect.page}</p>
             {quote && <p className='combat-note'>{t('Prerequisites', language)}: {quote.requirements.map((requirement) => readableName(requirement, language)).join(', ') || t('None', language)}</p>}
             {mode !== 'record' && quote?.problems.length ? <ul className='field-error' role='status'>
             {quote.problems.map((problem) => <li key={problem}>{translateEntryProblem(problem, language, knownCatalogNames)}</li>)}

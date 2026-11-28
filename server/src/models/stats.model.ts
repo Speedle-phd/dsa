@@ -450,6 +450,8 @@ const statsSchema = new Schema<IStatsDocument>(
                      form: { type: String, enum: herbForms, required: true },
                      obtainedDay: { type: Number, default: null },
                      keepsUntilDay: { type: Number, default: null },
+                     // Keeps for many years (AdK S. 285–286): never spoils
+                     lasting: { type: Boolean },
                   }, { _id: false }),
                   default: undefined,
                },

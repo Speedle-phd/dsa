@@ -252,6 +252,7 @@ User decisions: tracker and grid board together (background images later); NPC t
 - Delete the account when no longer needed.
 
 ## Gotchas
+- **Account switch in one browser** (Nov 2026, `auth/AuthContext.tsx`): the active hero (`dsa5.hero`) and the TanStack Query cache belong to one account (`dsa5.auth.account`). A login of another account or a logout clears both; the same account keeps its hero across a token expiry. Browsers without the marker check the remembered hero once (`GET /api/chars/:id`, 404 = forget). A 404 on `/api/chars/:id` for someone else's hero is correct (owner-only).
 - Client files that export components may only export components (`react-refresh/only-export-components`): put hooks and helpers next to them in a `.ts` file (e.g. `fightHelpers.ts`).
 - `.probe-difficulty-presets` is a fixed 7-column grid for the difficulty numbers only. Text choices (check type, side, opponent result, attempt presets) use `.probe-segmented`.
 - **Vite sometimes misses writes to `index.css`** — touch the file or restart `npm run dev` before debugging CSS.
@@ -270,6 +271,9 @@ User decisions: tracker and grid board together (background images later); NPC t
 - **Archiv der Kräuter** (Nov 2026): the book is indexed. Done:
    - **Phase 0**: rule switches, Aventurian calendar, plant item state (doc `docs/dsa5/rules/herbs/foundations.md`).
    - **Phase 1**: Herbarium, store, plant use, Pflanzenkunde knowledge (doc `docs/dsa5/rules/herbs/herbarium.md`). Summaries exist for all 132 plants (`server/src/utils/herbs/herbSummaries.ts`); `scripts/adk_herbs.py … --digest a b <file>` prints the raw page text when a summary needs checking.
+   - **Phase 2**: Kräutersuche (Fokusregel I) with the GM's herb finds on the party page (doc `docs/dsa5/rules/herbs/herb-search.md`). Regions (Fokusregel II) are not built.
+   - **Phase 3**: Haltbarkeit: preserve by Pflanzenkunde check or by plant part, spoiled plants blocked and discardable (doc `docs/dsa5/rules/herbs/shelf-life.md`).
+   - **Phase 4**: recipe book with all 125 recipes and summaries, crafting plant recipes (also with other talents), AdK elixirs brewable with their Berufsgeheimnisse, Alchimistische Äquivalenzlehre (special ability, cheaper brews) (doc `docs/dsa5/rules/herbs/recipes.md`). Not built: the weapon/armour tables beside some recipes, the optional longer-lasting weapon poisons (S. 144).
    **Approved plan** (`~/.claude/plans/can-you-come-up-atomic-fern-…md`):
    - Phases:
      - 0: rule switches per party/solo hero, a party calendar, herb item metadata

@@ -10,6 +10,11 @@ const corrections: Record<string, Partial<HerbFacts>> = {
    'Grüne Schleimschlange': { price: { raw: 0.1, processed: null, note: 'Kenner zahlen bis zu 2 Silbertaler (vermuteter Schmuck im Inneren)' } },
    Madablüte: { price: { raw: null, processed: null, note: 'wird nicht gehandelt (Frevel gegen Hesinde), bis zu 100 Dukaten' } },
    Basilamine: { identifyNote: 'zum Entdecken: Sinnesschärfe (Suchen oder Wahrnehmen) –3' },
+   // The distribution table prints only 7 of 8 values for these rows (AdK S. 263–264); taken from the plant page instead:
+   // Finage "selten" in Wäldern, Regenwäldern and Maraskan, "sehr selten" in Grasländern (S. 44)
+   Finage: { distribution: [null, 1, null, 2, 2, null, null, 2] },
+   // Orazal "eher selten" in Wäldern, Regenwäldern and the Südliche Regengebirge (S. 88)
+   Orazal: { distribution: [null, null, null, 3, 3, 3, null, null] },
 }
 
 // Landscape types of a plant for filters and the herb search: "alle"/"überall" means every type above ground
